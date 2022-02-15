@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -7,6 +11,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isHiddenPassword = true;
+  var loginController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 366,
                 height: 46,
                 child: TextField(
+                  controller: loginController,
                   obscureText: false,
                   style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
                   decoration: InputDecoration(
@@ -55,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 366,
                 height: 46,
                 child: TextField(
+                  controller: passwordController,
                   obscureText: isHiddenPassword,
                   style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
                   decoration: InputDecoration(
@@ -93,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: login,
                     child: Text(
                       "Войти",
                       style: TextStyle(
@@ -123,18 +131,37 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontFamily: 'OpenSans',
                             fontSize: 14,
                             color: Color(0xFF757575)),
-                      )
-                  ),
+                      )),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Icon(
+                                  Icons.settings,
+                                  color: Colors.green,
+                                  size: 48,
+                                ),
+                                content: Text(
+                                  "Авторизация студента производится при помощи логина и пароля от eios.kemsu.ru. Пожалуйста, обратитесь в дирекцию свего института для получения логина или пароля.",
+                                  style: TextStyle(
+                                      fontFamily: "Montseratt",
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 14,
+                                      color: Color(0xFF757575)),
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            });
+                      },
                       child: Text(
                         "Как войти?",
                         style: TextStyle(
                             fontFamily: 'OpenSans',
                             fontSize: 14,
                             color: Color(0xFFFF9966)),
-                      )
-                  ),
+                      )),
                 ],
               )
             ],
@@ -148,5 +175,47 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isHiddenPassword = !isHiddenPassword;
     });
+  }
+
+  void showFaqDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      title: Icon(
+        Icons.settings,
+        color: Colors.green,
+      ),
+      content: Text(
+          "Авторизация студента производится при помощи логина и пароля от eios.kemsu.ru. Пожалуйста, обратитесь в дирекцию свего института для получения логина или пароля."),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+  }
+
+  Future<void> login() async {
+    if (loginController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      var response = await http.post(
+          Uri.parse("http://82.179.1.166:8080/authEios"),
+          headers: <String, String> {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'login': loginController.text,
+            'password': passwordController.text
+          }));
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Авторизация прошла успешно!")));
+        print(response.body);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Логин или пароль введены неверно!")));
+        print(response.statusCode);
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Пустые поля не допустимы!")));
+    }
   }
 }
