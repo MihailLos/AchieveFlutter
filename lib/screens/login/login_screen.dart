@@ -9,45 +9,48 @@ class LoginScreenRoute extends MaterialPageRoute {
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(context),
+        viewModelBuilder: () => LoginViewModel.withContext(context),
         onModelReady: (viewModel) => viewModel.onReady(),
-        builder: (context, model, chile) {
+        builder: (context, model, child) {
           return Scaffold(
             body: _body(context, model),
           );
         });
   }
 
-  _body(BuildContext context, LoginViewModel model) {
+  _body(context, model) {
     return SafeArea(child: _loginSpace(context, model));
   }
 
-  _loginSpace(BuildContext context, LoginViewModel model) {
+  _loginSpace(context, model) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _achievementsLabel(),
-          SizedBox(
-            height: 21,
-          ),
-          _loginTextField(context, model),
-          SizedBox(
-            height: 21,
-          ),
-          _passwordTextField(context, model),
-          SizedBox(
-            height: 21,
-          ),
-          _loginButton(context, model),
-          SizedBox(
-            height: 22,
-          ),
-          _bottomInfo(context, model)
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _achievementsLabel(),
+            SizedBox(
+              height: 21,
+            ),
+            _loginTextField(context, model),
+            SizedBox(
+              height: 21,
+            ),
+            _passwordTextField(context, model),
+            SizedBox(
+              height: 21,
+            ),
+            _loginButton(context, model),
+            SizedBox(
+              height: 22,
+            ),
+            _bottomInfo(context, model)
+          ],
+        ),
       ),
     );
   }

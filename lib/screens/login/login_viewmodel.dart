@@ -1,19 +1,28 @@
 import 'dart:convert';
 
+import 'package:achieve_student_flutter/screens/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginViewModel extends BaseViewModel {
 
-  bool isHiddenPassword = true;
   var loginController = TextEditingController();
   var passwordController = TextEditingController();
+  NetworkHandler networkHandler = NetworkHandler();
+  FlutterSecureStorage tokenStorage = FlutterSecureStorage();
 
-  LoginViewModel(BuildContext context);
+
+  bool isHiddenPassword = true;
+
+  LoginViewModel();
+
+  LoginViewModel.withContext(BuildContext context);
 
   Future onReady() async {
 
@@ -24,28 +33,46 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> loginAction(context) async {
+  void loginAction(context) async {
     if (loginController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      var response = await http.post(
-          Uri.parse("http://82.179.1.166:8080/authEios"),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'login': loginController.text,
-            'password': passwordController.text
-          }));
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Авторизация прошла успешно!")));
-        print(response.body);
+      Map<String, String> bodyData = {
+        "login": loginController.text,
+        "password": passwordController.text
+      };
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var response = await networkHandler.post("/authEios", headers, bodyData);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> output = json.decode(response.body);
+        await tokenStorage.write(key: "token", value: output["accessToken"]);
+        Navigator.push(context, new MaterialPageRoute(builder: (context) => HomeView()));
+      } else {
+        SnackBar(content: Text("Логин или пароль введены неверно!"));
+      }
+      // var response = await http.post(
+      //     Uri.parse("http://82.179.1.166:8080/authEios"),
+      //     headers: <String, String>{
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: jsonEncode({
+      //       'login': loginController.text,
+      //       'password': passwordController.text
+      //     }));
+      // if (response.statusCode == 200) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text("Авторизация прошла успешно!")));
+      //   Navigator.push(context, new MaterialPageRoute(builder: (context) => HomeView()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Логин или пароль введены неверно!")));
-        print(response.statusCode);
+        // print(response.statusCode);
       }
     }
-  }
+
 
   launchRecoveryPasswordURL() async {
     const url = "https://eios.kemsu.ru/a/eios";
