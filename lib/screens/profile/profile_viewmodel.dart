@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:achieve_student_flutter/model/student_profile.dart';
 import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/screens/report/report_screen.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -22,19 +23,19 @@ class ProfileViewModel extends BaseViewModel {
   StudentProfileModel studentProfileModel = StudentProfileModel();
   int? studentPercent;
   bool circular = true;
-  File? profileImageFile;
   FlutterSecureStorage tokenStorage = FlutterSecureStorage();
   double? studentPercentProgressBar;
 
   Future onReady() async {
     fetchData();
     fetchStudentPercent();
+    circular = false;
+    notifyListeners();
   }
 
   void fetchData() async {
     var response = await networkHandler.get("/student/getStudent");
     studentProfileModel = StudentProfileModel.fromJson(response);
-    circular = false;
     notifyListeners();
   }
 
@@ -42,7 +43,6 @@ class ProfileViewModel extends BaseViewModel {
     var response = await networkHandler.get("/student/achievementsPercent");
     studentPercent = response;
     studentPercentProgressBar = studentPercent! / 100;
-    circular = false;
     notifyListeners();
   }
 
@@ -50,12 +50,11 @@ class ProfileViewModel extends BaseViewModel {
     Navigator.pop(context);
   }
 
-  getImageFromBase64() {
+  MemoryImage getImageFromBase64() {
     var firstDecode = base64Decode(studentProfileModel.data.toString());
     String secondDecode = latin1.decode(firstDecode);
     var decodedImage = base64Decode(secondDecode);
-    circular = false;
-    return decodedImage;
+    return MemoryImage(decodedImage);
   }
 
   getImageFromGallery() async {
@@ -84,5 +83,14 @@ class ProfileViewModel extends BaseViewModel {
         SnackBar(content: Text("Не удалось загрузить изображение профиля!"));
       }
     }
+  }
+
+  goToReportsScreen(context) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => ReportScreen()));
+  }
+
+  Future<void> refresh() async {
+    fetchData();
+    fetchStudentPercent();
   }
 }

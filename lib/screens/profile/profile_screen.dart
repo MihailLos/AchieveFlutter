@@ -18,7 +18,9 @@ class ProfileScreen extends StatelessWidget {
         viewModelBuilder: () => ProfileViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return Scaffold(
+          return model.circular
+              ? LinearProgressIndicator()
+              : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
           );
@@ -29,12 +31,19 @@ class ProfileScreen extends StatelessWidget {
     return AppBar(
       leading: IconButton(
         icon: Image.asset("assets/images/support_button.png"),
-        onPressed: () {},
+        onPressed: () async {
+          model.goToReportsScreen(context);
+        },
         iconSize: 32,
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
       actions: [
+        IconButton(
+          icon: Icon(Icons.refresh, color: Color(0xFFFF9966),),
+          onPressed: () => model.refresh(),
+          iconSize: 32,
+        ),
         IconButton(
           icon: Image.asset("assets/images/exit_button.png"),
           onPressed: () => model.exitButtonAction(context),
@@ -45,23 +54,26 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _body(context, model) {
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: [
-        _profilePictureWidget(context, model),
-        SizedBox(
-          height: 16,
-        ),
-        _profileName(context, model),
-        SizedBox(
-          height: 16,
-        ),
-        _progressField(context, model),
-        SizedBox(
-          height: 8,
-        ),
-        _educationInfo(context, model)
-      ],
+    return RefreshIndicator(
+      onRefresh: model.refresh,
+      child: ListView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        children: [
+          _profilePictureWidget(context, model),
+          SizedBox(
+            height: 16,
+          ),
+          _profileName(context, model),
+          SizedBox(
+            height: 16,
+          ),
+          _progressField(context, model),
+          SizedBox(
+            height: 8,
+          ),
+          _educationInfo(context, model)
+        ],
+      ),
     );
   }
 
@@ -81,15 +93,13 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _profilePicture(context, model) {
-    final image = MemoryImage(model.getImageFromBase64());
-
     return model.circular
         ? LinearProgressIndicator()
         : ClipOval(
             child: Material(
               color: Colors.transparent,
               child: Ink.image(
-                image: image,
+                image: model.getImageFromBase64(),
                 fit: BoxFit.cover,
                 width: 95,
                 height: 95,
