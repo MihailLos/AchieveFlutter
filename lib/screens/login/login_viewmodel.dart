@@ -53,22 +53,9 @@ class LoginViewModel extends BaseViewModel {
       } else {
         SnackBar(content: Text("Логин или пароль введены неверно!"));
       }
-      // var response = await http.post(
-      //     Uri.parse("http://82.179.1.166:8080/authEios"),
-      //     headers: <String, String>{
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: jsonEncode({
-      //       'login': loginController.text,
-      //       'password': passwordController.text
-      //     }));
-      // if (response.statusCode == 200) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //       SnackBar(content: Text("Авторизация прошла успешно!")));
-      //   Navigator.push(context, new MaterialPageRoute(builder: (context) => HomeView()));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Логин или пароль введены неверно!")));
+            SnackBar(content: Text("Введите логин и пароль!")));
         // print(response.statusCode);
       }
     }

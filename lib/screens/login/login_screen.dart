@@ -69,7 +69,7 @@ class LoginScreen extends StatelessWidget {
 
   _loginTextField(context, model) {
     return Container(
-      width: 366,
+      width: 350,
       height: 46,
       child: TextField(
         controller: model.loginController,
@@ -91,7 +91,7 @@ class LoginScreen extends StatelessWidget {
 
   _passwordTextField(context, model) {
     return Container(
-      width: 366,
+      width: 350,
       height: 46,
       child: TextField(
         controller: model.passwordController,
@@ -119,7 +119,7 @@ class LoginScreen extends StatelessWidget {
 
   _loginButton(context, model) {
     return Container(
-        width: 366,
+        width: 350,
         height: 46,
         decoration: BoxDecoration(
           boxShadow: <BoxShadow>[
