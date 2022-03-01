@@ -71,7 +71,11 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          _educationInfo(context, model)
+          _educationInfo(context, model),
+          SizedBox(
+            height: 27,
+          ),
+          _achievementsTabs(context, model)
         ],
       ),
     );
@@ -278,6 +282,44 @@ class ProfileScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  _achievementsTabs(context, model) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            child:  TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              tabs: [
+                Tab(text: "Получение",),
+                Tab(text: "Создание",)
+              ],
+            ),
+          ),
+          Container(
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Colors.indigoAccent,
+                  width: 0.5
+                )
+              )
+            ),
+            child: TabBarView(
+              children: [
+                Center(child: Text("Получение достижения"),),
+                Center(child: Text("Создание достижения"),),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

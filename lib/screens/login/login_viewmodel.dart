@@ -36,7 +36,7 @@ class LoginViewModel extends BaseViewModel {
   void loginAction(context) async {
     if (loginController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       Map<String, String> bodyData = {
-        "login": loginController.text,
+        "email": loginController.text,
         "password": passwordController.text
       };
 
@@ -44,18 +44,18 @@ class LoginViewModel extends BaseViewModel {
         'Content-Type': 'application/json',
       };
 
-      var response = await networkHandler.post("/authEios", headers, bodyData);
+      var response = await networkHandler.post("/auth", headers, bodyData);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map<String, dynamic> output = json.decode(response.body);
         await tokenStorage.write(key: "token", value: output["accessToken"]);
         Navigator.push(context, new MaterialPageRoute(builder: (context) => HomeView()));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Авторизация прошла успешно.")));
       } else {
-        SnackBar(content: Text("Логин или пароль введены неверно!"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Логин или пароль введены неверно!")));
       }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Введите логин и пароль!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Введите логин и пароль!")));
         // print(response.statusCode);
       }
     }

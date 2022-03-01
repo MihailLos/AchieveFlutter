@@ -65,14 +65,13 @@ class ReportViewModel extends BaseViewModel {
           "/student/newMessageError", headers, bodyData);
       print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print(response.body);
         Navigator.pop(context);
-        SnackBar(content: Text("Ваше обращение успешно отправлено."));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваше обращение успешно отправлено.")));
       } else {
-        SnackBar(content: Text("Ошибка при отправке обращения!"));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке обращения!")));
       }
     } else {
-      SnackBar(content: Text("Заполните тему и описание обращения!"));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните тему и описание обращения!")));
     }
   }
 
