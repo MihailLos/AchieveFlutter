@@ -20,6 +20,11 @@ class NetworkHandler {
     if (response.statusCode == 200 || response.statusCode == 201) {
       log.i(response.body);
       return json.decode(response.body);
+    } else if (response.statusCode == 403) {
+      // var newAccessToken = await http.get(Uri.parse("http://82.179.1.166:8080/newToken"), headers: {
+      //   "Refresh": "Refresh ${tokenStorage.read(key: "refresh_token")}"
+      // });
+      // tokenStorage.write(key: "token", value: newAccessToken.body);
     }
     log.i(response.body);
     log.i(response.statusCode);
