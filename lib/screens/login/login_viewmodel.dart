@@ -49,7 +49,8 @@ class LoginViewModel extends BaseViewModel {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map<String, dynamic> output = json.decode(response.body);
         await tokenStorage.write(key: "token", value: output["accessToken"]);
-        Navigator.push(context, new MaterialPageRoute(builder: (context) => HomeView()));
+        await tokenStorage.write(key: "refresh_token", value: output["refreshToken"]);
+        Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => HomeView()), (route) => false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Авторизация прошла успешно.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Логин или пароль введены неверно!")));
