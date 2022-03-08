@@ -3,8 +3,12 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
+
 import 'package:achieve_student_flutter/model/student_profile.dart';
 import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/screens/login/login_screen.dart';
+import 'package:base_x/base_x.dart';
+
 import 'package:achieve_student_flutter/screens/report/report_screen.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +27,8 @@ class ProfileViewModel extends BaseViewModel {
   StudentProfileModel studentProfileModel = StudentProfileModel();
   int? studentPercent;
   bool circular = true;
-  FlutterSecureStorage tokenStorage = FlutterSecureStorage();
+  bool imageCircular = true;
+  FlutterSecureStorage storage = FlutterSecureStorage();
   double? studentPercentProgressBar;
 
   Future onReady() async {
@@ -47,18 +52,19 @@ class ProfileViewModel extends BaseViewModel {
   }
 
   exitButtonAction(context) {
-    Navigator.pop(context);
+    storage.delete(key: "token");
+    Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
   }
 
-  MemoryImage getImageFromBase64() {
-    var firstDecode = base64Decode(studentProfileModel.data.toString());
-    String secondDecode = latin1.decode(firstDecode);
-    var decodedImage = base64Decode(secondDecode);
-    return MemoryImage(decodedImage);
+  MemoryImage getImageFromBase64(String base64String) {
+    var firstDecode = base64Decode(base64String);
+    var tempString = latin1.decode(firstDecode).replaceAll(RegExp("[^A-Za-z0-9+/=]+"), "");
+    var secondDecode = base64Decode(tempString);
+    return MemoryImage(secondDecode);
   }
 
   getImageFromGallery() async {
-    String? accessToken = await tokenStorage.read(key: "token");
+    String? accessToken = await storage.read(key: "token");
     XFile? pickedFile = await ImagePicker()
         .pickImage(source: ImageSource.gallery, maxWidth: 462, maxHeight: 462);
     if (pickedFile != null) {
@@ -71,7 +77,8 @@ class ProfileViewModel extends BaseViewModel {
         "format": "png",
         "listFileId": null
       };
-      var response = await networkHandler.put("/student/changePhoto", {"Authorization": "Bearer $accessToken"}, bodyData);
+      var response = await networkHandler.put("/student/changePhoto",
+          {"Authorization": "Bearer $accessToken"}, bodyData);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print(response.body);
@@ -86,7 +93,8 @@ class ProfileViewModel extends BaseViewModel {
   }
 
   goToReportsScreen(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => ReportScreen()));
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => ReportScreen()));
   }
 
   Future<void> refresh() async {
