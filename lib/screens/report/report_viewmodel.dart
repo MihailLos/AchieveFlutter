@@ -38,7 +38,7 @@ class ReportViewModel extends BaseViewModel {
 
   goToNewReportsScreen(context) {
     Navigator.push(context,
-        new MaterialPageRoute(builder: (context) => NewReportScreen()));
+        new MaterialPageRoute(builder: (context) => NewReportScreen())).then((value) => refresh());
   }
 
   goToReportDetailScreen(context) {
@@ -65,7 +65,7 @@ class ReportViewModel extends BaseViewModel {
           "/student/newMessageError", headers, bodyData);
       print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Navigator.pop(context);
+        Navigator.of(context).pop(true);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваше обращение успешно отправлено.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке обращения!")));
@@ -83,7 +83,7 @@ class ReportViewModel extends BaseViewModel {
   }
 
   reportsSpace(context) {
-    return Column(
+    return listReports == null ? Center(child: CircularProgressIndicator()) : Column(
       children:
          listReports!.map((item) => Column(
           children: [

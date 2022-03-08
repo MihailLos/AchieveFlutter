@@ -10,11 +10,13 @@ class ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(reportModel!.theme.toString() + " " + "(" + reportModel!.statusErrorName.toString() + ")"),
-      subtitle: Text(reportModel!.messageErrorDate.toString()),
-      isThreeLine: true,
-      trailing: Icon(reportModel!.statusErrorName.toString() == "Решено" ? Icons.check : reportModel!.statusErrorName.toString() == "Отклонено" ? Icons.highlight_off : reportModel!.statusErrorName.toString() == "Просмотрено" ? Icons.remove_red_eye : Icons.access_time),
+    return Card(
+      child: ListTile(
+        title: Text(reportModel!.theme.toString() + " " + "(" + reportModel!.statusErrorName.toString() + ")"),
+        subtitle: Text(reportModel!.messageErrorDate.toString()),
+        isThreeLine: true,
+        trailing: Icon(reportModel!.statusErrorName.toString() == "Решено" ? Icons.check : reportModel!.statusErrorName.toString() == "Отклонено" ? Icons.highlight_off : reportModel!.statusErrorName.toString() == "Просмотрено" ? Icons.remove_red_eye : Icons.access_time),
+      ),
     );
   }
 }
