@@ -1,5 +1,6 @@
 import 'package:achieve_student_flutter/screens/home_viewmodel.dart';
 import 'package:achieve_student_flutter/screens/profile/profile_screen.dart';
+import 'package:achieve_student_flutter/screens/rating/rating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -23,7 +24,7 @@ class HomeView extends StatelessWidget {
       case 0:
         return ProfileScreen();
       case 1:
-        return Center(child: Text("Рейтинг"),);
+        return RatingScreen();
       case 2:
         return Center(child: Text("Достижения"),);
       case 3:
@@ -41,14 +42,14 @@ _bottomNavBar(BuildContext context, HomeViewModel model) {
     items: [
       BottomNavigationBarItem(
           icon: Image.asset("assets/images/profile_icon.png"),
-          label: "Профиль"),
+          label: "Профиль", activeIcon: Image.asset("assets/images/profile_active.png")),
       BottomNavigationBarItem(
-          icon: Image.asset("assets/images/rating_icon.png"), label: "Рейтинг"),
+          icon: Image.asset("assets/images/rating_icon.png"), label: "Рейтинг", activeIcon: Image.asset("assets/images/rating_active.png")),
       BottomNavigationBarItem(
           icon: Image.asset("assets/images/achievements_icon.png"),
-          label: "Достижения"),
+          label: "Достижения", activeIcon: Image.asset("assets/images/achieve_active.png")),
       BottomNavigationBarItem(
-          icon: Image.asset("assets/images/requests_icon.png"), label: "Заявки")
+          icon: Image.asset("assets/images/requests_icon.png"), label: "Заявки", activeIcon: Image.asset("assets/images/requests_active.png"))
     ],
   );
 }
