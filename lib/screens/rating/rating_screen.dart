@@ -53,30 +53,27 @@ class RatingScreen extends StatelessWidget {
   }
 
   _searchTextView(context, model) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: 300,
-        height: 46,
-        child: TextField(
-          controller: model.searchController,
-          onChanged: (value) {
-            model.searchAction();
-          },
-          obscureText: false,
-          style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
-          decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-              fillColor: Color(0xfff3f2f2),
-              //suffixIcon: IconButton(icon: Icon(Icons.search), onPressed: model.searchAction,),
-              filled: true,
-              hintText: "Фамилия студента"),
-        ),
+    return Container(
+      width: 300,
+      height: 46,
+      child: TextField(
+        controller: model.searchController,
+        onChanged: (value) {
+          model.searchAction();
+        },
+        obscureText: false,
+        style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
+        decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+            fillColor: Color(0xfff3f2f2),
+            //suffixIcon: IconButton(icon: Icon(Icons.search), onPressed: model.searchAction,),
+            filled: true,
+            hintText: "Фамилия студента"),
       ),
     );
   }
