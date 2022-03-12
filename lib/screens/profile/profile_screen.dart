@@ -1,3 +1,5 @@
+import 'package:achieve_student_flutter/screens/achievements/created_achieve_grid.dart';
+import 'package:achieve_student_flutter/screens/achievements/received_achieve_grid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,7 +77,11 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(
             height: 27,
           ),
-          // _achievementsTabs(context, model)
+          _buttonsSpace(context, model),
+          SizedBox(
+            height: 10,
+          ),
+          model.isCreated ? CreatedAchieveGrid() : ReceivedAchieveGrid()
         ],
       ),
     );
@@ -97,43 +103,59 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _profilePicture(context, model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : ClipOval(
-            child: Material(
-              color: Colors.transparent,
-              child: Ink.image(
-                image: model.getImageFromBase64(model.studentProfileModel.data.toString()),
-                fit: BoxFit.cover,
-                width: 95,
-                height: 95,
-                child: InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: ((builder) =>
-                            _bottomChooseProfilePhotoWidget(context, model)));
-                  },
+    return FutureBuilder(
+        future: model.getImageFromBase64(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData || snapshot.data != null) {
+            return ClipOval(
+              child: Material(
+                color: Colors.transparent,
+                child: Ink.image(
+                  image: snapshot.data as ImageProvider,
+                  fit: BoxFit.cover,
+                  width: 95,
+                  height: 95,
+                  child: InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: ((builder) =>
+                              _bottomChooseProfilePhotoWidget(context, model)));
+                    },
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Произошла ошибка"),);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        }
+    );
   }
 
   _profileName(context, model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : Center(
+    return FutureBuilder(
+      future: model.getName(),
+          builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Center(
             child: Text(
-              model.studentProfileModel.firstName +
-                  " " +
-                  model.studentProfileModel.lastName,
+              snapshot.data as String,
               style: GoogleFonts.montserrat(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.normal),
             ),
           );
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Произошла ошибка"),);
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+          }
+        );
   }
 
   _editProfilePictureButton(context, model) {
@@ -219,18 +241,61 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(model.studentProfileModel.instituteFullName),
+                FutureBuilder(
+                  future: model.getInstitute(),
+                    builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data as String);
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Произошла ошибка"),);
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    },
+                ),
                 SizedBox(
                   height: 5,
                 ),
-                Text(model.studentProfileModel.streamFullName),
+                FutureBuilder(
+                  future: model.getStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data as String);
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Произошла ошибка"),);
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
                 SizedBox(
                   height: 5,
                 ),
-                Text(model.studentProfileModel.groupName),
+                FutureBuilder(
+                  future: model.getGroup(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data as String);
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Произошла ошибка"),);
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
               ],
             ),
           );
+  }
+
+  _buttonsSpace(context, model) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(onPressed: () {model.showCreatedAchieve();}, child: Text("Созданные")),
+        ElevatedButton(onPressed: () {model.showReceivedAchieve();}, child: Text("Полученные")),
+      ],
+    );
   }
 
   _bottomChooseProfilePhotoWidget(context, model) {
@@ -258,25 +323,41 @@ class ProfileScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {model.pickPhoto(ImageSource.camera);},
-                      icon: Icon(Icons.camera_alt_outlined),
-                      iconSize: 40,
+                InkWell(
+                  onTap: () {
+                    model.pickImage(ImageSource.camera, context);
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Icon(Icons.camera_alt),
+                            Text("Камера")
+                          ],
+                        ),
+                      ),
                     ),
-                    Text("Камера", style: TextStyle(fontSize: 14),)
-                  ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {model.pickPhoto(ImageSource.gallery);},
-                      icon: Icon(Icons.image_outlined),
-                      iconSize: 40,
+                InkWell(
+                  onTap: () {
+                    model.pickImage(ImageSource.gallery, context);
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Icon(Icons.photo),
+                            Text("Выбрать из галереи")
+                          ],
+                        ),
+                      ),
                     ),
-                    Text("Галерея", style: TextStyle(fontSize: 14),)
-                  ],
+                  ),
                 )
               ],
             )
