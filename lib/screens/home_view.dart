@@ -1,8 +1,11 @@
+import 'package:achieve_student_flutter/screens/achievements/unreceived_achieve_screen.dart';
 import 'package:achieve_student_flutter/screens/home_viewmodel.dart';
 import 'package:achieve_student_flutter/screens/profile/profile_screen.dart';
 import 'package:achieve_student_flutter/screens/rating/rating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
+import 'achievements/requests_screen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
         viewModelBuilder: () => HomeViewModel(),
+        onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
             body: getViewFromIndex(model.currentIndex),
@@ -26,9 +30,9 @@ class HomeView extends StatelessWidget {
       case 1:
         return RatingScreen();
       case 2:
-        return Center(child: Text("Достижения"),);
+        return UnreceivedAchieveScreen();
       case 3:
-        return Center(child: Text("Заявки"),);
+        return RequestsScreen();
     }
   }
 }
