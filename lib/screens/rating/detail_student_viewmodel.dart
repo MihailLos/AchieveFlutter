@@ -19,14 +19,13 @@ class DetailStudentViewModel extends BaseViewModel {
   Future onReady() async {
     getStudent();
     fetchStudentPercent();
-    circular = false;
-    notifyListeners();
   }
 
   void getStudent() async {
     String? studentId = await storage.read(key: "student_id");
     var response = await networkHandler.get("/student/getStudent?studentId=${int.parse(studentId.toString())}");
     studentProfileModel = StudentProfileModel.fromJson(response);
+    circular = false;
     notifyListeners();
   }
 
@@ -38,11 +37,47 @@ class DetailStudentViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  MemoryImage getImageFromBase64(String base64String) {
-    var firstDecode = base64Decode(base64String);
-    var tempString = latin1.decode(firstDecode).replaceAll(RegExp("[^A-Za-z0-9+/=]+"), "");
-    var secondDecode = base64Decode(tempString);
-    return MemoryImage(secondDecode);
+  Future<MemoryImage?> getImageFromBase64() async {
+    if (studentProfileModel.data == null) {
+      return null;
+    } else {
+      var firstDecode = base64Decode(studentProfileModel.data.toString());
+      var tempString = latin1.decode(firstDecode).replaceAll("\n", "");
+      var secondDecode = base64Decode(tempString);
+      return MemoryImage(secondDecode);
+    }
+  }
+
+  Future<String?> getName() async {
+    if (studentProfileModel.firstName == null && studentProfileModel.lastName == null) {
+      return null;
+    } else {
+      return "${studentProfileModel.firstName.toString()} ${studentProfileModel.lastName.toString()}";
+    }
+  }
+
+  Future<String?> getInstitute() async {
+    if (studentProfileModel.instituteFullName == null) {
+      return null;
+    } else {
+      return studentProfileModel.instituteFullName.toString();
+    }
+  }
+
+  Future<String?> getStream() async {
+    if (studentProfileModel.streamFullName == null) {
+      return null;
+    } else {
+      return studentProfileModel.streamFullName.toString();
+    }
+  }
+
+  Future<String?> getGroup() async {
+    if (studentProfileModel.groupName == null) {
+      return null;
+    } else {
+      return studentProfileModel.groupName.toString();
+    }
   }
 
   goToRatingScreen(context) async {

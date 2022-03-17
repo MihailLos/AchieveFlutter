@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 
+import '../achievements/received_achieve_grid.dart';
+
 class DetailStudentScreenRoute extends MaterialPageRoute {
   DetailStudentScreenRoute() : super(builder: (context) => const DetailStudentScreen());
 }
@@ -19,7 +21,7 @@ class DetailStudentScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return model.circular
-              ? LinearProgressIndicator()
+              ? Center(child: CircularProgressIndicator())
               : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
@@ -60,7 +62,6 @@ class DetailStudentScreen extends StatelessWidget {
         SizedBox(
           height: 27,
         ),
-        // _achievementsTabs(context, model)
       ],
     );
   }
@@ -70,26 +71,43 @@ class DetailStudentScreen extends StatelessWidget {
         ? LinearProgressIndicator()
         : Align(
       alignment: Alignment.center,
-          child: CircleAvatar(
-      backgroundImage: model.getImageFromBase64(model.studentProfileModel.data.toString()),
-      radius: 47.5,
+          child: FutureBuilder(
+            future: model.getImageFromBase64(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData || snapshot.data != null) {
+                return CircleAvatar(
+                    backgroundImage: snapshot.data as ImageProvider,
+                    radius: 47.5);
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Произошла ошибка"),);
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
     ),
-        );
+          );
   }
 
   _profileName(context, model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : Center(
-      child: Text(
-        model.studentProfileModel.firstName +
-            " " +
-            model.studentProfileModel.lastName,
-        style: GoogleFonts.montserrat(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.normal),
-      ),
+    return FutureBuilder(
+        future: model.getName(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Center(
+              child: Text(
+                snapshot.data as String,
+                style: GoogleFonts.montserrat(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Произошла ошибка"),);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        }
     );
   }
 
