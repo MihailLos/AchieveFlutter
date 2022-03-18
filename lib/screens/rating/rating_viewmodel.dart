@@ -118,111 +118,6 @@ class RatingViewModel extends BaseViewModel {
         .toList();
   }
 
-  topStudentsSpace(context) {
-    return filteredStudents.isEmpty
-        ? Center(
-      child: CircularProgressIndicator(),
-    )
-        : Expanded(
-        child: ListView.builder(
-          itemCount: filteredStudents.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () async {
-                await storage.write(key: "student_id", value: filteredStudents[index].studentId.toString());
-                goToStudentDetail(context);
-              },
-              child: Card(
-                child: ListTile(
-                  leading: ClipOval(
-                    child: Image.memory(getStudentImage(
-                        filteredStudents[index].data.toString())),
-                  ),
-                  title: Text(
-                      "${filteredStudents[index].firstName.toString()} ${filteredStudents[index].lastName.toString()}"),
-                  subtitle: Text(
-                      "${filteredStudents[index].instituteName.toString()}, ${filteredStudents[index].groupName.toString()}"),
-                  trailing: Text("${filteredStudents[index].score.toString()}"),
-                ),
-              ),
-            );
-          },
-        )
-    );
-  }
-
-  showFilters(context) {
-    return AnimatedOpacity(
-      opacity: isVisibleFilters ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
-      child: Visibility(
-        visible: isVisibleFilters,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Center(
-            child: Column(
-              children: [
-                DropdownButton<InstituteModel>(
-                  isExpanded: true,
-                    value: filterInstitute,
-                    items: institutesList.map((e) {
-                      return new DropdownMenuItem(
-                        child: Text(e.instituteFullName.toString()),
-                        value: e,
-                      );
-                    }).toList(),
-                    hint: Text("Институт"),
-                    onChanged: (value) {
-                      filterStream = null;
-                      filterGroup = null;
-                      filterInstitute = value;
-                      fetchStreams();
-                      filteredStudents = fetchedStudents.where((element) => element.instituteName!
-                          .contains(value!.instituteFullName.toString())).toList();
-                      notifyListeners();
-                    }),
-                DropdownButton<StreamModel>(
-                  isExpanded: true,
-                    value: filterStream,
-                    items: streamsList.map((e) {
-                      return new DropdownMenuItem(
-                        child: Text(e.streamName.toString()),
-                        value: e,
-                      );
-                    }).toList(),
-                    hint: Text("Направление"),
-                    onChanged: (value) {
-                      filterGroup = null;
-                      filterStream = value;
-                      fetchGroups();
-                      filteredStudents = fetchedStudents.where((element) => element.streamName!
-                          .contains(value!.streamName.toString())).toList();
-                      notifyListeners();
-                    }),
-                DropdownButton<GroupModel>(
-                  isExpanded: true,
-                    value: filterGroup,
-                    items: groupsList.map((e) {
-                      return new DropdownMenuItem(
-                        child: Text(e.groupName.toString()),
-                        value: e,
-                      );
-                    }).toList(),
-                    hint: Text("Группа"),
-                    onChanged: (value) {
-                      filterGroup = value;
-                      filteredStudents = fetchedStudents.where((element) => element.groupName!
-                          .contains(value!.groupName.toString())).toList();
-                      notifyListeners();
-                    }),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   goToStudentDetail(context) {
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => DetailStudentScreen()));
@@ -231,5 +126,37 @@ class RatingViewModel extends BaseViewModel {
   changeVisibility(context) {
     isVisibleFilters = !isVisibleFilters;
     notifyListeners();
+  }
+
+  onChangeInstituteFilter(InstituteModel? instituteModel) {
+    filterStream = null;
+    filterGroup = null;
+    filterInstitute = instituteModel;
+    fetchStreams();
+    filteredStudents = fetchedStudents.where((element) => element.instituteName!
+        .contains(instituteModel!.instituteFullName.toString())).toList();
+    notifyListeners();
+  }
+
+  onChangeStreamFilter(StreamModel? streamModel) {
+    filterGroup = null;
+    filterStream = streamModel;
+    fetchGroups();
+    filteredStudents = fetchedStudents.where((element) => element.streamName!
+        .contains(streamModel!.streamName.toString())).toList();
+    notifyListeners();
+  }
+
+  onChangeGroupFilter(GroupModel? groupModel) {
+    filterGroup = groupModel;
+    filteredStudents = fetchedStudents.where((element) => element.groupName!
+        .contains(groupModel!.groupName.toString())).toList();
+    notifyListeners();
+  }
+
+  onTapStudent(context, String studentId) async {
+    await storage.write(key: "student_id", value: studentId);
+    notifyListeners();
+    goToStudentDetail(context);
   }
 }
