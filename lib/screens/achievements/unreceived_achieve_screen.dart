@@ -43,7 +43,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
     return Column(
       children: [
         _buttonsTab(context, model),
-        model.unreceivedAchievementsList(context)
+        _unreceivedAchievementsList(context, model)
       ],
     );
   }
@@ -79,5 +79,89 @@ class UnreceivedAchieveScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _unreceivedAchievementsList(context, model) {
+    return model.filteredUnreceivedProfileAchievements.isEmpty
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Expanded(
+        child: ListView.builder(
+            itemCount: model.filteredUnreceivedProfileAchievements.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {},
+                child: Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.memory(
+                                model.getImage(model.filteredUnreceivedProfileAchievements[index].achieveData.toString()),
+                                width: 65,
+                                height: 65,
+                                fit: BoxFit.fill,),
+                            ),
+                            Positioned(
+                              child: ClipOval(
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  color: Colors.white,
+                                  child: Image.memory(model.getImage(
+                                      model.filteredUnreceivedProfileAchievements[index]
+                                          .categoryData.toString()), width: 15, height: 15, color: Colors.black,),
+                                ),
+                              ),
+                              bottom: 0,
+                              right: 1,)
+                          ],
+                        ),
+                        SizedBox(width: 16,),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(model.filteredUnreceivedProfileAchievements[index].achieveName.toString(),
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black),),
+                              SizedBox(height: 12,),
+                              Text(model.filteredUnreceivedProfileAchievements[index].achieveDescription.toString(),
+                                style: GoogleFonts.openSans(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey
+                                ),)
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("+${model.filteredUnreceivedProfileAchievements[index].score.toString()}",
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 14,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF4065D8)),),
+                            Image.asset("assets/images/prize_icon.png", width: 30, height: 30,),
+                            Image.memory(model.getImage(model.filteredUnreceivedProfileAchievements[index].rewardData.toString()), width: 30, height: 30,)
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
   }
 }

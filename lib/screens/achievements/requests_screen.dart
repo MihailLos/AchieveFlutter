@@ -46,7 +46,7 @@ class RequestsScreen extends StatelessWidget {
     return Column(
       children: [
         _buttonsTab(context, model),
-        model.isProof ? model.proofAchievementsList(context) : model.createdAchievementsList(context)
+        model.isProof ? _proofAchievementsList(context, model) : _createdAchievementsList(context, model)
       ],
     );
   }
@@ -103,6 +103,151 @@ class RequestsScreen extends StatelessWidget {
             ),
           );
         }
+    );
+  }
+
+  _createdAchievementsList(context, model) {
+    return model.createdAchievements.isEmpty
+        ? Center(
+      child: CircularProgressIndicator(),
+    ) : Expanded(
+        child: ListView.builder(
+            itemCount: model.createdAchievements.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {},
+                  child: Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.memory(
+                            model.getImage(model.createdAchievements[index].data.toString()),
+                            width: 65,
+                            height: 65,
+                            fit: BoxFit.fill,),
+                        ),
+                        SizedBox(width: 16,),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Создание достижения",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black),),
+                              SizedBox(height: 12,),
+                              Text(model.createdAchievements[index].achieveName.toString(),
+                                style: GoogleFonts.openSans(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey
+                                ),),
+                              Text(model.createdAchievements[index].statusActive.toString(),
+                                style: GoogleFonts.openSans(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey
+                                ),)
+                            ],
+                          ),
+                        ),
+                        model.createdAchievements[index].statusActive.toString() == "Одобрено" || model.createdAchievements[index].statusActive.toString() == "Активно" ?
+                        Icon(Icons.check, color: Colors.green, size: 32,) :
+                        model.createdAchievements[index].statusActive.toString() == "Отклонено" || model.createdAchievements[index].statusActive.toString() == "Устарело" ?
+                        Icon(Icons.clear, color: Colors.red, size: 32,) :
+                        Icon(Icons.access_time_outlined, color: Colors.black, size: 32,)
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+        )
+    );
+  }
+
+  _proofAchievementsList(context, model) {
+    return model.proofAchievements.isEmpty
+        ? Center(
+      child: CircularProgressIndicator(),
+    ) : Expanded(
+        child: ListView.builder(
+            itemCount: model.proofAchievements.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {},
+                  child: Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.memory(
+                            model.getImage(model.proofAchievements[index].achieveData.toString()),
+                            width: 65,
+                            height: 65,
+                            fit: BoxFit.fill,),
+                        ),
+                        SizedBox(width: 16,),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Получение достижения",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black),),
+                              SizedBox(height: 12,),
+                              Text(model.proofAchievements[index].achieveName.toString(),
+                                style: GoogleFonts.openSans(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey
+                                ),),
+                              Text(model.proofAchievements[index].statusRequestName.toString(),
+                                style: GoogleFonts.openSans(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey
+                                ),),
+                              Text(model.proofAchievements[index].dateProof.toString(),
+                                style: GoogleFonts.openSans(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey
+                                ),)
+                            ],
+                          ),
+                        ),
+                        model.proofAchievements[index].statusRequestName.toString() == "Подтверждено" ?
+                        Icon(Icons.check, color: Colors.green, size: 32,) :
+                        model.proofAchievements[index].statusRequestName.toString() == "Отклонено" ?
+                        Icon(Icons.clear, color: Colors.red, size: 32,) :
+                        model.proofAchievements[index].statusRequestName.toString() == "Просмотрено" ?
+                        Icon(Icons.remove_red_eye_outlined, color: Colors.blue, size: 32,) :
+                        Icon(Icons.access_time_outlined, color: Colors.black, size: 32,)
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+        )
     );
   }
 }

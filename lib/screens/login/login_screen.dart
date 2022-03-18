@@ -169,7 +169,7 @@ class LoginScreen extends StatelessWidget {
             )),
         TextButton(
             onPressed: () {
-              model.showFaqScreen(context);
+              _showFaqScreen(context);
             },
             child: Text(
               "Как войти?",
@@ -180,5 +180,28 @@ class LoginScreen extends StatelessWidget {
             )),
       ],
     );
+  }
+
+  _showFaqScreen(context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Icon(
+              Icons.settings,
+              color: Colors.green,
+              size: 48,
+            ),
+            content: Text(
+              "Авторизация студента производится при помощи логина и пароля от eios.kemsu.ru. Пожалуйста, обратитесь в дирекцию свего института для получения логина или пароля.",
+              style: TextStyle(
+                  fontFamily: "Montseratt",
+                  fontStyle: FontStyle.normal,
+                  fontSize: 14,
+                  color: Color(0xFF757575)),
+              textAlign: TextAlign.center,
+            ),
+          );
+        });
   }
 }

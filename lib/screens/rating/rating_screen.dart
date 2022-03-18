@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../model/group.dart';
+import '../../model/institute.dart';
+import '../../model/stream.dart';
+
 class RatingScreenRoute extends MaterialPageRoute {
   RatingScreenRoute() : super(builder: (context) => const RatingScreen());
 }
@@ -45,9 +49,9 @@ class RatingScreen extends StatelessWidget {
             IconButton(onPressed: () {model.changeVisibility(context);}, icon: Icon(Icons.filter_alt), color: Colors.blueAccent,)
           ],
         ),
-        model.showFilters(context),
+        _showFilters(context, model),
         _buttonsTab(context, model),
-        model.topStudentsSpace(context)
+        _topStudentsSpace(context, model)
       ],
     );
   }
@@ -108,6 +112,96 @@ class RatingScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  _showFilters(context, model) {
+    return AnimatedOpacity(
+      opacity: model.isVisibleFilters ? 1.0 : 0.0,
+      duration: const Duration(milliseconds: 500),
+      child: Visibility(
+        visible: model.isVisibleFilters,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: Column(
+              children: [
+                DropdownButton<InstituteModel>(
+                    isExpanded: true,
+                    value: model.filterInstitute,
+                    items: model.institutesList.map<DropdownMenuItem<InstituteModel>>((e) {
+                      return DropdownMenuItem<InstituteModel>(
+                        child: Text(e.instituteFullName.toString()),
+                        value: e,
+                      );
+                    }).toList(),
+                    hint: Text("Институт"),
+                    onChanged: (value) {
+                      model.onChangeInstituteFilter(value);
+                    }),
+                DropdownButton<StreamModel>(
+                    isExpanded: true,
+                    value: model.filterStream,
+                    items: model.streamsList.map<DropdownMenuItem<StreamModel>>((e) {
+                      return DropdownMenuItem<StreamModel>(
+                        child: Text(e.streamName.toString()),
+                        value: e,
+                      );
+                    }).toList(),
+                    hint: Text("Направление"),
+                    onChanged: (value) {
+                      model.onChangeStreamFilter(value);
+                    }),
+                DropdownButton<GroupModel>(
+                    isExpanded: true,
+                    value: model.filterGroup,
+                    items: model.groupsList.map<DropdownMenuItem<GroupModel>>((e) {
+                      return DropdownMenuItem<GroupModel>(
+                        child: Text(e.groupName.toString()),
+                        value: e,
+                      );
+                    }).toList(),
+                    hint: Text("Группа"),
+                    onChanged: (value) {
+                      model.onChangeGroupFilter(value);
+                    }),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _topStudentsSpace(context, model) {
+    return model.filteredStudents.isEmpty
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Expanded(
+        child: ListView.builder(
+          itemCount: model.filteredStudents.length,
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+              onTap: () {
+                model.onTapStudent(context, model.filteredStudents[index].studentId.toString());
+              },
+              child: Card(
+                child: ListTile(
+                  leading: ClipOval(
+                    child: Image.memory(model.getStudentImage(
+                        model.filteredStudents[index].data.toString())),
+                  ),
+                  title: Text(
+                      "${model.filteredStudents[index].firstName.toString()} ${model.filteredStudents[index].lastName.toString()}"),
+                  subtitle: Text(
+                      "${model.filteredStudents[index].instituteName.toString()}, ${model.filteredStudents[index].groupName.toString()}"),
+                  trailing: Text("${model.filteredStudents[index].score.toString()}"),
+                ),
+              ),
+            );
+          },
+        )
     );
   }
 }
