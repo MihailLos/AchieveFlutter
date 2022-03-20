@@ -1,4 +1,5 @@
 import 'package:achieve_student_flutter/screens/achievements/achievements_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/received_achieve_profile_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -11,15 +12,15 @@ class ReceivedAchieveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AchievementsViewModel>.reactive(
-        viewModelBuilder: () => AchievementsViewModel(context),
-        onModelReady: (viewModel) => viewModel.onReadyReceivedAchieveGrid(),
+    return ViewModelBuilder<ReceivedAchieveProfileViewModel>.reactive(
+        viewModelBuilder: () => ReceivedAchieveProfileViewModel(context),
+        onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return _receivedProfileAchievementsGrid(context, model);
         });
   }
 
-  _receivedProfileAchievementsGrid(context, model) {
+  _receivedProfileAchievementsGrid(context, ReceivedAchieveProfileViewModel model) {
     return model.filteredReceivedProfileAchievements.isEmpty
         ? Center(
       child: CircularProgressIndicator(),
