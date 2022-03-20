@@ -1,4 +1,5 @@
 import 'package:achieve_student_flutter/screens/achievements/achievements_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/unreceived_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -12,9 +13,9 @@ class UnreceivedAchieveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AchievementsViewModel>.reactive(
-        viewModelBuilder: () => AchievementsViewModel(context),
-        onModelReady: (viewModel) => viewModel.onReadyUnreceived(),
+    return ViewModelBuilder<UnreceivedAchieveViewModel>.reactive(
+        viewModelBuilder: () => UnreceivedAchieveViewModel(context),
+        onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
             appBar: _appBar(context, model),
@@ -23,7 +24,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
         });
   }
 
-  _appBar(context, model) {
+  _appBar(context, UnreceivedAchieveViewModel model) {
     return AppBar(
       title: Text("Неполученные Достижения",
           style: GoogleFonts.montserrat(
@@ -33,13 +34,13 @@ class UnreceivedAchieveScreen extends StatelessWidget {
       elevation: 0,
       backgroundColor: Colors.transparent,
       actions: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.add_box), color: Color(0xFF4065D8), iconSize: 32,)
+        IconButton(onPressed: () {model.goToNewAchievement(context);}, icon: Icon(Icons.add_box), color: Color(0xFF4065D8), iconSize: 32,)
       ],
       // bottom:
     );
   }
 
-  _body(context, model) {
+  _body(context, UnreceivedAchieveViewModel model) {
     return Column(
       children: [
         _buttonsTab(context, model),
@@ -48,7 +49,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
     );
   }
 
-  _buttonsTab(context, model) {
+  _buttonsTab(context, UnreceivedAchieveViewModel model) {
     return Container(
       child: Row (
         children: [
@@ -81,7 +82,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
     );
   }
 
-  _unreceivedAchievementsList(context, model) {
+  _unreceivedAchievementsList(context, UnreceivedAchieveViewModel model) {
     return model.filteredUnreceivedProfileAchievements.isEmpty
         ? Center(
       child: CircularProgressIndicator(),
