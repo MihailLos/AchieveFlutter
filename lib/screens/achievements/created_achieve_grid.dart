@@ -2,6 +2,8 @@ import 'package:achieve_student_flutter/screens/achievements/achievements_viewmo
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import 'created_achieve_profile_viewmodel.dart';
+
 class CreatedAchieveGridRoute extends MaterialPageRoute {
   CreatedAchieveGridRoute() : super(builder: (context) => const CreatedAchieveGrid());
 }
@@ -11,15 +13,15 @@ class CreatedAchieveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AchievementsViewModel>.reactive(
-        viewModelBuilder: () => AchievementsViewModel(context),
-        onModelReady: (viewModel) => viewModel.onReadyCreatedAchieveGrid(),
+    return ViewModelBuilder<CreatedAchieveProfileViewModel>.reactive(
+        viewModelBuilder: () => CreatedAchieveProfileViewModel(context),
+        onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return _createdProfileAchievementsGrid(context, model);
         });
   }
 
-  _createdProfileAchievementsGrid(context, model) {
+  _createdProfileAchievementsGrid(context, CreatedAchieveProfileViewModel model) {
     return model.createdProfileAchievements.isEmpty
         ? Center(
       child: CircularProgressIndicator(),
