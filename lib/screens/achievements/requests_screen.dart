@@ -1,3 +1,4 @@
+import 'package:achieve_student_flutter/screens/achievements/requests_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -13,9 +14,9 @@ class RequestsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<AchievementsViewModel>.reactive(
-        viewModelBuilder: () => AchievementsViewModel(context),
-        onModelReady: (viewModel) => viewModel.onReadyRequests(),
+    return ViewModelBuilder<RequestsViewModel>.reactive(
+        viewModelBuilder: () => RequestsViewModel(context),
+        onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
             appBar: _appBar(context, model),
@@ -59,35 +60,38 @@ class RequestsScreen extends StatelessWidget {
           color: Color(0xFFD3D3D3),
           borderRadius: BorderRadius.circular(8)
         ),
-        child: Row (
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                  onPressed: () {
-                    model.proofAchieveButtonActive(context);
-                    model.changeRequestsProofAchievements(context);
-                  },
-                  child: Text("Подтверждение", style: TextStyle(color: Colors.black),),
-                style: ElevatedButton.styleFrom(
-                  primary: model.isProofAchieveButtonTapped ? Colors.white : Colors.transparent,
-                  elevation: 0
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+          child: Row (
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                    onPressed: () {
+                      model.proofAchieveButtonActive(context);
+                      model.changeRequestsProofAchievements(context);
+                    },
+                    child: Text("Подтверждение", style: TextStyle(color: Colors.black),),
+                  style: ElevatedButton.styleFrom(
+                    primary: model.isProofAchieveButtonTapped ? Colors.white : Colors.transparent,
+                    elevation: 0
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ElevatedButton(
-                  onPressed: () {
-                    model.createdAchieveButtonActive(context);
-                    model.changeRequestsCreatedAchievements(context);
-                  },
-                  child: Text("Создание", style: TextStyle(color: Colors.black),),
-                style: ElevatedButton.styleFrom(
-                    primary: model.isCreatedAchieveButtonTapped ? Colors.white : Colors.transparent,
-                  elevation: 0
+              Expanded(
+                child: ElevatedButton(
+                    onPressed: () {
+                      model.createdAchieveButtonActive(context);
+                      model.changeRequestsCreatedAchievements(context);
+                    },
+                    child: Text("Создание", style: TextStyle(color: Colors.black),),
+                  style: ElevatedButton.styleFrom(
+                      primary: model.isCreatedAchieveButtonTapped ? Colors.white : Colors.transparent,
+                    elevation: 0
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
