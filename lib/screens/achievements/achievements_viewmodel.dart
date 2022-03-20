@@ -1,114 +1,44 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:achieve_student_flutter/model/achieve_category.dart';
 import 'package:achieve_student_flutter/model/created_achievement.dart';
-import 'package:achieve_student_flutter/model/proof_achieve.dart';
+import 'package:achieve_student_flutter/model/reward.dart';
 import 'package:achieve_student_flutter/network_handler.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:path/path.dart';
+import 'package:image/image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
-import 'package:path_provider/path_provider.dart';
 
-import '../../model/received_achievement.dart';
-import '../../model/unreceived_achievement.dart';
 
-class AchievementsViewModel extends BaseViewModel {
-  AchievementsViewModel(BuildContext context);
+class NewAchievementViewModel extends BaseViewModel {
+  NewAchievementViewModel(BuildContext context);
 
   NetworkHandler networkHandler = NetworkHandler();
   FlutterSecureStorage storage = FlutterSecureStorage();
   CreatedAchievementModel createdAchievementModel = CreatedAchievementModel();
-  List<CreatedAchievementModel> createdProfileAchievements = [];
-  List<CreatedAchievementModel> createdAchievements = [];
-  List<ProofAchieveModel> proofAchievements = [];
-  List<ReceivedAchievementModel> receivedProfileAchievements = [];
-  List<ReceivedAchievementModel> filteredReceivedProfileAchievements = [];
-  List<UnreceivedAchievementModel> unreceivedProfileAchievements = [];
-  List<UnreceivedAchievementModel> filteredUnreceivedProfileAchievements = [];
   List<AchieveCategoryModel> achieveCategoryList = [];
-  AchieveCategoryModel achieveCategoryModel = AchieveCategoryModel();
+  List<RewardModel> rewardList = [];
+  RewardModel? chosenReward;
+  AchieveCategoryModel? achieveCategoryModel;
   bool circle = true;
-  bool isVisibleFilters = false;
-  bool isProof = true;
-  bool isProofAchieveButtonTapped = true;
-  bool isCreatedAchieveButtonTapped = false;
 
-  Future onReadyCreatedAchieveGrid() async {
-    fetchCreatedProfileAchievements();
-    notifyListeners();
-  }
+  File? newAchieveImage;
+  String? decodedNewAchieveImage;
+  var newAchievementTitle = TextEditingController();
+  var newAchievementDescription = TextEditingController();
+  var newAchievementScore = TextEditingController();
+  DateTime? startNewAchieveDate;
+  DateTime? endNewAchieveDate;
+  String? startNewAchieveDateString;
+  String? endNewAchieveDateString;
 
-  Future onReadyReceivedAchieveGrid() async {
-    fetchReceivedProfileAchievements();
+  Future onReady() async {
     fetchAchieveCategory();
-    circle = false;
-    notifyListeners();
-  }
-
-  Future onReadyUnreceived() async {
-    fetchUnreceivedAchievements();
-    circle = false;
-    notifyListeners();
-  }
-
-  Future onReadyRequests() async {
-    fetchRequestAchievements("create");
-    fetchRequestAchievements("proof");
-    circle = false;
-    notifyListeners();
-  }
-
-  void fetchCreatedProfileAchievements() async {
-    var response = await networkHandler.get("/student/achievementsCreated");
-    createdProfileAchievements = parseCreatedProfileAchievements(response);
-    circle = false;
-    notifyListeners();
-  }
-
-  void fetchRequestAchievements(String? type) async {
-    List response;
-    if (type == "create") {
-        response = await networkHandler.get("/student/achievementsCreated");
-        createdAchievements = parseCreatedAchievements(response);
-    } else {
-      response = await networkHandler.get("/student/proof");
-      proofAchievements = parseProofAchievements(response);
-    }
-    circle = false;
-    notifyListeners();
-  }
-
-  void fetchReceivedProfileAchievements([int? categoryId]) async {
-    List response;
-    if (categoryId != null) {
-      response = await networkHandler
-          .get("/student/achievementsReceived/3?categoryId=$categoryId");
-    } else {
-      response = await networkHandler.get("/student/achievementsReceived/3");
-    }
-    receivedProfileAchievements = parseReceivedProfileAchievements(response);
-    filteredReceivedProfileAchievements = receivedProfileAchievements;
-    circle = false;
-    notifyListeners();
-  }
-
-  void fetchUnreceivedAchievements([int? statusActiveId]) async {
-    List response;
-    if (statusActiveId == null) {
-      response = await networkHandler.get("/student/achievementsUnreceived/3");
-    } else {
-      response = await networkHandler
-          .get("/student/achievementsUnreceived/$statusActiveId");
-    }
-    unreceivedProfileAchievements =
-        parseUnreceivedProfileAchievements(response);
-    filteredUnreceivedProfileAchievements = unreceivedProfileAchievements;
+    fetchRewards();
     circle = false;
     notifyListeners();
   }
@@ -119,45 +49,10 @@ class AchievementsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  List<CreatedAchievementModel> parseCreatedProfileAchievements(List response) {
-    return response
-        .map<CreatedAchievementModel>(
-            (json) => CreatedAchievementModel.fromJson(json))
-        .toList()
-        .where((element) =>
-            element.statusActive.toString().contains("Активно") ||
-            element.statusActive.toString().contains("Не активно"))
-        .toList();
-  }
-
-  List<CreatedAchievementModel> parseCreatedAchievements(List response) {
-    return response
-        .map<CreatedAchievementModel>(
-            (json) => CreatedAchievementModel.fromJson(json))
-        .toList();
-  }
-
-  List<ProofAchieveModel> parseProofAchievements(List response) {
-    return response
-        .map<ProofAchieveModel>(
-            (json) => ProofAchieveModel.fromJson(json))
-        .toList();
-  }
-
-  List<ReceivedAchievementModel> parseReceivedProfileAchievements(
-      List response) {
-    return response
-        .map<ReceivedAchievementModel>(
-            (json) => ReceivedAchievementModel.fromJson(json))
-        .toList();
-  }
-
-  List<UnreceivedAchievementModel> parseUnreceivedProfileAchievements(
-      List response) {
-    return response
-        .map<UnreceivedAchievementModel>(
-            (json) => UnreceivedAchievementModel.fromJson(json))
-        .toList();
+  void fetchRewards() async {
+    var response = await networkHandler.get("/rewards");
+    rewardList = parseRewards(response);
+    notifyListeners();
   }
 
   List<AchieveCategoryModel> parseAchieveCategory(List response) {
@@ -167,30 +62,11 @@ class AchievementsViewModel extends BaseViewModel {
         .toList();
   }
 
-  Future<MemoryImage?> getImageForCreated(int index) async {
-    if (createdProfileAchievements[index].data!.isEmpty) {
-      return null;
-    } else {
-      var firstDecode =
-          base64Decode(createdProfileAchievements[index].data.toString());
-      String tempString =
-          String.fromCharCodes(firstDecode).replaceAll("\n", "");
-      var secondDecode = base64Decode(tempString);
-      return MemoryImage(secondDecode);
-    }
-  }
-
-  Future<MemoryImage?> getImageForReceived(int index) async {
-    if (receivedProfileAchievements[index].achieveData == null) {
-      return null;
-    } else {
-      var firstDecode = base64Decode(
-          receivedProfileAchievements[index].achieveData.toString());
-      String tempString =
-          String.fromCharCodes(firstDecode).replaceAll("\n", "");
-      var secondDecode = base64Decode(tempString);
-      return MemoryImage(secondDecode);
-    }
+  List<RewardModel> parseRewards(List response) {
+    return response
+        .map<RewardModel>(
+            (json) => RewardModel.fromJson(json))
+        .toList();
   }
 
   Uint8List getImage(String base64String) {
@@ -200,57 +76,124 @@ class AchievementsViewModel extends BaseViewModel {
     return secondDecode;
   }
 
-  showFilters(context) {
-    return Visibility(
-      visible: isVisibleFilters,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: DropdownButton<AchieveCategoryModel>(
-              isExpanded: true,
-              value: null,
-              items: achieveCategoryList.map((e) {
-                return DropdownMenuItem(
-                  child: Text(e.categoryName.toString()),
-                  value: e,
-                );
-              }).toList(),
-              hint: Text("Категория достижения"),
-              onChanged: (value) {
-                achieveCategoryModel = value!;
-                fetchReceivedProfileAchievements(
-                    achieveCategoryModel.categoryId);
-                notifyListeners();
-              }),
-        ),
-      ),
+  pickNewAchievementImage(context) async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      newAchieveImage = File(image!.path);
+      var decodedImage = decodeImage(File(newAchieveImage!.path).readAsBytesSync());
+      File newFile = File(image.path)..writeAsBytesSync(encodePng(decodedImage!));
+      var firstEncode = base64Encode(newFile.readAsBytesSync());
+      Codec<String, String> stringToBase64 = utf8.fuse(base64);
+      decodedNewAchieveImage = stringToBase64.encode(firstEncode);
+      notifyListeners();
+    } on PlatformException catch (e) {
+      print("Не удалось загрузить изображение: $e");
+    }
+  }
+
+  sendNewAchievementRequest(context) async {
+    var accessToken = await storage.read(key: "token");
+    if (newAchievementTitle.text.isNotEmpty &&
+        newAchievementDescription.text.isNotEmpty &&
+        decodedNewAchieveImage!.isNotEmpty && newAchievementScore.text.isNotEmpty && startNewAchieveDateString!.isNotEmpty) {
+      Map<String, dynamic> bodyData = {
+        "achieveDescription": newAchievementDescription.text,
+        "achieveEndDate": endNewAchieveDateString!.isEmpty ? null : endNewAchieveDateString!,
+        "achieveName": newAchievementTitle.text,
+        "achieveStartDate": startNewAchieveDateString!,
+        "categoryId": achieveCategoryModel!.categoryId,
+        "format": "png",
+        "rewardId": chosenReward!.rewardId,
+        "achieveScore": int.parse(newAchievementScore.text),
+        "photo": decodedNewAchieveImage.toString(),
+      };
+      print(bodyData);
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      };
+      print(headers);
+
+      var response = await networkHandler.post(
+          "/student/newAchieve", headers, bodyData);
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.of(context).pop(true);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваша заявка успешно отправлена.")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке заявки!")));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните все поля заявки!")));
+    }
+  }
+
+  goToUnreceivedFromNewAchievement(context) {
+    Navigator.pop(context);
+  }
+
+  getTextFromStartDateNewAchieve() {
+    if (startNewAchieveDate == null) {
+      return Text("Дата начала", style: TextStyle(color: Colors.black),);
+    } else {
+      if (startNewAchieveDate!.month < 10) {
+        if (startNewAchieveDate!.day < 10) {
+          startNewAchieveDateString = "${startNewAchieveDate!.year}-0${startNewAchieveDate!.month}-0${startNewAchieveDate!.day}";
+        } else {
+          startNewAchieveDateString = "${startNewAchieveDate!.year}-0${startNewAchieveDate!.month}-${startNewAchieveDate!.day}";
+        }
+      } else {
+        startNewAchieveDateString = "${startNewAchieveDate!.year}-${startNewAchieveDate!.month}-${startNewAchieveDate!.day}";
+      }
+      notifyListeners();
+      return Text("${startNewAchieveDate!.day}-${startNewAchieveDate!.month}-${startNewAchieveDate!.year}", style: TextStyle(color: Colors.black),);
+    }
+  }
+
+  getTextFromEndDateNewAchieve() {
+    if (endNewAchieveDate == null) {
+      return Text("Дата окончания", style: TextStyle(color: Colors.black));
+    } else {
+      if (endNewAchieveDate!.month < 10) {
+        if (endNewAchieveDate!.day < 10) {
+          endNewAchieveDateString = "${endNewAchieveDate!.year}-0${endNewAchieveDate!.month}-0${endNewAchieveDate!.day}";
+        } else {
+          endNewAchieveDateString = "${endNewAchieveDate!.year}-0${endNewAchieveDate!.month}-${endNewAchieveDate!.day}";
+        }
+      } else {
+        endNewAchieveDateString = "${endNewAchieveDate!.year}-${endNewAchieveDate!.month}-${endNewAchieveDate!.day}";
+      }
+      notifyListeners();
+      return Text("${endNewAchieveDate!.day}-${endNewAchieveDate!.month}-${endNewAchieveDate!.year}", style: TextStyle(color: Colors.black));
+    }
+  }
+
+  void pickStartNewAchieveDate(context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(DateTime.now().year),
+        lastDate: DateTime(DateTime.now().year + 5)
     );
-  }
+    if (newDate == null) return;
 
-  changeVisibility(context) {
-    isVisibleFilters = !isVisibleFilters;
+    startNewAchieveDate = newDate;
     notifyListeners();
   }
 
-  changeRequestsCreatedAchievements(context) {
-    isProof = false;
-    notifyListeners();
-  }
+  void pickEndNewAchieveDate(context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(DateTime.now().year),
+        lastDate: DateTime(DateTime.now().year + 5)
+    );
+    if (newDate == null) return;
 
-  changeRequestsProofAchievements(context) {
-    isProof = true;
-    notifyListeners();
-  }
-
-  proofAchieveButtonActive(context) {
-    isProofAchieveButtonTapped = true;
-    isCreatedAchieveButtonTapped = false;
-    notifyListeners();
-  }
-
-  createdAchieveButtonActive(context) {
-    isProofAchieveButtonTapped = false;
-    isCreatedAchieveButtonTapped = true;
+    endNewAchieveDate = newDate;
     notifyListeners();
   }
 }
