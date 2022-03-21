@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 
-import 'achievements_viewmodel.dart';
-
 class RequestsScreenRoute extends MaterialPageRoute {
   RequestsScreenRoute() : super(builder: (context) => const RequestsScreen());
 }
@@ -110,7 +108,7 @@ class RequestsScreen extends StatelessWidget {
     );
   }
 
-  _createdAchievementsList(context, model) {
+  _createdAchievementsList(context, RequestsViewModel model) {
     return model.createdAchievements.isEmpty
         ? Center(
       child: CircularProgressIndicator(),
