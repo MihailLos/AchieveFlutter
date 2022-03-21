@@ -92,7 +92,10 @@ class UnreceivedAchieveScreen extends StatelessWidget {
             itemCount: model.filteredUnreceivedProfileAchievements.length,
             itemBuilder: (context, index) {
               return InkWell(
-                onTap: () {},
+                onTap: () async {
+                  await model.storage.write(key: "unreceived_achieve_id", value: model.filteredUnreceivedProfileAchievements[index].achieveId.toString());
+                  model.goToDetailAchievement(context);
+                },
                 child: Card(
                   child: Padding(
                     padding: EdgeInsets.all(8),

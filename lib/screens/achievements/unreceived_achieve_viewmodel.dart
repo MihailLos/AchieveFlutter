@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:achieve_student_flutter/screens/achievements/unreceived_detail_achieve_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -56,5 +57,9 @@ class UnreceivedAchieveViewModel extends BaseViewModel {
 
   goToNewAchievement(context) {
     Navigator.push(context, new MaterialPageRoute(builder: (context) => NewAchieveScreen()));
+  }
+
+  goToDetailAchievement(context) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => UnreceivedDetailAchievementScreen()));
   }
 }
