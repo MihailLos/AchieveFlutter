@@ -112,7 +112,7 @@ class ProfileViewModel extends BaseViewModel {
       Map<String, dynamic> bodyData = {
         "data": secondEncode.toString(),
         "format": "png",
-        "listFileId": 3
+        "listFileId": null
       };
 
       Map<String, String> headers = {
