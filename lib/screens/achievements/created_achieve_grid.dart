@@ -22,7 +22,7 @@ class CreatedAchieveGrid extends StatelessWidget {
   }
 
   _createdProfileAchievementsGrid(context, CreatedAchieveProfileViewModel model) {
-    return model.createdProfileAchievements.isEmpty
+    return model.circle
         ? Center(
       child: CircularProgressIndicator(),
     )
@@ -38,7 +38,10 @@ class CreatedAchieveGrid extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData || snapshot.data != null) {
               return InkWell(
-                onTap: () {},
+                onTap: () async {
+                  await model.storage.write(key: "created_achieve_id", value: model.createdProfileAchievements[index].achieveId.toString());
+                  model.goToDetailCreatedAchievement(context);
+                },
                 child: Container(
                   margin: EdgeInsets.all(8),
                   decoration: BoxDecoration(

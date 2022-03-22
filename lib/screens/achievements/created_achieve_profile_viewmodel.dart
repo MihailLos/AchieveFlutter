@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../model/created_achievement.dart';
 import '../../network_handler.dart';
+import 'created_detail_achieve_screen.dart';
 
 class CreatedAchieveProfileViewModel extends BaseViewModel {
   CreatedAchieveProfileViewModel(BuildContext context);
@@ -18,13 +20,13 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
 
   Future onReady() async {
     fetchCreatedProfileAchievements();
-    circle = false;
     notifyListeners();
   }
 
   void fetchCreatedProfileAchievements() async {
     var response = await networkHandler.get("/student/achievementsCreated");
     createdProfileAchievements = parseCreatedProfileAchievements(response);
+    circle = false;
     notifyListeners();
   }
 
@@ -32,10 +34,6 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
     return response
         .map<CreatedAchievementModel>(
             (json) => CreatedAchievementModel.fromJson(json))
-        .toList()
-        .where((element) =>
-    element.statusActive.toString().contains("Активно") ||
-        element.statusActive.toString().contains("Не активно"))
         .toList();
   }
 
@@ -50,5 +48,9 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
       var secondDecode = base64Decode(tempString);
       return MemoryImage(secondDecode);
     }
+  }
+
+  goToDetailCreatedAchievement(context) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => CreatedDetailAchieveScreen()));
   }
 }
