@@ -109,7 +109,7 @@ class RequestsScreen extends StatelessWidget {
   }
 
   _createdAchievementsList(context, RequestsViewModel model) {
-    return model.createdAchievements.isEmpty
+    return model.circle
         ? Center(
       child: CircularProgressIndicator(),
     ) : Expanded(
@@ -119,7 +119,10 @@ class RequestsScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    await model.storage.write(key: "created_achieve_id", value: model.createdAchievements[index].achieveId.toString());
+                    model.goToDetailCreatedAchievement(context);
+                  },
                   child: Card(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,8 +179,8 @@ class RequestsScreen extends StatelessWidget {
     );
   }
 
-  _proofAchievementsList(context, model) {
-    return model.proofAchievements.isEmpty
+  _proofAchievementsList(context, RequestsViewModel model) {
+    return model.circle
         ? Center(
       child: CircularProgressIndicator(),
     ) : Expanded(
@@ -187,7 +190,10 @@ class RequestsScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    await model.storage.write(key: "proof_achieve_id", value: model.proofAchievements[index].proofId.toString());
+                    model.goToDetailProofAchievement(context);
+                  },
                   child: Card(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

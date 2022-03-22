@@ -83,7 +83,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
   }
 
   _unreceivedAchievementsList(context, UnreceivedAchieveViewModel model) {
-    return model.filteredUnreceivedProfileAchievements.isEmpty
+    return model.circle
         ? Center(
       child: CircularProgressIndicator(),
     )

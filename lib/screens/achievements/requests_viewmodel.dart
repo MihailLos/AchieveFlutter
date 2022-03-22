@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:achieve_student_flutter/screens/achievements/created_detail_achieve_screen.dart';
+import 'package:achieve_student_flutter/screens/achievements/proof_detail_achieve_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
 
@@ -24,7 +27,6 @@ class RequestsViewModel extends BaseViewModel {
   Future onReady() async {
     fetchRequestAchievements("create");
     fetchRequestAchievements("proof");
-    circle = false;
     notifyListeners();
   }
 
@@ -37,6 +39,7 @@ class RequestsViewModel extends BaseViewModel {
       response = await networkHandler.get("/student/proof");
       proofAchievements = parseProofAchievements(response);
     }
+    circle = false;
     notifyListeners();
   }
 
@@ -81,5 +84,13 @@ class RequestsViewModel extends BaseViewModel {
     isProofAchieveButtonTapped = false;
     isCreatedAchieveButtonTapped = true;
     notifyListeners();
+  }
+
+  goToDetailCreatedAchievement(context) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => CreatedDetailAchieveScreen()));
+  }
+
+  goToDetailProofAchievement(context) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => ProofDetailAchieveScreen()));
   }
 }

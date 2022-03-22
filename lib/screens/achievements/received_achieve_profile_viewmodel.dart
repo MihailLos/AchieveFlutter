@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:achieve_student_flutter/screens/achievements/received_detail_achieve_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,7 +27,6 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   Future onReady() async {
     fetchReceivedProfileAchievements();
     fetchAchieveCategory();
-    circle = false;
     notifyListeners();
   }
 
@@ -40,6 +40,7 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
     }
     receivedProfileAchievements = parseReceivedProfileAchievements(response);
     filteredReceivedProfileAchievements = receivedProfileAchievements;
+    circle = false;
     notifyListeners();
   }
 
@@ -107,5 +108,9 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   changeVisibility(context) {
     isVisibleFilters = !isVisibleFilters;
     notifyListeners();
+  }
+
+  goToDetailReceivedAchievement(BuildContext context) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => ReceivedDetailAchieveScreen()));
   }
 }

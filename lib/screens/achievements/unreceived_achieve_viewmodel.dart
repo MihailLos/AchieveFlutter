@@ -22,7 +22,6 @@ class UnreceivedAchieveViewModel extends BaseViewModel {
 
   Future onReady() async {
     fetchUnreceivedAchievements();
-    circle = false;
     notifyListeners();
   }
 
@@ -37,6 +36,7 @@ class UnreceivedAchieveViewModel extends BaseViewModel {
     unreceivedProfileAchievements =
         parseUnreceivedAchievements(response);
     filteredUnreceivedProfileAchievements = unreceivedProfileAchievements;
+    circle = false;
     notifyListeners();
   }
 
