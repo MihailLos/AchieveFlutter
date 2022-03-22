@@ -36,7 +36,7 @@ class LoginViewModel extends BaseViewModel {
   void loginAction(context) async {
     if (loginController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       Map<String, String> bodyData = {
-        "email": loginController.text,
+        "login": loginController.text,
         "password": passwordController.text
       };
 
@@ -44,12 +44,24 @@ class LoginViewModel extends BaseViewModel {
         'Content-Type': 'application/json',
       };
 
-      var response = await networkHandler.post("/auth", headers, bodyData);
+      Map<String, String> headersForTokenEios = {
+        'Content-Type': 'application/json',
+        'Application': 'application/json',
+      };
+
+      var response = await networkHandler.post("/authEios", headers, bodyData);
+      var responseForTokenEios = await http.post(Uri.parse('https://api-next.kemsu.ru/api/auth'), headers: headersForTokenEios, body: jsonEncode(bodyData));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map<String, dynamic> output = json.decode(response.body);
         await tokenStorage.write(key: "token", value: output["accessToken"]);
         await tokenStorage.write(key: "refresh_token", value: output["refreshToken"]);
+        if (responseForTokenEios.statusCode == 200 || responseForTokenEios.statusCode == 201) {
+          Map<String, dynamic> outputForEiosToken = json.decode(response.body);
+          await tokenStorage.write(key: "eios_token", value: outputForEiosToken["accessToken"]);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Не удалось подключиться к системе защиты ЭИОС.")));
+        }
         Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => HomeView()), (route) => false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Авторизация прошла успешно.")));
       } else {
