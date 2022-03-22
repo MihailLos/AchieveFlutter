@@ -25,13 +25,13 @@ class NetworkHandler {
     log.i(response.statusCode);
   }
 
-  Future<http.Response> post(String uri, Map<String, String> headers, Map<String, dynamic> body) async {
+  Future<http.Response> post(String uri, Map<String, String>? headers, Map<String, dynamic>? body) async {
     uri = formater(uri);
     var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(body));
     return response;
   }
 
-  Future<http.Response> put(String uri, Map<String, String> headers, Map<String, dynamic> body) async {
+  Future<http.Response> put(String uri, Map<String, String>? headers, Map<String, dynamic>? body) async {
     uri = formater(uri);
     var response = await http.put(Uri.parse(uri), headers: headers, body: jsonEncode(body));
     return response;
