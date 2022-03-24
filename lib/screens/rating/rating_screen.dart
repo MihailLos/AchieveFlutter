@@ -1,6 +1,7 @@
 import 'package:achieve_student_flutter/screens/rating/rating_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../model/group.dart';
@@ -21,7 +22,6 @@ class RatingScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
-            appBar: _appBar(context, model),
             body: _body(context, model),
           );
         });
@@ -30,7 +30,7 @@ class RatingScreen extends StatelessWidget {
   _appBar(context, model) {
     return AppBar(
       title: Text("Рейтинг студентов",
-          style: GoogleFonts.montserrat(
+          style: CyrillicFonts.robotoMono(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Color(0xFF4065D8))),
@@ -39,16 +39,11 @@ class RatingScreen extends StatelessWidget {
       // bottom:
     );
   }
-
   _body(context, model) {
     return Column(
       children: [
-        Row(
-          children: [
-            _searchTextView(context, model),
-            IconButton(onPressed: () {model.changeVisibility(context);}, icon: Icon(Icons.filter_alt), color: Colors.blueAccent,)
-          ],
-        ),
+        _searchTextView(context, model),
+        _titleAndFilters(context, model),
         _showFilters(context, model),
         _buttonsTab(context, model),
         _topStudentsSpace(context, model)
@@ -58,61 +53,135 @@ class RatingScreen extends StatelessWidget {
 
   _searchTextView(context, model) {
     return Container(
-      width: 300,
-      height: 46,
-      child: TextField(
-        controller: model.searchController,
-        onChanged: (value) {
-          model.searchAction();
-        },
-        obscureText: false,
-        style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-            fillColor: Color(0xfff3f2f2),
-            //suffixIcon: IconButton(icon: Icon(Icons.search), onPressed: model.searchAction,),
-            filled: true,
-            hintText: "Фамилия студента"),
+      color: Color(0xFF39ABDF),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 0),
+        child: Container(
+          width: double.maxFinite,
+          height: 46,
+          child: TextField(
+            controller: model.searchController,
+            obscureText: false,
+            style: TextStyle(fontFamily: 'OpenSans', fontSize: 16, color: Colors.white),
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: "Поиск",
+                hintStyle: CyrillicFonts.openSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.search),
+                  color: Colors.white,
+                  onPressed: () {
+                    model.searchAction();
+                    },
+                  iconSize: 32,)
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  _buttonsTab(context, model) {
-    return Container(
-      child: Row (
+  _titleAndFilters(context, RatingViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 21),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: ElevatedButton(
-                onPressed: () {
-                  model.fetchStudentsTop10();
-                },
-                child: Text("Топ-10")
-            ),
+          Text("Рейтинг студентов",
+              style: CyrillicFonts.robotoMono(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF4065D8)
+              )
           ),
-          Expanded(
-            child: ElevatedButton(
-                onPressed: () {
-                  model.fetchStudentsTop50();
-                },
-                child: Text("Топ-50")
-            ),
-          ),
-          Expanded(
-            child: ElevatedButton(
-                onPressed: () {
-                  model.fetchStudentsTop100();
-                },
-                child: Text("Топ-100")
-            ),
-          )
+          IconButton(onPressed: () {model.changeVisibility(context);}, icon: Icon(Icons.filter_alt, size: 32,), color: Colors.blueAccent,)
         ],
       ),
     );
+  }
+
+  _buttonsTab(context, RatingViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Container(
+          height: 36,
+          padding: EdgeInsets.zero,
+          decoration: BoxDecoration(
+              color: Color(0xFF39ABDF),
+              borderRadius: BorderRadius.all(Radius.circular(180)),
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0xFFFF9966),
+                    offset: Offset(0, 3.5),
+                    spreadRadius: 1,
+                    blurRadius: 7
+                )
+              ]
+          ),
+          child: ToggleButtons(
+            borderRadius: BorderRadius.circular(180),
+            selectedColor: Colors.white,
+            fillColor: Color(0xFFFF9966),
+            renderBorder: false,
+            color: Colors.white,
+            constraints: BoxConstraints.expand(width: (constraints.maxWidth / 3) - 3),
+            isSelected: model.isSelectedButton,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Топ 10", style: CyrillicFonts.openSans(fontSize: 12, fontWeight: FontWeight.w700),),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Топ 50", style: CyrillicFonts.openSans(fontSize: 12, fontWeight: FontWeight.w700),),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Топ 100", style: CyrillicFonts.openSans(fontSize: 12, fontWeight: FontWeight.w700),),
+              ),
+            ],
+            onPressed: (int newIndex) {
+              model.onChangeToggle(newIndex);
+            },
+          ),
+        ),
+      ),
+    );
+    // return Container(
+    //   child: Row (
+    //     children: [
+    //       Expanded(
+    //         child: ElevatedButton(
+    //             onPressed: () {
+    //               model.fetchStudentsTop10();
+    //             },
+    //             child: Text("Топ-10")
+    //         ),
+    //       ),
+    //       Expanded(
+    //         child: ElevatedButton(
+    //             onPressed: () {
+    //               model.fetchStudentsTop50();
+    //             },
+    //             child: Text("Топ-50")
+    //         ),
+    //       ),
+    //       Expanded(
+    //         child: ElevatedButton(
+    //             onPressed: () {
+    //               model.fetchStudentsTop100();
+    //             },
+    //             child: Text("Топ-100")
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   _showFilters(context, model) {
@@ -186,17 +255,46 @@ class RatingScreen extends StatelessWidget {
               onTap: () {
                 model.onTapStudent(context, model.filteredStudents[index].studentId.toString());
               },
-              child: Card(
-                child: ListTile(
-                  leading: ClipOval(
-                    child: Image.memory(model.getStudentImage(
-                        model.filteredStudents[index].data.toString())),
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 21),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("${index + 1}", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w800)),
+                      Center(
+                        child: ClipOval(
+                          child: Image.memory(model.getStudentImage(
+                              model.filteredStudents[index].data.toString()), width: 61, height: 61,),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("${model.filteredStudents[index].firstName.toString()} ${model.filteredStudents[index].lastName.toString()}",
+                            style: CyrillicFonts.raleway(fontSize: 12, color: Colors.black, fontWeight: FontWeight.w700),),
+                          Text(
+                              "${model.filteredStudents[index].instituteName.toString()}, ${model.filteredStudents[index].groupName.toString()}",
+                              style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w700))
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            model.filteredStudents[index].score.toString(),
+                            style: CyrillicFonts.montserrat(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.normal,
+                                color: Colors.blueAccent),
+                          ),
+                          Image(image: AssetImage("assets/images/prize_icon.png"))
+                        ],
+                      )
+                    ],
                   ),
-                  title: Text(
-                      "${model.filteredStudents[index].firstName.toString()} ${model.filteredStudents[index].lastName.toString()}"),
-                  subtitle: Text(
-                      "${model.filteredStudents[index].instituteName.toString()}, ${model.filteredStudents[index].groupName.toString()}"),
-                  trailing: Text("${model.filteredStudents[index].score.toString()}"),
                 ),
               ),
             );

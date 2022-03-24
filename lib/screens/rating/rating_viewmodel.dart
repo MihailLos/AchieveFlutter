@@ -29,6 +29,7 @@ class RatingViewModel extends BaseViewModel {
   GroupModel? filterGroup;
   FlutterSecureStorage storage = FlutterSecureStorage();
   bool isVisibleFilters = false;
+  List<bool> isSelectedButton = [true, false, false];
 
   Future onReady() async {
     fetchStudentsTop10();
@@ -128,29 +129,35 @@ class RatingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  onChangeInstituteFilter(InstituteModel? instituteModel) {
+  onChangeInstituteFilter(InstituteModel? instituteModel) async {
     filterStream = null;
     filterGroup = null;
     filterInstitute = instituteModel;
     fetchStreams();
-    filteredStudents = fetchedStudents.where((element) => element.instituteName!
-        .contains(instituteModel!.instituteFullName.toString())).toList();
+    var response = await networkHandler.get("/student/students100?filterName=Институт&filterId=${instituteModel!.instituteId}");
+    filteredStudents = parseStudents(response);
+    // filteredStudents = fetchedStudents.where((element) => element.instituteName!
+    //     .contains(instituteModel!.instituteFullName.toString())).toList();
     notifyListeners();
   }
 
-  onChangeStreamFilter(StreamModel? streamModel) {
+  onChangeStreamFilter(StreamModel? streamModel) async {
     filterGroup = null;
     filterStream = streamModel;
     fetchGroups();
-    filteredStudents = fetchedStudents.where((element) => element.streamName!
-        .contains(streamModel!.streamName.toString())).toList();
+    var response = await networkHandler.get("/student/students100?filterName=Направление&filterId=${streamModel!.streamId}");
+    filteredStudents = parseStudents(response);
+    // filteredStudents = fetchedStudents.where((element) => element.streamName!
+    //     .contains(streamModel!.streamName.toString())).toList();
     notifyListeners();
   }
 
-  onChangeGroupFilter(GroupModel? groupModel) {
+  onChangeGroupFilter(GroupModel? groupModel) async {
     filterGroup = groupModel;
-    filteredStudents = fetchedStudents.where((element) => element.groupName!
-        .contains(groupModel!.groupName.toString())).toList();
+    var response = await networkHandler.get("/student/students100?filterName=Группа&filterId=${groupModel!.groupId}");
+    filteredStudents = parseStudents(response);
+    // filteredStudents = fetchedStudents.where((element) => element.groupName!
+    //     .contains(groupModel!.groupName.toString())).toList();
     notifyListeners();
   }
 
@@ -158,5 +165,25 @@ class RatingViewModel extends BaseViewModel {
     await storage.write(key: "student_id", value: studentId);
     notifyListeners();
     goToStudentDetail(context);
+  }
+
+  onChangeToggle(int newIndex) {
+    for (int index = 0; index < isSelectedButton.length; index++) {
+      if (index == newIndex) {
+        isSelectedButton[index] = true;
+        if (newIndex == 0) {
+          fetchStudentsTop10();
+          notifyListeners();
+        } else if (newIndex == 1) {
+          fetchStudentsTop50();
+          notifyListeners();
+        } else {
+          fetchStudentsTop100();
+          notifyListeners();
+        }
+      } else {
+        isSelectedButton[index] = false;
+      }
+    }
   }
 }
