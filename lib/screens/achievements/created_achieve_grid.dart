@@ -1,5 +1,6 @@
 import 'package:achieve_student_flutter/screens/achievements/achievements_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 import 'created_achieve_profile_viewmodel.dart';
@@ -43,6 +44,8 @@ class CreatedAchieveGrid extends StatelessWidget {
                   model.goToDetailCreatedAchievement(context);
                 },
                 child: Container(
+                  width: 100,
+                  height: 200,
                   margin: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -50,22 +53,23 @@ class CreatedAchieveGrid extends StatelessWidget {
                         fit: BoxFit.fill),
                     border: Border.all(color: Colors.lightBlue, width: 4),
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Color(0xffbfbfbf),
-                          blurRadius: 6,
-                          spreadRadius: 2,
-                          offset: Offset(0, 4)),
-                    ],
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
                           padding: EdgeInsets.all(4),
                           child: Text(
                             "${model.createdProfileAchievements[index].achieveName.toString()}",
-                            style: TextStyle(color: Colors.white),
+                            style: CyrillicFonts.openSans(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 0.7
+                                  ..color = Colors.black
+                            ),
                           ))
                     ],
                   ),
