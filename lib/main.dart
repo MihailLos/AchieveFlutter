@@ -18,9 +18,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   runApp(MaterialApp(
+    theme: ThemeData(
+      primaryColor: Color(0xFF4065D8)
+    ),
     debugShowCheckedModeBanner: false,
     home: LoginScreen(),
   ));
