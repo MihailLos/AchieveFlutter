@@ -60,12 +60,12 @@ class LoginViewModel extends BaseViewModel {
           Map<String, dynamic> outputForEiosToken = json.decode(response.body);
           await tokenStorage.write(key: "eios_token", value: outputForEiosToken["accessToken"]);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Не удалось подключиться к системе защиты ЭИОС.")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Не удалось подключиться к системе защиты ЭИОС. (Код ошибки: ${response.statusCode})")));
         }
         Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => HomeView()), (route) => false);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Авторизация прошла успешно.")));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Логин или пароль введены неверно!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Логин или пароль введены неверно! (Код ошибки: ${response.statusCode})")));
       }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Введите логин и пароль!")));
