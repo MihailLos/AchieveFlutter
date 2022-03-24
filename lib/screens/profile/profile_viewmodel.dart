@@ -28,7 +28,8 @@ class ProfileViewModel extends BaseViewModel {
   bool circular = true;
   FlutterSecureStorage storage = FlutterSecureStorage();
   double? studentPercentProgressBar;
-  bool? isCreated = true;
+  bool isCreated = false;
+  List<bool> isSelectedButton = [true, false];
 
   Future onReady() async {
     fetchData();
@@ -46,7 +47,6 @@ class ProfileViewModel extends BaseViewModel {
     var response = await networkHandler.get("/student/achievementsPercent");
     studentPercent = response;
     studentPercentProgressBar = studentPercent! / 100;
-    circular = false;
     notifyListeners();
   }
 
@@ -141,16 +141,6 @@ class ProfileViewModel extends BaseViewModel {
     }
   }
 
-  showCreatedAchieve() {
-    isCreated = true;
-    notifyListeners();
-  }
-
-  showReceivedAchieve() {
-    isCreated = false;
-    notifyListeners();
-  }
-
   goToReportsScreen(context) {
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => ReportScreen()));
@@ -159,6 +149,22 @@ class ProfileViewModel extends BaseViewModel {
   Future<void> refresh() async {
     fetchData();
     fetchStudentPercent();
-    showCreatedAchieve();
+  }
+
+  onChangeToggle(int newIndex) {
+    for (int index = 0; index < isSelectedButton.length; index++) {
+      if (index == newIndex) {
+        isSelectedButton[index] = true;
+        if (newIndex == 0) {
+          isCreated = false;
+          notifyListeners();
+        } else {
+          isCreated = true;
+          notifyListeners();
+        }
+      } else {
+        isSelectedButton[index] = false;
+      }
+    }
   }
 }

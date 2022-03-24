@@ -3,6 +3,8 @@ import 'package:achieve_student_flutter/screens/achievements/received_achieve_gr
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'profile_viewmodel.dart';
@@ -42,12 +44,7 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       actions: [
         IconButton(
-          icon: Icon(Icons.refresh, color: Color(0xFFFF9966),),
-          onPressed: () => model.refresh(),
-          iconSize: 32,
-        ),
-        IconButton(
-          icon: Image.asset("assets/images/exit_button.png"),
+          icon: Icon(Icons.logout, color: Colors.blueAccent,),
           onPressed: () => model.exitButtonAction(context),
           iconSize: 32,
         ),
@@ -77,6 +74,7 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(
             height: 27,
           ),
+          _achievementsTitle(),
           _buttonsSpace(context, model),
           SizedBox(
             height: 10,
@@ -143,9 +141,9 @@ class ProfileScreen extends StatelessWidget {
           return Center(
             child: Text(
               snapshot.data as String,
-              style: GoogleFonts.montserrat(
+              style: CyrillicFonts.raleway(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.normal),
             ),
           );
@@ -159,11 +157,19 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _editProfilePictureButton(context, model) {
-    return _buildCircle(
-      Icon(
-        Icons.edit,
-        size: 20,
-        color: Colors.white,
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: ((builder) =>
+                _bottomChooseProfilePhotoWidget(context, model)));
+      },
+      child: _buildCircle(
+        Icon(
+          Icons.edit,
+          size: 20,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -198,7 +204,7 @@ class ProfileScreen extends StatelessWidget {
             children: [
               Text(
                 model.studentProfileModel.score.toString(),
-                style: GoogleFonts.montserrat(
+                style: CyrillicFonts.montserrat(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal,
@@ -212,20 +218,25 @@ class ProfileScreen extends StatelessWidget {
   _progressBar(context, model) {
     return model.circular
         ? LinearProgressIndicator()
-        : SizedBox(
-            height: 29,
-            width: 202,
+        : Container(
+          height: 29,
+          width: 202,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
             child: LinearProgressIndicator(
+              backgroundColor: Color(0xFFE2E2E2),
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0x7CEAF1)),
               value: model.studentPercentProgressBar,
             ),
-          );
+          ),
+        );
   }
 
   _userPercent(context, model) {
     return model.circular
         ? LinearProgressIndicator()
         : Text(model.studentPercent.toString() + "%",
-            style: GoogleFonts.montserrat(
+            style: CyrillicFonts.montserrat(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.normal,
@@ -237,7 +248,7 @@ class ProfileScreen extends StatelessWidget {
     return model.circular
         ? LinearProgressIndicator()
         : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 29),
+            padding: const EdgeInsets.fromLTRB(29, 59, 29, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -245,7 +256,8 @@ class ProfileScreen extends StatelessWidget {
                   future: model.getInstitute(),
                     builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data as String);
+                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500),
+                      );
                     } else if (snapshot.hasError) {
                       return Center(child: Text("Произошла ошибка"),);
                     } else {
@@ -260,7 +272,7 @@ class ProfileScreen extends StatelessWidget {
                   future: model.getStream(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data as String);
+                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500));
                     } else if (snapshot.hasError) {
                       return Center(child: Text("Произошла ошибка"),);
                     } else {
@@ -275,7 +287,7 @@ class ProfileScreen extends StatelessWidget {
                   future: model.getGroup(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data as String);
+                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500));
                     } else if (snapshot.hasError) {
                       return Center(child: Text("Произошла ошибка"),);
                     } else {
@@ -288,13 +300,49 @@ class ProfileScreen extends StatelessWidget {
           );
   }
 
-  _buttonsSpace(context, model) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(onPressed: () {model.showCreatedAchieve();}, child: Text("Созданные")),
-        ElevatedButton(onPressed: () {model.showReceivedAchieve();}, child: Text("Полученные")),
-      ],
+  _buttonsSpace(context, ProfileViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Container(
+          height: 36,
+          padding: EdgeInsets.zero,
+          decoration: BoxDecoration(
+              color: Color(0xFF39ABDF),
+              borderRadius: BorderRadius.all(Radius.circular(180)),
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0xFFFF9966),
+                    offset: Offset(0, 3.5),
+                    spreadRadius: 1,
+                    blurRadius: 7
+                )
+              ]
+          ),
+          child: ToggleButtons(
+              borderRadius: BorderRadius.circular(180),
+              selectedColor: Colors.white,
+              color: Colors.white,
+              fillColor: Color(0xFFFF9966),
+              renderBorder: false,
+              constraints: BoxConstraints.expand(width: (constraints.maxWidth / 2)),
+              isSelected: model.isSelectedButton,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Выполненные", style: CyrillicFonts.robotoMono(fontSize: 11, fontWeight: FontWeight.w600),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Созданные", style: CyrillicFonts.robotoMono(fontSize: 11, fontWeight: FontWeight.w600),),
+                ),
+              ],
+              onPressed: (int newIndex) {
+                model.onChangeToggle(newIndex);
+              },
+            ),
+        ),
+      ),
     );
   }
 
@@ -363,6 +411,26 @@ class ProfileScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  _achievementsTitle() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "Ваши достижения",
+            style: CyrillicFonts.raleway(
+                fontSize: 24,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF4065D8)
+            ),
+          ),
+        ],
       ),
     );
   }
