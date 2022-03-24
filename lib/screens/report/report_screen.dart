@@ -1,6 +1,7 @@
 import 'package:achieve_student_flutter/screens/report/report_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class ReportScreenRoute extends MaterialPageRoute {
@@ -33,13 +34,6 @@ class ReportScreen extends StatelessWidget {
         },
         iconSize: 32,
       ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.refresh, color: Colors.black,),
-          onPressed: () => model.refresh(),
-          iconSize: 32,
-        ),
-      ],
       elevation: 0,
       backgroundColor: Colors.transparent,
     );
@@ -68,10 +62,10 @@ class ReportScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20),
       child: Text(
         "Поддержка",
-        style: GoogleFonts.montserrat(
+        style: CyrillicFonts.raleway(
           fontSize: 24,
           fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w700,
           color: Color(0xFF4065D8)
         ),
       ),
@@ -79,42 +73,45 @@ class ReportScreen extends StatelessWidget {
   }
 
   _createReportButton(context, model) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-            width: 320,
-            height: 46,
-            decoration: BoxDecoration(
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Color(0xffbfbfbf),
-                    blurRadius: 6,
-                    spreadRadius: 2,
-                    offset: Offset(0, 4)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
+      child: Container(
+          width: double.maxFinite,
+          height: 46,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black45,
+                  offset: Offset(0, 6),
+                  spreadRadius: 1,
+                  blurRadius: 7
+              )
+            ],
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFFFBC89),
+                Color(0xFFFF9A67)
               ],
             ),
-            child: ElevatedButton(
-              onPressed: () {
-                model.goToNewReportsScreen(context);
-              },
-              child: Text(
-                "Написать в поддержку",
-                style: TextStyle(
-                    fontFamily: "Montseratt",
-                    fontStyle: FontStyle.normal,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600),
-              ),
-              style: ElevatedButton.styleFrom(
-                shape: new RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                primary: Color(0xFFFF9966),
-              ),
-            )
-        ),
-      ],
+          ),
+          child: TextButton(
+            onPressed: () async {
+              model.goToNewReportsScreen(context);
+            },
+            child: Text(
+              "Написать в поддержку",
+              style: CyrillicFonts.robotoMono(
+                fontStyle: FontStyle.normal,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,),
+            ),
+
+          )
+      ),
     );
   }
 
@@ -126,7 +123,7 @@ class ReportScreen extends StatelessWidget {
         children: [
           Text(
             "Ваши обращения",
-            style: GoogleFonts.montserrat(
+            style: CyrillicFonts.raleway(
                 fontSize: 24,
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.w500,

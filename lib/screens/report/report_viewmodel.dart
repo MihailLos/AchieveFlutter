@@ -68,7 +68,7 @@ class ReportViewModel extends BaseViewModel {
         Navigator.of(context).pop(true);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваше обращение успешно отправлено.")));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке обращения!")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке обращения! (Код ошибки: ${response.statusCode})")));
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните тему и описание обращения!")));
