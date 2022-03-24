@@ -16,7 +16,6 @@ class ReportDetailViewModel extends BaseViewModel {
 
   Future onReady() async {
     getReport();
-    circular = false;
     notifyListeners();
   }
 
@@ -31,6 +30,7 @@ class ReportDetailViewModel extends BaseViewModel {
     detailReportModel = DetailReportModel.fromJson(response);
     DateTime parsedDate = DateTime.parse(detailReportModel.messageErrorDate.toString());
     detailReportModel.messageErrorDate = DateFormat('dd.MM.yyyy').format(parsedDate);
+    circular = false;
     notifyListeners();
   }
 }
