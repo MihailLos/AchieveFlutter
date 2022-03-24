@@ -1,6 +1,7 @@
 import 'package:achieve_student_flutter/screens/achievements/achievements_viewmodel.dart';
 import 'package:achieve_student_flutter/screens/achievements/received_achieve_profile_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class ReceivedAchieveGridRoute extends MaterialPageRoute {
@@ -31,7 +32,7 @@ class ReceivedAchieveGrid extends StatelessWidget {
           onPressed: () {
             model.changeVisibility(context);
           },
-          icon: Icon(Icons.filter_alt),
+          icon: Icon(Icons.filter_alt, size: 30,),
           color: Colors.blueAccent,
         ),
         model.showFilters(context),
@@ -66,22 +67,23 @@ class ReceivedAchieveGrid extends StatelessWidget {
                                 : Colors.orange,
                             width: 4),
                         borderRadius: BorderRadius.circular(10),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Color(0xffbfbfbf),
-                              blurRadius: 6,
-                              spreadRadius: 2,
-                              offset: Offset(0, 4)),
-                        ],
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
                               padding: EdgeInsets.all(4),
                               child: Text(
                                 "${model.filteredReceivedProfileAchievements[index].achieveName.toString()}",
-                                style: TextStyle(color: Colors.white),
+                                style: CyrillicFonts.openSans(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 0.7
+                                      ..color = Colors.black
+                                ),
                               ))
                         ],
                       ),
