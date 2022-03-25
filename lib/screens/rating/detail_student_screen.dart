@@ -2,10 +2,11 @@ import 'package:achieve_student_flutter/screens/rating/detail_student_viewmodel.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 
-import '../achievements/received_achieve_grid.dart';
+import '../achievements/profile_achievements/received_achieve_grid.dart';
 
 class DetailStudentScreenRoute extends MaterialPageRoute {
   DetailStudentScreenRoute() : super(builder: (context) => const DetailStudentScreen());
@@ -59,9 +60,6 @@ class DetailStudentScreen extends StatelessWidget {
           height: 8,
         ),
         _educationInfo(context, model),
-        SizedBox(
-          height: 27,
-        ),
       ],
     );
   }
@@ -96,9 +94,9 @@ class DetailStudentScreen extends StatelessWidget {
             return Center(
               child: Text(
                 snapshot.data as String,
-                style: GoogleFonts.montserrat(
+                style: CyrillicFonts.raleway(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.normal),
               ),
             );
@@ -131,7 +129,7 @@ class DetailStudentScreen extends StatelessWidget {
       children: [
         Text(
           model.studentProfileModel.score.toString(),
-          style: GoogleFonts.montserrat(
+          style: CyrillicFonts.montserrat(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.normal,
@@ -145,11 +143,16 @@ class DetailStudentScreen extends StatelessWidget {
   _progressBar(context, model) {
     return model.circular
         ? LinearProgressIndicator()
-        : SizedBox(
+        : Container(
       height: 29,
       width: 202,
-      child: LinearProgressIndicator(
-        value: model.studentPercentProgressBar,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: LinearProgressIndicator(
+          backgroundColor: Color(0xFFE2E2E2),
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF7CEAF1)),
+          value: model.studentPercentProgressBar,
+        ),
       ),
     );
   }
@@ -158,7 +161,7 @@ class DetailStudentScreen extends StatelessWidget {
     return model.circular
         ? LinearProgressIndicator()
         : Text(model.studentPercent.toString() + "%",
-        style: GoogleFonts.montserrat(
+        style: CyrillicFonts.montserrat(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           fontStyle: FontStyle.normal,
@@ -170,73 +173,20 @@ class DetailStudentScreen extends StatelessWidget {
     return model.circular
         ? LinearProgressIndicator()
         : Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 29),
+      padding: const EdgeInsets.fromLTRB(29, 59, 29, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(model.studentProfileModel.instituteFullName),
+          Text(model.studentProfileModel.instituteFullName, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
           SizedBox(
             height: 5,
           ),
-          Text(model.studentProfileModel.streamFullName),
+          Text(model.studentProfileModel.streamFullName, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
           SizedBox(
             height: 5,
           ),
-          Text(model.studentProfileModel.groupName),
+          Text(model.studentProfileModel.groupName, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
         ],
-      ),
-    );
-  }
-
-  _bottomChooseProfilePhotoWidget(context, model) {
-    return Container(
-      height: 150,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Center(
-        child: Column(
-          children: [
-            Text(
-              "Изменить фото профиля",
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              "Если фото будет содержать непристойный контент, Ваш аккаунт будет заблокирован модератором!",
-              style: TextStyle(fontSize: 14),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {model.pickPhoto(ImageSource.camera);},
-                      icon: Icon(Icons.camera_alt_outlined),
-                      iconSize: 40,
-                    ),
-                    Text("Камера", style: TextStyle(fontSize: 14),)
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {model.pickPhoto(ImageSource.gallery);},
-                      icon: Icon(Icons.image_outlined),
-                      iconSize: 40,
-                    ),
-                    Text("Галерея", style: TextStyle(fontSize: 14),)
-                  ],
-                )
-              ],
-            )
-          ],
-        ),
       ),
     );
   }

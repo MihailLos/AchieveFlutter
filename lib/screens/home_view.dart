@@ -1,11 +1,11 @@
-import 'package:achieve_student_flutter/screens/achievements/unreceived_achieve_screen.dart';
+import 'package:achieve_student_flutter/screens/achievements/unreceived_achievements//unreceived_achieve_screen.dart';
 import 'package:achieve_student_flutter/screens/home_viewmodel.dart';
 import 'package:achieve_student_flutter/screens/profile/profile_screen.dart';
 import 'package:achieve_student_flutter/screens/rating/rating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-import 'achievements/requests_screen.dart';
+import 'achievements/requests/requests_screen.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);

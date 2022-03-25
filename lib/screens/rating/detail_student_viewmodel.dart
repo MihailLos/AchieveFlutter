@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:achieve_student_flutter/model/student_profile.dart';
+import 'package:achieve_student_flutter/model/student/student_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 
 class DetailStudentViewModel extends BaseViewModel {
   DetailStudentViewModel(BuildContext context);

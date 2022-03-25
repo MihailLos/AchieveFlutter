@@ -7,7 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginViewModel extends BaseViewModel {
