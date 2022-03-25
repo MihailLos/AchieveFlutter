@@ -1,13 +1,11 @@
-import 'dart:convert';
-
-import 'package:achieve_student_flutter/model/report.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/model/report/report.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:achieve_student_flutter/screens/report/newreport_screen.dart';
 import 'package:achieve_student_flutter/screens/report/report_card.dart';
 import 'package:achieve_student_flutter/screens/report/report_detail_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class ReportViewModel extends BaseViewModel {
@@ -83,7 +81,13 @@ class ReportViewModel extends BaseViewModel {
   }
 
   reportsSpace(context) {
-    return listReports == null ? Center(child: CircularProgressIndicator()) : Column(
+    return listReports == null ? Center(child: CircularProgressIndicator()) :
+    listReports!.isEmpty ? Center(
+      child: Text(
+        "Нет сообщений об ошибках.",
+          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+      ),
+    ) : Column(
       children:
          listReports!.map((item) => Column(
           children: [
