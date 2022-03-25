@@ -1,6 +1,6 @@
-import 'package:achieve_student_flutter/screens/achievements/created_detail_achieve_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/created_achievements/created_detail_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class CreatedDetailAchieveScreenRoute extends MaterialPageRoute {
@@ -18,25 +18,29 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
-            appBar: _appBar(context, model),
-            body: _createdAchieveBody(context, model),
+              body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                [
+                  SliverAppBar(
+                    floating: true,
+                    snap: true,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_outlined),
+                      color: Colors.black,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                      iconSize: 32,
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                  )
+                ],
+                body: _createdAchieveBody(context, model),
+              )
           );
         });
-  }
-
-  _appBar(context, CreatedDetailAchieveViewModel model) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
-        color: Colors.black,
-        onPressed: () async {
-          Navigator.pop(context);
-        },
-        iconSize: 32,
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-    );
   }
 
   _createdAchieveBody(context, CreatedDetailAchieveViewModel model) {
@@ -48,7 +52,7 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
       children: [
         _achieveImage(context, model),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 27, horizontal: 35),
+          padding: const EdgeInsets.symmetric(vertical: 27, horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,8 +73,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
               SizedBox(height: 20,),
               model.createdAchievement?.achieveStatus != "Активно" ?
               Text("На неактивные достижения нельзя подавать заявку на получение.",
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w300,
+                style: CyrillicFonts.raleway(
+                    fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     color: Colors.black,
                     fontSize: 14
@@ -95,8 +99,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
 
   _achieveName(context, CreatedDetailAchieveViewModel model) {
     return Text("${model.createdAchievement?.achieveName}",
-      style: GoogleFonts.montserrat(
-          fontWeight: FontWeight.w700,
+      style: CyrillicFonts.raleway(
+          fontWeight: FontWeight.w800,
           fontSize: 24,
           fontStyle: FontStyle.normal,
           color: Color(0xFF4065D8)
@@ -109,8 +113,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Описание:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -118,8 +122,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
         ),
         Text(
           "${model.createdAchievement!.achieveDescription}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -134,8 +138,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Награда:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -146,8 +150,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
             Image.memory(model.getImage(model.createdAchievement!.rewardData.toString()), width: 24, height: 24,),
             Text(
               "${model.createdAchievement!.rewardName}",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -164,8 +168,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Категория:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -176,8 +180,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
             Image.memory(model.getImage(model.createdAchievement!.categoryData.toString()), width: 24, height: 24,),
             Text(
               "${model.createdAchievement!.categoryName}",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -194,21 +198,32 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Статус:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
           ),
         ),
-        Text(
-          "${model.createdAchievement!.achieveStatus}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
-              fontStyle: FontStyle.normal,
-              color: Colors.black,
-              fontSize: 14
-          ),
+        Row(
+          children: [
+            model.createdAchievement!.achieveStatus == "Активно" ?
+            Icon(Icons.check, color: Colors.green, size: 24,) :
+            model.createdAchievement!.achieveStatus == "Отклонено" ?
+            Icon(Icons.close, color: Colors.red, size: 24,) :
+            model.createdAchievement!.achieveStatus == "Одобрено" ?
+            Icon(Icons.check, color: Colors.orange, size: 24,) :
+            Icon(Icons.access_time, color: Colors.black, size: 24,),
+            Text(
+              "${model.createdAchievement!.achieveStatus}",
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  color: Colors.black,
+                  fontSize: 14
+              ),
+            ),
+          ],
         )
       ],
     );
@@ -234,8 +249,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Правила получения:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -250,8 +265,8 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
               "достижение. Ваша заявка будет "
               "рассмотрена модератором. Статус заявки на получение можно "
               "отслеживать во вкладке 'Подтверждение', на странице 'Заявки'",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -356,7 +371,7 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
                       ),
                       child: Text(
                         ".${file.extension}",
-                        style: GoogleFonts.montserrat(
+                        style: CyrillicFonts.montserrat(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: Colors.white
@@ -365,7 +380,7 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
                     ),
                     Text(
                       file.name,
-                      style: GoogleFonts.montserrat(
+                      style: CyrillicFonts.montserrat(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.black
@@ -374,7 +389,7 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
                     ),
                     Text(
                       fileSizeString,
-                      style: GoogleFonts.montserrat(
+                      style: CyrillicFonts.montserrat(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Colors.black

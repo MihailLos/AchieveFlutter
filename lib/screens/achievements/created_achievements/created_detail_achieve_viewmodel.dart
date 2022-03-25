@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:achieve_student_flutter/model/detail_created_achievement.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/model/achievement/created_achievement/detail_created_achievement.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

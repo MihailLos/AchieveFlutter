@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:achieve_student_flutter/model/achievement/created_achievement/created_achievement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../model/created_achievement.dart';
-import '../../network_handler.dart';
-import 'created_detail_achieve_screen.dart';
+import '../../../utils/network_handler.dart';
+import '../created_achievements/created_detail_achieve_screen.dart';
 
 class CreatedAchieveProfileViewModel extends BaseViewModel {
   CreatedAchieveProfileViewModel(BuildContext context);

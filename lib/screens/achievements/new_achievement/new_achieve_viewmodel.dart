@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:achieve_student_flutter/model/achieve_category.dart';
-import 'package:achieve_student_flutter/model/created_achievement.dart';
-import 'package:achieve_student_flutter/model/reward.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/model/achievement/achieve_category.dart';
+import 'package:achieve_student_flutter/model/achievement/created_achievement/created_achievement.dart';
+import 'package:achieve_student_flutter/model/reward/reward.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -85,10 +85,10 @@ class NewAchievementViewModel extends BaseViewModel {
       var firstEncode = base64Encode(newFile.readAsBytesSync());
       Codec<String, String> stringToBase64 = utf8.fuse(base64);
       decodedNewAchieveImage = stringToBase64.encode(firstEncode);
-      notifyListeners();
     } on PlatformException catch (e) {
       print("Не удалось загрузить изображение: $e");
     }
+    notifyListeners();
   }
 
   sendNewAchievementRequest(context) async {
@@ -98,7 +98,7 @@ class NewAchievementViewModel extends BaseViewModel {
         decodedNewAchieveImage!.isNotEmpty && newAchievementScore.text.isNotEmpty && startNewAchieveDateString!.isNotEmpty) {
       Map<String, dynamic> bodyData = {
         "achieveDescription": newAchievementDescription.text,
-        "achieveEndDate": endNewAchieveDateString!.isEmpty ? null : endNewAchieveDateString!,
+        "achieveEndDate": endNewAchieveDateString == null ? null : endNewAchieveDateString!,
         "achieveName": newAchievementTitle.text,
         "achieveStartDate": startNewAchieveDateString!,
         "categoryId": achieveCategoryModel!.categoryId,
@@ -140,14 +140,15 @@ class NewAchievementViewModel extends BaseViewModel {
       if (startNewAchieveDate!.month < 10) {
         if (startNewAchieveDate!.day < 10) {
           startNewAchieveDateString = "${startNewAchieveDate!.year}-0${startNewAchieveDate!.month}-0${startNewAchieveDate!.day}";
+          return Text(startNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
         } else {
           startNewAchieveDateString = "${startNewAchieveDate!.year}-0${startNewAchieveDate!.month}-${startNewAchieveDate!.day}";
+          return Text(startNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
         }
       } else {
         startNewAchieveDateString = "${startNewAchieveDate!.year}-${startNewAchieveDate!.month}-${startNewAchieveDate!.day}";
+        return Text(startNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
       }
-      notifyListeners();
-      return Text("${startNewAchieveDate!.day}-${startNewAchieveDate!.month}-${startNewAchieveDate!.year}", style: TextStyle(color: Colors.black),);
     }
   }
 
@@ -158,14 +159,15 @@ class NewAchievementViewModel extends BaseViewModel {
       if (endNewAchieveDate!.month < 10) {
         if (endNewAchieveDate!.day < 10) {
           endNewAchieveDateString = "${endNewAchieveDate!.year}-0${endNewAchieveDate!.month}-0${endNewAchieveDate!.day}";
+          return Text(endNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
         } else {
           endNewAchieveDateString = "${endNewAchieveDate!.year}-0${endNewAchieveDate!.month}-${endNewAchieveDate!.day}";
+          return Text(endNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
         }
       } else {
         endNewAchieveDateString = "${endNewAchieveDate!.year}-${endNewAchieveDate!.month}-${endNewAchieveDate!.day}";
+        return Text(endNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
       }
-      notifyListeners();
-      return Text("${endNewAchieveDate!.day}-${endNewAchieveDate!.month}-${endNewAchieveDate!.year}", style: TextStyle(color: Colors.black));
     }
   }
 

@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:achieve_student_flutter/screens/achievements/received_detail_achieve_screen.dart';
+import 'package:achieve_student_flutter/screens/achievements/received_achievements/received_detail_achieve_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../model/achieve_category.dart';
-import '../../model/received_achievement.dart';
-import '../../network_handler.dart';
+import '../../../model/achievement/achieve_category.dart';
+import '../../../model/achievement/received_achievement/received_achievement.dart';
+import '../../../utils/network_handler.dart';
 
 class ReceivedAchieveProfileViewModel extends BaseViewModel {
   ReceivedAchieveProfileViewModel(BuildContext context);

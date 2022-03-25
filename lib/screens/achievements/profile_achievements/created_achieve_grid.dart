@@ -1,4 +1,4 @@
-import 'package:achieve_student_flutter/screens/achievements/achievements_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/new_achievement/new_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -27,7 +27,14 @@ class CreatedAchieveGrid extends StatelessWidget {
         ? Center(
       child: CircularProgressIndicator(),
     )
-        : GridView.builder(
+        : model.createdProfileAchievements.isEmpty ?
+    Center(
+      child: Text(
+          "Нет созданных достижений.",
+          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+      ),
+    ) :
+    GridView.builder(
       physics: ScrollPhysics(),
       shrinkWrap: true,
       gridDelegate:
@@ -63,12 +70,9 @@ class CreatedAchieveGrid extends StatelessWidget {
                           child: Text(
                             "${model.createdProfileAchievements[index].achieveName.toString()}",
                             style: CyrillicFonts.openSans(
-                                fontSize: 11,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                foreground: Paint()
-                                  ..style = PaintingStyle.stroke
-                                  ..strokeWidth = 0.7
-                                  ..color = Colors.black
+                                color: Colors.white
                             ),
                           ))
                     ],

@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:achieve_student_flutter/screens/achievements/created_detail_achieve_screen.dart';
-import 'package:achieve_student_flutter/screens/achievements/proof_detail_achieve_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:achieve_student_flutter/model/achievement/created_achievement/created_achievement.dart';
+import 'package:achieve_student_flutter/screens/achievements/created_achievements/created_detail_achieve_screen.dart';
+import 'package:achieve_student_flutter/screens/achievements/proof_achievements/proof_detail_achieve_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../model/created_achievement.dart';
-import '../../model/proof_achieve.dart';
-import '../../network_handler.dart';
+import '../../../model/proof_achievement/proof_achieve.dart';
+import '../../../utils/network_handler.dart';
 
 class RequestsViewModel extends BaseViewModel {
   RequestsViewModel(BuildContext context);
@@ -23,6 +22,7 @@ class RequestsViewModel extends BaseViewModel {
   bool isProof = true;
   bool isProofAchieveButtonTapped = true;
   bool isCreatedAchieveButtonTapped = false;
+  List<bool> isSelectedButton = [true, false];
 
   Future onReady() async {
     fetchRequestAchievements("create");
@@ -87,10 +87,31 @@ class RequestsViewModel extends BaseViewModel {
   }
 
   goToDetailCreatedAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => CreatedDetailAchieveScreen()));
+    Navigator.push(context, new MaterialPageRoute(
+        builder: (context) => CreatedDetailAchieveScreen()));
   }
 
   goToDetailProofAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => ProofDetailAchieveScreen()));
+    Navigator.push(context, new MaterialPageRoute(
+        builder: (context) => ProofDetailAchieveScreen()));
+  }
+
+  onChangeToggle(int newIndex, BuildContext context) {
+    for (int index = 0; index < isSelectedButton.length; index++) {
+      if (index == newIndex) {
+        if (isSelectedButton[index] != true) {
+          isSelectedButton[index] = true;
+          if (newIndex == 0) {
+            changeRequestsProofAchievements(context);
+            notifyListeners();
+          } else if (newIndex == 1) {
+            changeRequestsCreatedAchievements(context);
+            notifyListeners();
+          }
+        }
+      } else {
+        isSelectedButton[index] = false;
+      }
+    }
   }
 }

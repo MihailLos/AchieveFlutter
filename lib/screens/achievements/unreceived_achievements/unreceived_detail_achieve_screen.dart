@@ -1,6 +1,8 @@
-import 'package:achieve_student_flutter/screens/achievements/unreceived_detail_achieve_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/unreceived_achievements/unreceived_detail_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class UnreceivedDetailAchievementScreenRoute extends MaterialPageRoute {
@@ -18,27 +20,31 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
-            appBar: _appBar(context, model),
-            body: model.unreceivedAchievement?.statusActive == "Активно"
-                ? _activeAchieveBody(context, model)
-                : _nonActiveAchieveBody(context, model),
+              body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                [
+                  SliverAppBar(
+                    floating: true,
+                    snap: true,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_outlined),
+                      color: Colors.black,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                      iconSize: 32,
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                  )
+                ],
+                body: model.unreceivedAchievement?.statusActive == "Активно"
+                    ? _activeAchieveBody(context, model)
+                    : _nonActiveAchieveBody(context, model),
+              )
           );
         });
-  }
-
-  _appBar(context, UnreceivedDetailAchievementViewModel model) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
-        color: Colors.black,
-        onPressed: () async {
-          Navigator.pop(context);
-        },
-        iconSize: 32,
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-    );
   }
 
   _activeAchieveBody(context, UnreceivedDetailAchievementViewModel model) {
@@ -89,8 +95,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
   _nonActiveAchieveBody(context, UnreceivedDetailAchievementViewModel model) {
     return model.circle
         ? Center(
-            child: CircularProgressIndicator(),
-          )
+      child: CircularProgressIndicator(),
+    )
         : ListView(
       children: [
         _achieveImage(context, model),
@@ -125,32 +131,33 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
   _achieveImage(context, UnreceivedDetailAchievementViewModel model) {
     return Image.memory(
       model.getImage(model.unreceivedAchievement!.achieveData!),
-      width: double.maxFinite,
-      height: 300,
+      width: double.infinity,
+      height: 400,
       fit: BoxFit.cover,
     );
   }
 
   _authorName(context, UnreceivedDetailAchievementViewModel model) {
     return Text(
-        "Автор: ${model.unreceivedAchievement?.achieveCreatorFirstName} ${model.unreceivedAchievement?.achieveCreatorLastName}",
-      style: GoogleFonts.montserrat(
-        fontWeight: FontWeight.w300,
-        fontStyle: FontStyle.normal,
-        color: Colors.black,
-        fontSize: 14
+      "Автор: ${model.unreceivedAchievement?.achieveCreatorFirstName} ${model
+          .unreceivedAchievement?.achieveCreatorLastName}",
+      style: CyrillicFonts.raleway(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+          color: Colors.grey,
+          fontSize: 14
       ),
     );
   }
 
   _achieveName(context, UnreceivedDetailAchievementViewModel model) {
     return Text("${model.unreceivedAchievement?.achieveName}",
-    style: GoogleFonts.montserrat(
-      fontWeight: FontWeight.w700,
-      fontSize: 24,
-      fontStyle: FontStyle.normal,
-      color: Color(0xFF4065D8)
-    ),
+      style: CyrillicFonts.raleway(
+          fontWeight: FontWeight.w800,
+          fontSize: 24,
+          fontStyle: FontStyle.normal,
+          color: Color(0xFF4065D8)
+      ),
     );
   }
 
@@ -159,17 +166,17 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Описание:",
-          style: GoogleFonts.montserrat(
-            fontWeight: FontWeight.w500,
-            fontStyle: FontStyle.normal,
-            color: Colors.black,
-            fontSize: 14
-        ),
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              color: Colors.black,
+              fontSize: 14
+          ),
         ),
         Text(
           "${model.unreceivedAchievement!.achieveDescription}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -184,8 +191,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Награда:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -193,11 +200,13 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         ),
         Row(
           children: [
-            Image.memory(model.getImage(model.unreceivedAchievement!.rewardData.toString()), width: 24, height: 24,),
+            Image.memory(model.getImage(
+                model.unreceivedAchievement!.rewardData.toString()), width: 24,
+              height: 24,),
             Text(
               "${model.unreceivedAchievement!.rewardName}",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -214,8 +223,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Категория:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -223,11 +232,13 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         ),
         Row(
           children: [
-            Image.memory(model.getImage(model.unreceivedAchievement!.categoryData.toString()), width: 24, height: 24,),
+            Image.memory(model.getImage(
+                model.unreceivedAchievement!.categoryData.toString()),
+              width: 24, height: 24,),
             Text(
               "${model.unreceivedAchievement!.categoryName}",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -244,21 +255,32 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Статус:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
           ),
         ),
-        Text(
-          "${model.unreceivedAchievement!.statusActive}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
-              fontStyle: FontStyle.normal,
-              color: Colors.black,
-              fontSize: 14
-          ),
+        Row(
+          children: [
+            model.unreceivedAchievement!.statusActive.toString() == "Активно" ?
+            Icon(Icons.check, color: Colors.green, size: 24,) :
+            model.unreceivedAchievement!.statusActive.toString() == "Не активно"
+                ?
+            Icon(Icons.access_time, color: Colors.black, size: 24,)
+                :
+            Icon(Icons.close, color: Colors.red, size: 24,),
+            Text(
+              "${model.unreceivedAchievement!.statusActive}",
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  color: Colors.black,
+                  fontSize: 14
+              ),
+            )
+          ],
         )
       ],
     );
@@ -269,8 +291,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Правила получения:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -285,8 +307,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
               "достижение. Ваша заявка будет "
               "рассмотрена модератором. Статус заявки на получение можно "
               "отслеживать во вкладке 'Подтверждение', на странице 'Заявки'",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -322,38 +344,28 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
     return Container(
         width: double.maxFinite,
         height: 46,
-        decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Color(0xFF4065D8),
-                blurRadius: 6,
-                spreadRadius: 2,
-                offset: Offset(0, 4)),
-          ],
-        ),
-        child: ElevatedButton(
+        child: OutlinedButton(
           onPressed: () {
             model.chooseFilesAction(context);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.file_download),
+              Icon(Icons.file_download, color: Colors.black,),
               Text(
                 "Выбрать файлы",
-                style: TextStyle(
-                    fontFamily: "Montseratt",
+                style: CyrillicFonts.raleway(
                     fontStyle: FontStyle.normal,
                     fontSize: 17,
-                    fontWeight: FontWeight.w600),
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black),
               ),
             ],
           ),
-          style: ElevatedButton.styleFrom(
+          style: OutlinedButton.styleFrom(
             shape: new RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            primary: Color(0xFF4065D8),
           ),
         )
     );
@@ -361,7 +373,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
 
   _filesListView(context, UnreceivedDetailAchievementViewModel model) {
     return model.filePickerResult == null ?
-    Text("Здесь будут отображены загружаемые вами файлы") :
+    Text("") :
     Container(
       height: 150,
       child: ListView.builder(
@@ -386,21 +398,45 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Color(0xFF4065D8),
-                        borderRadius: BorderRadius.circular(12)
+                          color: file.extension == "docx" ||
+                              file.extension == "doc" ? Colors.blue :
+                          file.extension == "jpg" || file.extension == "png"
+                              || file.extension == "png" ? Colors.green
+                              : file.extension == "pdf" ? Colors.red :
+                          Color(0xFF4065D8),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                                color: file.extension == "docx" ||
+                                    file.extension == "doc"
+                                    ? Colors.blueAccent
+                                    :
+                                file.extension == "jpg" ||
+                                    file.extension == "png"
+                                    || file.extension == "png" ? Colors
+                                    .greenAccent
+                                    : file.extension == "pdf"
+                                    ? Colors.redAccent
+                                    :
+                                Color(0xFF4065D8),
+                                offset: Offset(3, 3.5),
+                                spreadRadius: 1,
+                                blurRadius: 7
+                            )
+                          ]
                       ),
                       child: Text(
                         ".${file.extension}",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
+                        style: CyrillicFonts.montserrat(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
                         ),
                       ),
                     ),
                     Text(
                       file.name,
-                      style: GoogleFonts.montserrat(
+                      style: CyrillicFonts.montserrat(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.black
@@ -409,7 +445,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
                     ),
                     Text(
                       fileSizeString,
-                      style: GoogleFonts.montserrat(
+                      style: CyrillicFonts.montserrat(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Colors.black
@@ -430,32 +466,37 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         width: double.maxFinite,
         height: 46,
         decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
+          boxShadow: [
             BoxShadow(
-                color: Colors.grey,
-                blurRadius: 6,
-                spreadRadius: 2,
-                offset: Offset(0, 4)),
+                color: Colors.black45,
+                offset: Offset(0, 6),
+                spreadRadius: 1,
+                blurRadius: 7
+            )
           ],
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFFFBC89),
+              Color(0xFFFF9A67)
+            ],
+          ),
         ),
-        child: ElevatedButton(
-          onPressed: () {
+        child: TextButton(
+          onPressed: () async {
             model.sendButtonAction(context);
           },
           child: Text(
             "Отправить заявку",
-            style: TextStyle(
-                fontFamily: "Montseratt",
-                fontStyle: FontStyle.normal,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+            style: CyrillicFonts.raleway(
+              fontStyle: FontStyle.normal,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,),
           ),
-          style: ElevatedButton.styleFrom(
-            shape: new RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            primary: Color(0xFFFF9966),
-          ),
+
         )
     );
   }

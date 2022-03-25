@@ -1,6 +1,7 @@
-import 'package:achieve_student_flutter/screens/achievements/proof_detail_achieve_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/proof_achievements/proof_detail_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class ProofDetailAchieveScreenRoute extends MaterialPageRoute {
@@ -18,25 +19,29 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
-            appBar: _appBar(context, model),
-            body: _proofAchieveBody(context, model),
+              body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                [
+                  SliverAppBar(
+                    floating: true,
+                    snap: true,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_outlined),
+                      color: Colors.black,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                      iconSize: 32,
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                  )
+                ],
+                body: _proofAchieveBody(context, model),
+              )
           );
         });
-  }
-
-  _appBar(context, ProofDetailAchieveViewModel model) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
-        color: Colors.black,
-        onPressed: () async {
-          Navigator.pop(context);
-        },
-        iconSize: 32,
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-    );
   }
 
   _proofAchieveBody(context, ProofDetailAchieveViewModel model) {
@@ -85,8 +90,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
 
   _achieveName(context, ProofDetailAchieveViewModel model) {
     return Text("${model.proofAchievement?.achieveName}",
-      style: GoogleFonts.montserrat(
-          fontWeight: FontWeight.w700,
+      style: CyrillicFonts.raleway(
+          fontWeight: FontWeight.w800,
           fontSize: 24,
           fontStyle: FontStyle.normal,
           color: Color(0xFF4065D8)
@@ -99,8 +104,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Описание:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -108,8 +113,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         ),
         Text(
           "${model.proofAchievement!.achieveDescription}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -124,8 +129,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Ваш комментарий к заявке:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -133,8 +138,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         ),
         Text(
           "${model.proofAchievement!.proofDescription}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -149,8 +154,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Дата заявки:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -158,8 +163,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         ),
         Text(
           "${model.proofAchievement!.dateProof}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -174,8 +179,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Статус рассмотрения:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -183,8 +188,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         ),
         Text(
           "${model.proofAchievement!.statusRequestName}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -199,8 +204,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Комментарий модератора:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -209,8 +214,8 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         model.proofAchievement?.comment == null ? Text("") :
         Text(
           "${model.proofAchievement!.comment}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14

@@ -1,6 +1,6 @@
-import 'package:achieve_student_flutter/screens/achievements/received_detail_achieve_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/received_achievements/received_detail_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class ReceivedDetailAchieveScreenRoute extends MaterialPageRoute {
@@ -18,25 +18,29 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
-            appBar: _appBar(context, model),
-            body: _receivedAchieveBody(context, model),
+              body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                [
+                  SliverAppBar(
+                    floating: true,
+                    snap: true,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_outlined),
+                      color: Colors.black,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                      iconSize: 32,
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                  )
+                ],
+                body: _receivedAchieveBody(context, model),
+              )
           );
         });
-  }
-
-  _appBar(context, ReceivedDetailAchieveViewModel model) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
-        color: Colors.black,
-        onPressed: () async {
-          Navigator.pop(context);
-        },
-        iconSize: 32,
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-    );
   }
 
   _receivedAchieveBody(context, ReceivedDetailAchieveViewModel model) {
@@ -70,44 +74,49 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
               ),
               model.receivedAchieve!.statusReward! ?
               Text("Вы получили награду за это достижение. Поздравляем!",
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
+                style: CyrillicFonts.raleway(
+                    fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
                     color: Colors.black,
                     fontSize: 14
                 ),
               ) : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
                 child: Container(
                     width: double.maxFinite,
                     height: 46,
                     decoration: BoxDecoration(
-                      boxShadow: <BoxShadow>[
+                      boxShadow: [
                         BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 6,
-                            spreadRadius: 2,
-                            offset: Offset(0, 4)),
+                            color: Colors.black45,
+                            offset: Offset(0, 6),
+                            spreadRadius: 1,
+                            blurRadius: 7
+                        )
                       ],
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFFFFBC89),
+                          Color(0xFFFF9A67)
+                        ],
+                      ),
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {
+                    child: TextButton(
+                      onPressed: () async {
                         _getRewardAlert(context, model);
                       },
                       child: Text(
                         "Получить награду",
-                        style: TextStyle(
-                            fontFamily: "Montseratt",
-                            fontStyle: FontStyle.normal,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600),
+                        style: CyrillicFonts.raleway(
+                          fontStyle: FontStyle.normal,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        primary: Color(0xFFFF9966),
-                      ),
+
                     )
                 ),
               )
@@ -130,10 +139,10 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
   _authorName(context, ReceivedDetailAchieveViewModel model) {
     return Text(
       "Автор: ${model.receivedAchieve?.creatorFirstName} ${model.receivedAchieve?.creatorLastName}",
-      style: GoogleFonts.montserrat(
-          fontWeight: FontWeight.w300,
+      style: CyrillicFonts.raleway(
+          fontWeight: FontWeight.w400,
           fontStyle: FontStyle.normal,
-          color: Colors.black,
+          color: Colors.grey,
           fontSize: 14
       ),
     );
@@ -141,8 +150,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
 
   _achieveName(context, ReceivedDetailAchieveViewModel model) {
     return Text("${model.receivedAchieve?.achieveName}",
-      style: GoogleFonts.montserrat(
-          fontWeight: FontWeight.w700,
+      style: CyrillicFonts.raleway(
+          fontWeight: FontWeight.w800,
           fontSize: 24,
           fontStyle: FontStyle.normal,
           color: Color(0xFF4065D8)
@@ -155,8 +164,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Описание:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -164,8 +173,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         ),
         Text(
           "${model.receivedAchieve!.achieveDescription}",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -182,8 +191,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         Row(
           children: [
             Text("Награда: ",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w500,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -191,16 +200,16 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
             ),
             model.receivedAchieve!.statusReward! ?
             Text("Получена",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w500,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
                   color: Colors.green,
                   fontSize: 14
               ),
             ) :
             Text("Не получена",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w500,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
                   color: Color(0xFFFF9966),
                   fontSize: 14
@@ -213,8 +222,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
             Image.memory(model.getImage(model.receivedAchieve!.rewardData.toString()), width: 24, height: 24,),
             Text(
               "${model.receivedAchieve!.rewardName}",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -231,8 +240,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Категория:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -243,8 +252,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
             Image.memory(model.getImage(model.receivedAchieve!.categoryData.toString()), width: 24, height: 24,),
             Text(
               "${model.receivedAchieve!.categoryName}",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14
@@ -261,8 +270,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Статус:",
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500,
+          style: CyrillicFonts.raleway(
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               color: Colors.black,
               fontSize: 14
@@ -273,8 +282,8 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
             Icon(Icons.check, color: Colors.green,),
             Text(
               "Выполнено",
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
+              style: CyrillicFonts.raleway(
+                  fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   color: Colors.black,
                   fontSize: 14

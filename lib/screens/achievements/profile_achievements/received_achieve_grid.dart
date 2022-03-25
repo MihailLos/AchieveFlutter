@@ -1,5 +1,5 @@
-import 'package:achieve_student_flutter/screens/achievements/achievements_viewmodel.dart';
-import 'package:achieve_student_flutter/screens/achievements/received_achieve_profile_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/new_achievement/new_achieve_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/achievements/profile_achievements/received_achieve_profile_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -26,7 +26,15 @@ class ReceivedAchieveGrid extends StatelessWidget {
         ? Center(
       child: CircularProgressIndicator(),
     )
-        : Column(
+        :
+    model.receivedProfileAchievements.isEmpty ?
+    Center(
+      child: Text(
+          "Нет полученных достижений.",
+          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+      ),
+    ) :
+    Column(
       children: [
         IconButton(
           onPressed: () {
@@ -79,10 +87,7 @@ class ReceivedAchieveGrid extends StatelessWidget {
                                 style: CyrillicFonts.openSans(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 0.7
-                                      ..color = Colors.black
+                                    color: Colors.white
                                 ),
                               ))
                         ],
