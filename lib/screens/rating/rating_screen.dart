@@ -1,12 +1,12 @@
+import 'package:achieve_student_flutter/model/education/stream.dart';
 import 'package:achieve_student_flutter/screens/rating/rating_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../model/group.dart';
-import '../../model/institute.dart';
-import '../../model/stream.dart';
+import '../../model/education/group.dart';
+import '../../model/education/institute.dart';
 
 class RatingScreenRoute extends MaterialPageRoute {
   RatingScreenRoute() : super(builder: (context) => const RatingScreen());
@@ -30,9 +30,9 @@ class RatingScreen extends StatelessWidget {
   _appBar(context, model) {
     return AppBar(
       title: Text("Рейтинг студентов",
-          style: CyrillicFonts.robotoMono(
+          style: CyrillicFonts.raleway(
               fontSize: 24,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w800,
               color: Color(0xFF4065D8))),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -92,9 +92,9 @@ class RatingScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("Рейтинг студентов",
-              style: CyrillicFonts.robotoMono(
+              style: CyrillicFonts.raleway(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w800,
                   color: Color(0xFF4065D8)
               )
           ),
@@ -152,36 +152,6 @@ class RatingScreen extends StatelessWidget {
         ),
       ),
     );
-    // return Container(
-    //   child: Row (
-    //     children: [
-    //       Expanded(
-    //         child: ElevatedButton(
-    //             onPressed: () {
-    //               model.fetchStudentsTop10();
-    //             },
-    //             child: Text("Топ-10")
-    //         ),
-    //       ),
-    //       Expanded(
-    //         child: ElevatedButton(
-    //             onPressed: () {
-    //               model.fetchStudentsTop50();
-    //             },
-    //             child: Text("Топ-50")
-    //         ),
-    //       ),
-    //       Expanded(
-    //         child: ElevatedButton(
-    //             onPressed: () {
-    //               model.fetchStudentsTop100();
-    //             },
-    //             child: Text("Топ-100")
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 
   _showFilters(context, model) {
@@ -242,7 +212,7 @@ class RatingScreen extends StatelessWidget {
     );
   }
 
-  _topStudentsSpace(context, model) {
+  _topStudentsSpace(context, RatingViewModel model) {
     return model.filteredStudents.isEmpty
         ? Center(
       child: CircularProgressIndicator(),
@@ -255,46 +225,45 @@ class RatingScreen extends StatelessWidget {
               onTap: () {
                 model.onTapStudent(context, model.filteredStudents[index].studentId.toString());
               },
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 21),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text("${index + 1}", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w800)),
-                      Center(
-                        child: ClipOval(
-                          child: Image.memory(model.getStudentImage(
-                              model.filteredStudents[index].data.toString()), width: 61, height: 61,),
-                        ),
-                      ),
-                      Column(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${index + 1}", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w800)),
+                    SizedBox(width: 11,),
+                    ClipOval(
+                      child: Image.memory(model.getStudentImage(
+                          model.filteredStudents[index].data.toString()), width: 61, height: 61,),
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("${model.filteredStudents[index].firstName.toString()} ${model.filteredStudents[index].lastName.toString()}",
                             style: CyrillicFonts.raleway(fontSize: 12, color: Colors.black, fontWeight: FontWeight.w700),),
+                          SizedBox(height: 16,),
                           Text(
                               "${model.filteredStudents[index].instituteName.toString()}, ${model.filteredStudents[index].groupName.toString()}",
                               style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w700))
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            model.filteredStudents[index].score.toString(),
-                            style: CyrillicFonts.montserrat(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.normal,
-                                color: Colors.blueAccent),
-                          ),
-                          Image(image: AssetImage("assets/images/prize_icon.png"))
-                        ],
-                      )
-                    ],
-                  ),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          model.filteredStudents[index].score.toString(),
+                          style: CyrillicFonts.montserrat(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.normal,
+                              color: Color(0xFF4065D8)),
+                        ),
+                        Image(image: AssetImage("assets/images/prize_icon.png"))
+                      ],
+                    )
+                  ],
                 ),
               ),
             );

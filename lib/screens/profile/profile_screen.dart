@@ -1,10 +1,9 @@
-import 'package:achieve_student_flutter/screens/achievements/created_achieve_grid.dart';
-import 'package:achieve_student_flutter/screens/achievements/received_achieve_grid.dart';
+import 'package:achieve_student_flutter/screens/achievements/profile_achievements/created_achieve_grid.dart';
+import 'package:achieve_student_flutter/screens/achievements/profile_achievements/received_achieve_grid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
 import 'profile_viewmodel.dart';
@@ -67,9 +66,6 @@ class ProfileScreen extends StatelessWidget {
             height: 16,
           ),
           _progressField(context, model),
-          SizedBox(
-            height: 8,
-          ),
           _educationInfo(context, model),
           SizedBox(
             height: 27,
@@ -208,7 +204,7 @@ class ProfileScreen extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal,
-                    color: Colors.blueAccent),
+                    color: Color(0xFF4065D8)),
               ),
               Image(image: AssetImage("assets/images/prize_icon.png"))
             ],
@@ -225,7 +221,7 @@ class ProfileScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
             child: LinearProgressIndicator(
               backgroundColor: Color(0xFFE2E2E2),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0x7CEAF1)),
+              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF7CEAF1)),
               value: model.studentPercentProgressBar,
             ),
           ),
