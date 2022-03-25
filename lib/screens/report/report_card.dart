@@ -1,5 +1,6 @@
-import 'package:achieve_student_flutter/model/report.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+
+import 'package:achieve_student_flutter/model/report/report.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 

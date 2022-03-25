@@ -1,11 +1,7 @@
-import 'package:achieve_student_flutter/model/report.dart';
 import 'package:achieve_student_flutter/screens/report/report_detail_viewmodel.dart';
-import 'package:achieve_student_flutter/screens/report/report_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
-import 'package:intl/intl.dart';
 
 class DetailReportScreenRoute extends MaterialPageRoute {
   DetailReportScreenRoute() : super(builder: (context) => const DetailReportScreen());

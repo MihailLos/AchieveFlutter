@@ -1,5 +1,5 @@
-import 'package:achieve_student_flutter/model/detail_report.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/model/report/detail_report.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
