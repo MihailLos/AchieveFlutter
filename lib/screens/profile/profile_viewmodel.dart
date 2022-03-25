@@ -3,15 +3,14 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:achieve_student_flutter/model/student_profile.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/model/student/student_profile.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:achieve_student_flutter/screens/login/login_screen.dart';
 
 import 'package:achieve_student_flutter/screens/report/report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -154,13 +153,15 @@ class ProfileViewModel extends BaseViewModel {
   onChangeToggle(int newIndex) {
     for (int index = 0; index < isSelectedButton.length; index++) {
       if (index == newIndex) {
-        isSelectedButton[index] = true;
-        if (newIndex == 0) {
-          isCreated = false;
-          notifyListeners();
-        } else {
-          isCreated = true;
-          notifyListeners();
+        if (isSelectedButton[index] != true) {
+          isSelectedButton[index] = true;
+          if (newIndex == 0) {
+            isCreated = false;
+            notifyListeners();
+          } else {
+            isCreated = true;
+            notifyListeners();
+          }
         }
       } else {
         isSelectedButton[index] = false;

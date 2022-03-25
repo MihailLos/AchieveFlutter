@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:achieve_student_flutter/model/group.dart';
-import 'package:achieve_student_flutter/model/institute.dart';
-import 'package:achieve_student_flutter/model/rating_student.dart';
-import 'package:achieve_student_flutter/model/stream.dart';
-import 'package:achieve_student_flutter/network_handler.dart';
+import 'package:achieve_student_flutter/model/education/group.dart';
+import 'package:achieve_student_flutter/model/education/institute.dart';
+import 'package:achieve_student_flutter/model/education/stream.dart';
+import 'package:achieve_student_flutter/model/student/rating_student.dart';
+import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:achieve_student_flutter/screens/rating/detail_student_screen.dart';
-import 'package:achieve_student_flutter/screens/rating/rating_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -170,16 +169,18 @@ class RatingViewModel extends BaseViewModel {
   onChangeToggle(int newIndex) {
     for (int index = 0; index < isSelectedButton.length; index++) {
       if (index == newIndex) {
-        isSelectedButton[index] = true;
-        if (newIndex == 0) {
-          fetchStudentsTop10();
-          notifyListeners();
-        } else if (newIndex == 1) {
-          fetchStudentsTop50();
-          notifyListeners();
-        } else {
-          fetchStudentsTop100();
-          notifyListeners();
+        if (isSelectedButton[index] != true) {
+          isSelectedButton[index] = true;
+          if (newIndex == 0) {
+            fetchStudentsTop10();
+            notifyListeners();
+          } else if (newIndex == 1) {
+            fetchStudentsTop50();
+            notifyListeners();
+          } else {
+            fetchStudentsTop100();
+            notifyListeners();
+          }
         }
       } else {
         isSelectedButton[index] = false;
