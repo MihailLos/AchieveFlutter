@@ -319,23 +319,26 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
   }
 
   _commentProofAchieve(context, UnreceivedDetailAchievementViewModel model) {
-    return Container(
-      width: double.maxFinite,
-      height: 46,
-      child: TextField(
-        controller: model.commentController,
-        obscureText: false,
-        style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-            fillColor: Colors.transparent,
-            filled: true,
-            hintText: "Комментарий к заявке"),
+    return SingleChildScrollView(
+      reverse: true,
+      child: Container(
+        width: double.maxFinite,
+        height: 46,
+        child: TextField(
+          controller: model.commentController,
+          obscureText: false,
+          style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+              fillColor: Colors.transparent,
+              filled: true,
+              hintText: "Комментарий к заявке"),
+        ),
       ),
     );
   }
