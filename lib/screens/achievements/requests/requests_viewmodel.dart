@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:achieve_student_flutter/model/achievement/created_achievement/created_achievement.dart';
 import 'package:achieve_student_flutter/screens/achievements/created_achievements/created_detail_achieve_screen.dart';
 import 'package:achieve_student_flutter/screens/achievements/proof_achievements/proof_detail_achieve_screen.dart';
+import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
@@ -20,41 +21,39 @@ class RequestsViewModel extends BaseViewModel {
   FlutterSecureStorage storage = FlutterSecureStorage();
   bool circle = true;
   bool isProof = true;
-  bool isProofAchieveButtonTapped = true;
-  bool isCreatedAchieveButtonTapped = false;
+  Parser parser = Parser();
   List<bool> isSelectedButton = [true, false];
 
   Future onReady() async {
-    fetchRequestAchievements("create");
     fetchRequestAchievements("proof");
+    fetchRequestAchievements("create");
     notifyListeners();
   }
 
-  void fetchRequestAchievements(String? type) async {
-    List response;
+  fetchRequestAchievements(String? type) async {
+    var response;
     if (type == "create") {
       response = await networkHandler.get("/student/achievementsCreated");
-      createdAchievements = parseCreatedAchievements(response);
+      if (response.statusCode == 200 || response.statusCode == 200) {
+        createdAchievements = parser.parseCreatedAchievements(json.decode(response.body));
+        notifyListeners();
+      } else if (response.statusCode == 403) {
+        var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+        await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+        return fetchRequestAchievements("create");
+      }
     } else {
       response = await networkHandler.get("/student/proof");
-      proofAchievements = parseProofAchievements(response);
+      if (response.statusCode == 200 || response.statusCode == 200) {
+        proofAchievements = parser.parseProofAchievements(json.decode(response.body));
+        circle = false;
+        notifyListeners();
+      } else if (response.statusCode == 403) {
+        var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+        await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+        return fetchRequestAchievements("proof");
+      }
     }
-    circle = false;
-    notifyListeners();
-  }
-
-  List<CreatedAchievementModel> parseCreatedAchievements(List response) {
-    return response
-        .map<CreatedAchievementModel>(
-            (json) => CreatedAchievementModel.fromJson(json))
-        .toList();
-  }
-
-  List<ProofAchieveModel> parseProofAchievements(List response) {
-    return response
-        .map<ProofAchieveModel>(
-            (json) => ProofAchieveModel.fromJson(json))
-        .toList();
   }
 
   changeRequestsCreatedAchievements(context) {
@@ -72,18 +71,6 @@ class RequestsViewModel extends BaseViewModel {
     String tempString = String.fromCharCodes(firstDecode).replaceAll("\n", "");
     var secondDecode = base64Decode(tempString);
     return secondDecode;
-  }
-
-  proofAchieveButtonActive(context) {
-    isProofAchieveButtonTapped = true;
-    isCreatedAchieveButtonTapped = false;
-    notifyListeners();
-  }
-
-  createdAchieveButtonActive(context) {
-    isProofAchieveButtonTapped = false;
-    isCreatedAchieveButtonTapped = true;
-    notifyListeners();
   }
 
   goToDetailCreatedAchievement(context) {

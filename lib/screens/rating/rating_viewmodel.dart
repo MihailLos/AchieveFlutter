@@ -8,7 +8,7 @@ import 'package:achieve_student_flutter/model/education/stream.dart';
 import 'package:achieve_student_flutter/model/student/rating_student.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:achieve_student_flutter/screens/rating/detail_student_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
@@ -28,11 +28,15 @@ class RatingViewModel extends BaseViewModel {
   GroupModel? filterGroup;
   FlutterSecureStorage storage = FlutterSecureStorage();
   bool isVisibleFilters = false;
+  Parser parser = Parser();
+  bool circle = true;
   List<bool> isSelectedButton = [true, false, false];
 
   Future onReady() async {
-    fetchStudentsTop10();
-    fetchInstitutes();
+    await fetchStudentsTop(10);
+    await fetchInstitutes();
+    filteredStudents.isNotEmpty && institutesList.isNotEmpty ? circle = false : circle = true;
+    notifyListeners();
   }
 
   Future<void> searchAction() async {
@@ -46,27 +50,6 @@ class RatingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void fetchStudentsTop10() async {
-    var response = await networkHandler.get("/student/students10");
-    fetchedStudents = parseStudents(response);
-    filteredStudents = fetchedStudents;
-    notifyListeners();
-  }
-
-  void fetchStudentsTop50() async {
-    var response = await networkHandler.get("/student/students50");
-    fetchedStudents = parseStudents(response);
-    filteredStudents = fetchedStudents;
-    notifyListeners();
-  }
-
-  void fetchStudentsTop100() async {
-    var response = await networkHandler.get("/student/students100");
-    fetchedStudents = parseStudents(response);
-    filteredStudents = fetchedStudents;
-    notifyListeners();
-  }
-
   Uint8List getStudentImage(String base64String) {
     var firstDecode = base64Decode(base64String);
     String secondDecode = latin1.decode(firstDecode).replaceAll("\n", "");
@@ -74,30 +57,55 @@ class RatingViewModel extends BaseViewModel {
     return decodedImage;
   }
 
-  void fetchInstitutes() async {
+  fetchStudentsTop(int topCount) async {
+    var response = await networkHandler.get("/student/students${topCount.toString()}");
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      fetchedStudents = parser.parseStudents(json.decode(response.body));
+      filteredStudents = fetchedStudents;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchStudentsTop(topCount);
+    }
+  }
+
+  fetchInstitutes() async {
     var response = await networkHandler.get("/education/institutions");
-    institutesList = parseInstitutes(response);
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      institutesList = parseInstitutes(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchInstitutes();
+    }
   }
 
   void fetchStreams() async {
     var response = await networkHandler
         .get("/education/stream/${filterInstitute!.instituteId}");
-    streamsList = parseStreams(response);
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      streamsList = parseStreams(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchStreams();
+    }
   }
 
   void fetchGroups() async {
     var response =
         await networkHandler.get("/education/group/${filterStream!.streamId}");
-    groupsList = parseGroups(response);
-    notifyListeners();
-  }
-
-  List<StudentRatingModel> parseStudents(List response) {
-    return response
-        .map<StudentRatingModel>((json) => StudentRatingModel.fromJson(json))
-        .toList();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      groupsList = parseGroups(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchGroups();
+    }
   }
 
   List<InstituteModel> parseInstitutes(List response) {
@@ -134,30 +142,43 @@ class RatingViewModel extends BaseViewModel {
     filterInstitute = instituteModel;
     fetchStreams();
     var response = await networkHandler.get("/student/students100?filterName=Институт&filterId=${instituteModel!.instituteId}");
-    filteredStudents = parseStudents(response);
-    // filteredStudents = fetchedStudents.where((element) => element.instituteName!
-    //     .contains(instituteModel!.instituteFullName.toString())).toList();
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      filteredStudents = parser.parseStudents(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return onChangeInstituteFilter(instituteModel);
+    }
   }
 
   onChangeStreamFilter(StreamModel? streamModel) async {
     filterGroup = null;
     filterStream = streamModel;
     fetchGroups();
-    var response = await networkHandler.get("/student/students100?filterName=Направление&filterId=${streamModel!.streamId}");
-    filteredStudents = parseStudents(response);
-    // filteredStudents = fetchedStudents.where((element) => element.streamName!
-    //     .contains(streamModel!.streamName.toString())).toList();
     notifyListeners();
+    var response = await networkHandler.get("/student/students100?filterName=Направление&filterId=${streamModel!.streamId}");
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      filteredStudents = parser.parseStudents(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return onChangeStreamFilter(streamModel);
+    }
   }
 
   onChangeGroupFilter(GroupModel? groupModel) async {
     filterGroup = groupModel;
     var response = await networkHandler.get("/student/students100?filterName=Группа&filterId=${groupModel!.groupId}");
-    filteredStudents = parseStudents(response);
-    // filteredStudents = fetchedStudents.where((element) => element.groupName!
-    //     .contains(groupModel!.groupName.toString())).toList();
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      filteredStudents = parser.parseStudents(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return onChangeGroupFilter(groupModel);
+    }
   }
 
   onTapStudent(context, String studentId) async {
@@ -166,24 +187,34 @@ class RatingViewModel extends BaseViewModel {
     goToStudentDetail(context);
   }
 
-  onChangeToggle(int newIndex) {
+  onChangeToggle(int newIndex) async {
     for (int index = 0; index < isSelectedButton.length; index++) {
       if (index == newIndex) {
         if (isSelectedButton[index] != true) {
           isSelectedButton[index] = true;
           if (newIndex == 0) {
-            fetchStudentsTop10();
+            circle = true;
+            notifyListeners();
+            fetchStudentsTop(10);
+            circle = false;
             notifyListeners();
           } else if (newIndex == 1) {
-            fetchStudentsTop50();
+            circle = true;
+            notifyListeners();
+            fetchStudentsTop(50);
+            circle = false;
             notifyListeners();
           } else {
-            fetchStudentsTop100();
+            circle = true;
+            notifyListeners();
+            fetchStudentsTop(100);
+            circle = false;
             notifyListeners();
           }
         }
       } else {
         isSelectedButton[index] = false;
+        notifyListeners();
       }
     }
   }

@@ -20,13 +20,18 @@ class ProofDetailAchieveViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void fetchDetailProofAchievement() async {
+  fetchDetailProofAchievement() async {
     String? proofAchieveId = await storage.read(key: "proof_achieve_id");
-    print(proofAchieveId);
     var response = await networkHandler.get("/student/proof/${int.parse(proofAchieveId!)}");
-    proofAchievement = DetailProofAchieveModel.fromJson(response);
-    circle = false;
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      proofAchievement = DetailProofAchieveModel.fromJson(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchDetailProofAchievement();
+    }
   }
 
   Uint8List getImage(String base64String) {

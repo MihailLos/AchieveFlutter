@@ -6,6 +6,7 @@ import 'package:achieve_student_flutter/model/achievement/achieve_category.dart'
 import 'package:achieve_student_flutter/model/achievement/created_achievement/created_achievement.dart';
 import 'package:achieve_student_flutter/model/reward/reward.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
+import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -25,6 +26,7 @@ class NewAchievementViewModel extends BaseViewModel {
   RewardModel? chosenReward;
   AchieveCategoryModel? achieveCategoryModel;
   bool circle = true;
+  Parser parser = Parser();
 
   File? newAchieveImage;
   String? decodedNewAchieveImage;
@@ -39,34 +41,33 @@ class NewAchievementViewModel extends BaseViewModel {
   Future onReady() async {
     fetchAchieveCategory();
     fetchRewards();
-    circle = false;
     notifyListeners();
   }
 
-  void fetchAchieveCategory() async {
+  fetchAchieveCategory() async {
     var response = await networkHandler.get("/categories");
-    achieveCategoryList = parseAchieveCategory(response);
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      achieveCategoryList = parser.parseAchieveCategory(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchAchieveCategory();
+    }
   }
 
-  void fetchRewards() async {
+  fetchRewards() async {
     var response = await networkHandler.get("/rewards");
-    rewardList = parseRewards(response);
-    notifyListeners();
-  }
-
-  List<AchieveCategoryModel> parseAchieveCategory(List response) {
-    return response
-        .map<AchieveCategoryModel>(
-            (json) => AchieveCategoryModel.fromJson(json))
-        .toList();
-  }
-
-  List<RewardModel> parseRewards(List response) {
-    return response
-        .map<RewardModel>(
-            (json) => RewardModel.fromJson(json))
-        .toList();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      rewardList = parser.parseRewards(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchRewards();
+    }
   }
 
   Uint8List getImage(String base64String) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:achieve_student_flutter/model/report/detail_report.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +29,16 @@ class ReportDetailViewModel extends BaseViewModel {
   void getReport() async {
     String? reportId = await storage.read(key: "report_id");
     var response = await networkHandler.get("/student/messageError/${int.parse(reportId!)}");
-    detailReportModel = DetailReportModel.fromJson(response);
-    DateTime parsedDate = DateTime.parse(detailReportModel.messageErrorDate.toString());
-    detailReportModel.messageErrorDate = DateFormat('dd.MM.yyyy').format(parsedDate);
-    circular = false;
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      detailReportModel = DetailReportModel.fromJson(json.decode(response.body));
+      DateTime parsedDate = DateTime.parse(detailReportModel.messageErrorDate.toString());
+      detailReportModel.messageErrorDate = DateFormat('dd.MM.yyyy').format(parsedDate);
+      circular = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return getReport();
+    }
   }
 }

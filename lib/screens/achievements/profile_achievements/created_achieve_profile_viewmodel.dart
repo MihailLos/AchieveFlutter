@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:achieve_student_flutter/model/achievement/created_achievement/created_achievement.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
@@ -15,26 +15,26 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
   NetworkHandler networkHandler = NetworkHandler();
   FlutterSecureStorage storage = FlutterSecureStorage();
   List<CreatedAchievementModel> createdProfileAchievements = [];
+  Parser parser = Parser();
   bool circle = true;
-
 
   Future onReady() async {
     fetchCreatedProfileAchievements();
     notifyListeners();
   }
 
-  void fetchCreatedProfileAchievements() async {
+  fetchCreatedProfileAchievements() async {
+    circle = true;
     var response = await networkHandler.get("/student/achievementsCreated");
-    createdProfileAchievements = parseCreatedProfileAchievements(response);
-    circle = false;
-    notifyListeners();
-  }
-
-  List<CreatedAchievementModel> parseCreatedProfileAchievements(List response) {
-    return response
-        .map<CreatedAchievementModel>(
-            (json) => CreatedAchievementModel.fromJson(json))
-        .toList();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      createdProfileAchievements = parser.parseCreatedProfileAchievements(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchCreatedProfileAchievements();
+    }
   }
 
   Future<MemoryImage?> getImageForCreated(int index) async {

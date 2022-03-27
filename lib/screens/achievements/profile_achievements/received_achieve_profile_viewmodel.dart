@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:achieve_student_flutter/screens/achievements/received_achievements/received_detail_achieve_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
@@ -20,49 +20,34 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   List<ReceivedAchievementModel> filteredReceivedProfileAchievements = [];
   List<AchieveCategoryModel> achieveCategoryList = [];
   AchieveCategoryModel? achieveCategoryModel;
+  Parser parser = Parser();
   bool circle = true;
   bool isVisibleFilters = false;
 
-
   Future onReady() async {
     fetchReceivedProfileAchievements();
-    fetchAchieveCategory();
     notifyListeners();
   }
 
-  void fetchReceivedProfileAchievements([int? categoryId]) async {
-    List response;
+  fetchReceivedProfileAchievements([int? categoryId]) async {
+    var response;
+    circle = true;
     if (categoryId != null) {
       response = await networkHandler
           .get("/student/achievementsReceived/3?categoryId=$categoryId");
     } else {
       response = await networkHandler.get("/student/achievementsReceived/3");
     }
-    receivedProfileAchievements = parseReceivedProfileAchievements(response);
-    filteredReceivedProfileAchievements = receivedProfileAchievements;
-    circle = false;
-    notifyListeners();
-  }
-
-  void fetchAchieveCategory() async {
-    var response = await networkHandler.get("/categories");
-    achieveCategoryList = parseAchieveCategory(response);
-    notifyListeners();
-  }
-
-  List<ReceivedAchievementModel> parseReceivedProfileAchievements(
-      List response) {
-    return response
-        .map<ReceivedAchievementModel>(
-            (json) => ReceivedAchievementModel.fromJson(json))
-        .toList();
-  }
-
-  List<AchieveCategoryModel> parseAchieveCategory(List response) {
-    return response
-        .map<AchieveCategoryModel>(
-            (json) => AchieveCategoryModel.fromJson(json))
-        .toList();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      receivedProfileAchievements = parser.parseReceivedProfileAchievements(json.decode(response.body));
+      filteredReceivedProfileAchievements = receivedProfileAchievements;
+      notifyListeners();
+      circle = false;
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchReceivedProfileAchievements();
+    }
   }
 
   Future<MemoryImage?> getImageForReceived(int index) async {

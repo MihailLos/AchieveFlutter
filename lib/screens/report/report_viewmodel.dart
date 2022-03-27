@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:achieve_student_flutter/model/report/report.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:achieve_student_flutter/screens/report/newreport_screen.dart';
@@ -75,9 +77,15 @@ class ReportViewModel extends BaseViewModel {
 
   void getReports() async {
     var response = await networkHandler.get("/student/messageError");
-    reportsCollectionModel = ReportsCollectionModel.fromJson(response);
-    listReports = reportsCollectionModel!.list;
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      reportsCollectionModel = ReportsCollectionModel.fromJson(json.decode(response.body));
+      listReports = reportsCollectionModel!.list;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return getReports();
+    }
   }
 
   reportsSpace(context) {

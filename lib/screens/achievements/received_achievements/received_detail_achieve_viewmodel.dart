@@ -20,12 +20,18 @@ class ReceivedDetailAchieveViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void fetchDetailReceivedAchievement() async {
+  fetchDetailReceivedAchievement() async {
     String? receivedAchieveId = await storage.read(key: "received_achieve_id");
     var response = await networkHandler.get("/student/achievementReceived/${int.parse(receivedAchieveId!)}");
-    receivedAchieve = DetailReceivedAchieveModel.fromJson(response);
-    circle = false;
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      receivedAchieve = DetailReceivedAchieveModel.fromJson(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchDetailReceivedAchievement();
+    }
   }
 
   Uint8List getImage(String base64String) {
@@ -55,6 +61,7 @@ class ReceivedDetailAchieveViewModel extends BaseViewModel {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Награда получена. Поздравляем!")));
       Navigator.pop(context);
       fetchDetailReceivedAchievement();
+      notifyListeners();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при получении награды.")));
     }

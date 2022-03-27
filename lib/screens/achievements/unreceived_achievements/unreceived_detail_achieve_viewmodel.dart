@@ -25,12 +25,20 @@ class UnreceivedDetailAchievementViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void fetchDetailUnreceivedAchievement() async {
+  fetchDetailUnreceivedAchievement() async {
+    circle = true;
+    notifyListeners();
     String? unreceivedAchieveId = await storage.read(key: "unreceived_achieve_id");
     var response = await networkHandler.get("/student/achievementUnreceived/${int.parse(unreceivedAchieveId!)}");
-    unreceivedAchievement = DetailUnreceivedAchievementModel.fromJson(response);
-    circle = false;
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      unreceivedAchievement = DetailUnreceivedAchievementModel.fromJson(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchDetailUnreceivedAchievement();
+    }
   }
 
   Uint8List getImage(String base64String) {

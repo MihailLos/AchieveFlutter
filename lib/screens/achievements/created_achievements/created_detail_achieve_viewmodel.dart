@@ -25,12 +25,18 @@ class CreatedDetailAchieveViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void fetchDetailCreatedAchievement() async {
+  fetchDetailCreatedAchievement() async {
     String? createdAchieveId = await storage.read(key: "created_achieve_id");
     var response = await networkHandler.get("/student/achievementsCreated/${int.parse(createdAchieveId!)}");
-    createdAchievement = DetailCreatedAchieveModel.fromJson(response);
-    circle = false;
-    notifyListeners();
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      createdAchievement = DetailCreatedAchieveModel.fromJson(json.decode(response.body));
+      circle = false;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchDetailCreatedAchievement();
+    }
   }
 
   Uint8List getImage(String base64String) {
