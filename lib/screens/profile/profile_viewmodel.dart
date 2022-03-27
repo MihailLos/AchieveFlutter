@@ -20,6 +20,7 @@ class ProfileViewModel extends BaseViewModel {
   NetworkHandler networkHandler = NetworkHandler();
   StudentProfileModel? studentProfileModel;
   int? studentPercent;
+  int? course;
   bool circular = true;
   FlutterSecureStorage storage = FlutterSecureStorage();
   double? studentPercentProgressBar;
@@ -29,6 +30,7 @@ class ProfileViewModel extends BaseViewModel {
   Future onReady() async {
     fetchStudentData();
     fetchStudentPercent();
+    fetchStudy();
     notifyListeners();
   }
 
@@ -42,6 +44,18 @@ class ProfileViewModel extends BaseViewModel {
       var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
       await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
       return fetchStudentData();
+    }
+  }
+
+  fetchStudy() async {
+    var response = await networkHandler.get("/student/getStudy");
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      course = json.decode(response.body)["course"];
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchStudy();
     }
   }
 

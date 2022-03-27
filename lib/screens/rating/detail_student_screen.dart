@@ -169,7 +169,7 @@ class DetailStudentScreen extends StatelessWidget {
         ));
   }
 
-  _educationInfo(context, model) {
+  _educationInfo(context, DetailStudentViewModel model) {
     return model.circular
         ? LinearProgressIndicator()
         : Padding(
@@ -177,15 +177,20 @@ class DetailStudentScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(model.studentProfileModel.instituteFullName, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
+          Text(model.studentProfileModel!.instituteFullName.toString(), style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
           SizedBox(
             height: 5,
           ),
-          Text(model.studentProfileModel.streamFullName, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
+          Text(model.studentProfileModel!.streamFullName.toString(), style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
           SizedBox(
             height: 5,
           ),
-          Text(model.studentProfileModel.groupName, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
+          Text(model.studentProfileModel!.groupName.toString(), style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
+          SizedBox(
+            height: 5,
+          ),
+          model.course != null ? Text("${model.course} курс", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)) :
+          Text("Нет курса", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
         ],
       ),
     );

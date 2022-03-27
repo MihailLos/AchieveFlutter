@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:achieve_student_flutter/model/student/student_profile.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
@@ -14,9 +15,11 @@ class DetailStudentViewModel extends BaseViewModel {
   StudentProfileModel? studentProfileModel;
   bool circular = true;
   int? studentPercent;
+  int? course;
   double? studentPercentProgressBar;
 
   Future onReady() async {
+    fetchAnotherStudy();
     fetchAnotherStudent();
     fetchAnotherStudentPercent();
     notifyListeners();
@@ -35,6 +38,19 @@ class DetailStudentViewModel extends BaseViewModel {
       var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
       await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
       return fetchAnotherStudent();
+    }
+  }
+
+  fetchAnotherStudy() async {
+    String? studentId = await storage.read(key: "student_id");
+    var response = await networkHandler.get("/student/getStudy?studentId=${int.parse(studentId.toString())}");
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      course = json.decode(response.body)["course"];
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchAnotherStudy();
     }
   }
 

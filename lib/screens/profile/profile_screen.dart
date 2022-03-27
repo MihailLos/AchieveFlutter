@@ -240,7 +240,7 @@ class ProfileScreen extends StatelessWidget {
             ));
   }
 
-  _educationInfo(context, model) {
+  _educationInfo(context, ProfileViewModel model) {
     return model.circular
         ? LinearProgressIndicator()
         : Padding(
@@ -291,6 +291,11 @@ class ProfileScreen extends StatelessWidget {
                     }
                   },
                 ),
+                SizedBox(
+                  height: 5,
+                ),
+                model.course != null ? Text("${model.course} курс", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)) :
+                Text("Нет курса", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500))
               ],
             ),
           );
