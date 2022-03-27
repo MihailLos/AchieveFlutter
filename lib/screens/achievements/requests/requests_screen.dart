@@ -72,7 +72,7 @@ class RequestsScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(child: Text("Подтверждение", style: CyrillicFonts.openSans(fontSize: 12, fontWeight: FontWeight.w700),)),
+                child: Container(child: Text("Получение", style: CyrillicFonts.openSans(fontSize: 12, fontWeight: FontWeight.w700),)),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -94,7 +94,7 @@ class RequestsScreen extends StatelessWidget {
         builder: (context) {
           return AlertDialog(
             content: Text(
-              "Подтверждение - вкладка предназначена для отображения заявок на получение достижений.\nСоздание - вкладка предназначена для отображения заявок на создание достижений."
+              "Получение - вкладка предназначена для отображения заявок на получение достижений.\nСоздание - вкладка предназначена для отображения заявок на создание достижений."
             ),
           );
         }
