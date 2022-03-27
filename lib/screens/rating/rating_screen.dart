@@ -213,7 +213,7 @@ class RatingScreen extends StatelessWidget {
   }
 
   _topStudentsSpace(context, RatingViewModel model) {
-    return model.filteredStudents.isEmpty
+    return model.circle
         ? Center(
       child: CircularProgressIndicator(),
     )
