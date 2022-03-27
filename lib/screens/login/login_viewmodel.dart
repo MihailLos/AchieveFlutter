@@ -16,7 +16,7 @@ class LoginViewModel extends BaseViewModel {
   var passwordController = TextEditingController();
   NetworkHandler networkHandler = NetworkHandler();
   FlutterSecureStorage tokenStorage = FlutterSecureStorage();
-
+  bool circle = true;
 
   bool isHiddenPassword = true;
 
@@ -24,12 +24,32 @@ class LoginViewModel extends BaseViewModel {
 
   LoginViewModel.withContext(BuildContext context);
 
-  Future onReady() async {
-
+  Future onReady(context) async {
+    checkAuthorize(context);
   }
 
   void changePasswordToggle() {
     isHiddenPassword = !isHiddenPassword;
+    notifyListeners();
+  }
+
+  checkAuthorize(context) async {
+    String? accessToken = await tokenStorage.read(key: "token");
+    if (accessToken != null) {
+      var response = await networkHandler.get("/userData");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        circle = false;
+        notifyListeners();
+        Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => HomeView()), (route) => false);
+      } else if (response.statusCode == 403) {
+        var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await tokenStorage.read(key: "refresh_token")}"});
+        if (response.statusCode == 200) {
+          await tokenStorage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+          return checkAuthorize(context);
+        }
+      }
+    }
+    circle = false;
     notifyListeners();
   }
 

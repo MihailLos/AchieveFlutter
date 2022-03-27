@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<LoginViewModel>.reactive(
         viewModelBuilder: () => LoginViewModel.withContext(context),
-        onModelReady: (viewModel) => viewModel.onReady(),
+        onModelReady: (viewModel) => viewModel.onReady(context),
         builder: (context, model, child) {
           return Scaffold(
             body: _body(context, model),
@@ -24,8 +24,8 @@ class LoginScreen extends StatelessWidget {
         });
   }
 
-  _body(context, model) {
-    return Container(
+  _body(context, LoginViewModel model) {
+    return model.circle ? Center(child: CircularProgressIndicator(),) : Container(
         decoration: BoxDecoration(
           gradient: RadialGradient(
             center: Alignment(0.5, -0.7),
