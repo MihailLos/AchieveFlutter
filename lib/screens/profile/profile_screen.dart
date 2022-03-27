@@ -344,7 +344,7 @@ class ProfileScreen extends StatelessWidget {
 
   _bottomChooseProfilePhotoWidget(context, model) {
     return Container(
-      height: 150,
+      height: 170,
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Center(
@@ -352,14 +352,22 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Text(
               "Изменить фото профиля",
-              style: TextStyle(fontSize: 20),
+              style: CyrillicFonts.raleway(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF5878DD)
+              ),
             ),
             SizedBox(
               height: 8,
             ),
             Text(
-              "Если фото будет содержать непристойный контент, Ваш аккаунт будет заблокирован модератором!",
-              style: TextStyle(fontSize: 14),
+              "Если фото будет содержать непристойный контент, ваш аккаунт будет заблокирован модератором!",
+              style: CyrillicFonts.raleway(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF757575)
+              ),
             ),
             SizedBox(
               height: 15,
@@ -371,36 +379,54 @@ class ProfileScreen extends StatelessWidget {
                   onTap: () {
                     model.pickImage(ImageSource.camera, context);
                   },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Icon(Icons.camera_alt),
-                            Text("Камера")
-                          ],
+                  child: Column(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          color: Color(0xFFFF9966),
+                          child: Icon(
+                            Icons.camera,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(height: 5,),
+                      Text(
+                          "Камера",
+                          style: CyrillicFonts.raleway(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      )
+                    ],
                   ),
                 ),
                 InkWell(
                   onTap: () {
                     model.pickImage(ImageSource.gallery, context);
                   },
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Row(
-                          children: [
-                            Icon(Icons.photo),
-                            Text("Выбрать из галереи")
-                          ],
+                  child: Column(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          color: Color(0xFFFF9966),
+                          child: Icon(
+                            Icons.photo,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(height: 5,),
+                      Text(
+                          "Галерея",
+                          style: CyrillicFonts.raleway(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          )
+                      )
+                    ],
                   ),
                 )
               ],
