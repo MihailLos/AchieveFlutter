@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -11,19 +9,25 @@ class NetworkHandler {
   var log = Logger();
   FlutterSecureStorage tokenStorage = FlutterSecureStorage();
 
-  Future get(String uri) async {
+  Future get(String uri, [Map<String, String>? customHeaders]) async {
+    var response;
     String? accessToken = await tokenStorage.read(key: "token");
     uri = formater(uri);
-    var response = await http.get(Uri.parse(uri), headers: {
-      "Authorization": "Bearer $accessToken"
-    });
+
+    if (customHeaders == null) {
+      response = await http.get(Uri.parse(uri), headers: {
+        "Authorization": "Bearer $accessToken"
+      });
+    } else {
+      response = await http.get(Uri.parse(uri), headers: customHeaders);
+    }
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       log.i(response.body);
-      return json.decode(response.body);
     }
     log.i(response.body);
     log.i(response.statusCode);
+    return response;
   }
 
   Future<http.Response> post(String uri, Map<String, String>? headers, Map<String, dynamic>? body) async {
