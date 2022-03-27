@@ -81,7 +81,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                     fontSize: 14
                 ),
               ) : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 22),
                 child: Container(
                     width: double.maxFinite,
                     height: 46,
@@ -300,16 +300,79 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Подтверждение"),
-            content: Text("Вы действительно хотите подтвердить получение награды? Подтверждайте получение наград только после выдачи приза"),
+            title: Center(child: Text(
+                "Подтверждение",
+              style: CyrillicFonts.raleway(
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF5878DD)
+              ),
+            )
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    "Вы действительно хотите подтвердить получение награды?",
+                  style: CyrillicFonts.raleway(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF757575)
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+                  child: Container(
+                      width: double.maxFinite,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black45,
+                              offset: Offset(0, 6),
+                              spreadRadius: 1,
+                              blurRadius: 7
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(25),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xFFFFBC89),
+                            Color(0xFFFF9A67)
+                          ],
+                        ),
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          model.getRewardAction(context);
+                        },
+                        child: Text(
+                          "Подтвердить",
+                          style: CyrillicFonts.raleway(
+                            fontStyle: FontStyle.normal,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,),
+                        ),
+
+                      )
+                  ),
+                ),
+                Text(
+                    "Подтверждайте получение наград только перед выдачей приза.",
+                    style: CyrillicFonts.raleway(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF757575)
+                    ),
+                ),
+              ],
+            ),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text("Отмена")
-              ),
-              TextButton(
-                  onPressed: () => model.getRewardAction(context),
-                  child: Text("Подтвердить")
               ),
             ],
           );
