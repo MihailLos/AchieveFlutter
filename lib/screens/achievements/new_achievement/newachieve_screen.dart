@@ -174,6 +174,7 @@ class NewAchieveScreen extends StatelessWidget {
         Container(
           width: 334,
           child: TextField(
+            autofocus: false,
             controller: model.newAchievementTitle,
               decoration: InputDecoration(
                 hintText: "Название достижения",
@@ -195,6 +196,7 @@ class NewAchieveScreen extends StatelessWidget {
         Container(
           width: 334,
           child: TextField(
+            autofocus: false,
             controller: model.newAchievementDescription,
               maxLines: 15,
               decoration: InputDecoration(
@@ -223,6 +225,7 @@ class NewAchieveScreen extends StatelessWidget {
         Container(
           width: 334,
           child: TextField(
+            autofocus: false,
               keyboardType: TextInputType.number,
               controller: model.newAchievementScore,
               decoration: InputDecoration(
