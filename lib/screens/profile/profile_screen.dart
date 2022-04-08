@@ -22,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return model.circular
-              ? LinearProgressIndicator()
+              ? Center(child: CircularProgressIndicator(),)
               : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
@@ -67,6 +67,10 @@ class ProfileScreen extends StatelessWidget {
           ),
           _progressField(context, model),
           _educationInfo(context, model),
+          SizedBox(
+            height: 16,
+          ),
+          _goToPgasButton(context, model),
           SizedBox(
             height: 27,
           ),
@@ -458,6 +462,49 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  _goToPgasButton(context, ProfileViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
+      child: Container(
+          width: double.maxFinite,
+          height: 30,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black45,
+                  offset: Offset(0, 6),
+                  spreadRadius: 1,
+                  blurRadius: 7
+              )
+            ],
+            borderRadius: BorderRadius.circular(25),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFFFBC89),
+                Color(0xFFFF9A67)
+              ],
+            ),
+          ),
+          child: TextButton(
+            onPressed: () async {
+              model.goToPgasScreen(context);
+            },
+            child: Text(
+              "Мои заявки на ПГАС",
+              style: CyrillicFonts.raleway(
+                fontStyle: FontStyle.normal,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,),
+            ),
+
+          )
       ),
     );
   }
