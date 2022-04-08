@@ -17,16 +17,29 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
         viewModelBuilder: () => CreatedDetailAchieveViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return Scaffold(
+          return model.circle
+              ? Center(
+            child: CircularProgressIndicator(),
+          )
+              : Scaffold(
               body: NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) =>
                 [
                   SliverAppBar(
-                    floating: true,
-                    snap: true,
+                    expandedHeight: 350,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: _achieveImage(context, model),
+                    ),
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back_outlined),
+                      icon: ClipOval(
+                        child: Container(
+                            width: 64,
+                            height: 64,
+                            color: Colors.grey.withOpacity(0.25),
+                            child: Icon(Icons.clear)
+                        ),
+                      ),
                       color: Colors.black,
                       onPressed: () async {
                         Navigator.pop(context);
@@ -44,13 +57,9 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
   }
 
   _createdAchieveBody(context, CreatedDetailAchieveViewModel model) {
-    return model.circle
-        ? Center(
-      child: CircularProgressIndicator(),
-    )
-        : ListView(
+    return ListView(
       children: [
-        _achieveImage(context, model),
+        //_achieveImage(context, model),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 27, horizontal: 20),
           child: Column(
@@ -277,23 +286,26 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
   }
 
   _commentProofAchieve(context, CreatedDetailAchieveViewModel model) {
-    return Container(
-      width: double.maxFinite,
-      height: 46,
-      child: TextField(
-        controller: model.commentController,
-        obscureText: false,
-        style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
-            fillColor: Colors.transparent,
-            filled: true,
-            hintText: "Комментарий к заявке"),
+    return SingleChildScrollView(
+      reverse: true,
+      child: Container(
+        width: double.maxFinite,
+        height: 46,
+        child: TextField(
+          controller: model.commentController,
+          obscureText: false,
+          style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+              fillColor: Colors.transparent,
+              filled: true,
+              hintText: "Комментарий к заявке"),
+        ),
       ),
     );
   }
@@ -302,38 +314,28 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
     return Container(
         width: double.maxFinite,
         height: 46,
-        decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Color(0xFF4065D8),
-                blurRadius: 6,
-                spreadRadius: 2,
-                offset: Offset(0, 4)),
-          ],
-        ),
-        child: ElevatedButton(
+        child: OutlinedButton(
           onPressed: () {
             model.chooseFilesAction(context);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.file_download),
+              Icon(Icons.file_download, color: Colors.black,),
               Text(
                 "Выбрать файлы",
-                style: TextStyle(
-                    fontFamily: "Montseratt",
+                style: CyrillicFonts.raleway(
                     fontStyle: FontStyle.normal,
                     fontSize: 17,
-                    fontWeight: FontWeight.w600),
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black),
               ),
             ],
           ),
-          style: ElevatedButton.styleFrom(
+          style: OutlinedButton.styleFrom(
             shape: new RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            primary: Color(0xFF4065D8),
           ),
         )
     );
@@ -341,7 +343,7 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
 
   _filesListView(context, CreatedDetailAchieveViewModel model) {
     return model.filePickerResult == null ?
-    Text("Здесь будут отображены загружаемые вами файлы") :
+    Text("") :
     Container(
       height: 150,
       child: ListView.builder(
@@ -366,8 +368,32 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                          color: Color(0xFF4065D8),
-                          borderRadius: BorderRadius.circular(12)
+                          color: file.extension == "docx" ||
+                              file.extension == "doc" ? Colors.blue :
+                          file.extension == "jpg" || file.extension == "png"
+                              || file.extension == "png" ? Colors.green
+                              : file.extension == "pdf" ? Colors.red :
+                          Color(0xFF4065D8),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                                color: file.extension == "docx" ||
+                                    file.extension == "doc"
+                                    ? Colors.blueAccent
+                                    :
+                                file.extension == "jpg" ||
+                                    file.extension == "png"
+                                    || file.extension == "png" ? Colors
+                                    .greenAccent
+                                    : file.extension == "pdf"
+                                    ? Colors.redAccent
+                                    :
+                                Color(0xFF4065D8),
+                                offset: Offset(3, 3.5),
+                                spreadRadius: 1,
+                                blurRadius: 7
+                            )
+                          ]
                       ),
                       child: Text(
                         ".${file.extension}",
@@ -410,32 +436,37 @@ class CreatedDetailAchieveScreen extends StatelessWidget {
         width: double.maxFinite,
         height: 46,
         decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
+          boxShadow: [
             BoxShadow(
-                color: Colors.grey,
-                blurRadius: 6,
-                spreadRadius: 2,
-                offset: Offset(0, 4)),
+                color: Colors.black45,
+                offset: Offset(0, 6),
+                spreadRadius: 1,
+                blurRadius: 7
+            )
           ],
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFFFBC89),
+              Color(0xFFFF9A67)
+            ],
+          ),
         ),
-        child: ElevatedButton(
-          onPressed: () {
+        child: TextButton(
+          onPressed: () async {
             model.sendButtonAction(context);
           },
           child: Text(
             "Отправить заявку",
-            style: TextStyle(
-                fontFamily: "Montseratt",
-                fontStyle: FontStyle.normal,
-                fontSize: 17,
-                fontWeight: FontWeight.w600),
+            style: CyrillicFonts.raleway(
+              fontStyle: FontStyle.normal,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,),
           ),
-          style: ElevatedButton.styleFrom(
-            shape: new RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            primary: Color(0xFFFF9966),
-          ),
+
         )
     );
   }
