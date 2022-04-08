@@ -25,18 +25,36 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   bool isVisibleFilters = false;
 
   Future onReady() async {
-    fetchReceivedProfileAchievements();
+    await fetchAchieveCategory();
+    await fetchReceivedProfileAchievements();
     notifyListeners();
   }
 
-  fetchReceivedProfileAchievements([int? categoryId]) async {
+  Future onReadyAnotherStudent() async {
+    String? studentId = await storage.read(key: "student_id");
+    notifyListeners();
+    await fetchAchieveCategory();
+    await fetchReceivedProfileAchievements(null, int.parse(studentId!));
+    notifyListeners();
+  }
+
+  fetchReceivedProfileAchievements([int? categoryId, int? studentId]) async {
     var response;
     circle = true;
     if (categoryId != null) {
-      response = await networkHandler
-          .get("/student/achievementsReceived/3?categoryId=$categoryId");
+      if (studentId == null) {
+        response = await networkHandler
+            .get("/student/achievementsReceived/3?categoryId=$categoryId");
+      } else {
+        response = await networkHandler
+            .get("/student/achievementsReceived/3?categoryId=$categoryId&studentId=$studentId");
+      }
     } else {
-      response = await networkHandler.get("/student/achievementsReceived/3");
+      if (studentId == null) {
+        response = await networkHandler.get("/student/achievementsReceived/3");
+      } else {
+        response = await networkHandler.get("/student/achievementsReceived/3?studentId=$studentId");
+      }
     }
     if (response.statusCode == 200 || response.statusCode == 200) {
       receivedProfileAchievements = parser.parseReceivedProfileAchievements(json.decode(response.body));
@@ -47,6 +65,18 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
       var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
       await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
       return fetchReceivedProfileAchievements();
+    }
+  }
+
+  fetchAchieveCategory() async {
+    var response = await networkHandler.get("/categories");
+    if (response.statusCode == 200 || response.statusCode == 200) {
+      achieveCategoryList = parser.parseAchieveCategory(json.decode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
+      return fetchAchieveCategory();
     }
   }
 
@@ -79,10 +109,13 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
                 );
               }).toList(),
               hint: Text("Категория достижения"),
-              onChanged: (value) {
+              onChanged: (value) async {
+                String? studentId = await storage.read(key: "student_id");
                 achieveCategoryModel = value!;
+                studentId == null ? fetchReceivedProfileAchievements(
+                    achieveCategoryModel!.categoryId) :
                 fetchReceivedProfileAchievements(
-                    achieveCategoryModel!.categoryId);
+                    achieveCategoryModel!.categoryId, int.parse(studentId));
                 notifyListeners();
               }),
         ),
