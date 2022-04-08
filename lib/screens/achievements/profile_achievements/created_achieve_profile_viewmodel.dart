@@ -19,13 +19,23 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
   bool circle = true;
 
   Future onReady() async {
-    fetchCreatedProfileAchievements();
+    await fetchCreatedProfileAchievements();
     notifyListeners();
   }
 
-  fetchCreatedProfileAchievements() async {
+  Future onReadyAnotherStudent() async {
+    String? studentId = await storage.read(key: "student_id");
+    notifyListeners();
+    await fetchCreatedProfileAchievements(int.parse(studentId!));
+    notifyListeners();
+  }
+
+  fetchCreatedProfileAchievements([int? studentId]) async {
     circle = true;
-    var response = await networkHandler.get("/student/achievementsCreated");
+    var response;
+    studentId == null ? response = await networkHandler.get("/student/achievementsCreated") :
+    response = await networkHandler.get("/student/achievementsCreated?studentId=$studentId");
+
     if (response.statusCode == 200 || response.statusCode == 200) {
       createdProfileAchievements = parser.parseCreatedProfileAchievements(json.decode(response.body));
       circle = false;
