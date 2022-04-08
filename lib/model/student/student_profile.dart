@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'student_profile.g.dart';
-
-@JsonSerializable()
 class StudentProfileModel {
   String? data;
   String? firstName;
@@ -27,6 +22,16 @@ class StudentProfileModel {
         this.statusUser,
         this.streamFullName});
 
-  factory StudentProfileModel.fromJson(Map<String, dynamic> json) => _$StudentProfileModelFromJson(json);
-  Map<String, dynamic> toJson() => _$StudentProfileModelToJson(this);
+  StudentProfileModel.fromJson(Map<dynamic, dynamic> json) {
+    data = json['data'];
+    firstName = json['firstName'];
+    formEducationName = json['formEducationName'];
+    format = json['format'];
+    groupName = json['groupName'];
+    instituteFullName = json['instituteFullName'];
+    lastName = json['lastName'];
+    score = json['score'];
+    statusUser = json['statusUser'];
+    streamFullName = json['streamFullName'];
+  }
 }
