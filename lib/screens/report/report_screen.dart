@@ -24,7 +24,7 @@ class ReportScreen extends StatelessWidget {
         });
   }
 
-  _appBar(context, model) {
+  _appBar(context, ReportViewModel model) {
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back_outlined),
@@ -39,7 +39,7 @@ class ReportScreen extends StatelessWidget {
     );
   }
 
-  _body(context, model) {
+  _body(context, ReportViewModel model) {
     return RefreshIndicator(
       onRefresh: model.refresh,
       child: ListView(
