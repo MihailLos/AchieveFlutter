@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:achieve_student_flutter/model/student/student_profile.dart';
+import 'package:achieve_student_flutter/screens/pgas/pgas_screen.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:achieve_student_flutter/screens/login/login_screen.dart';
 
@@ -9,8 +10,10 @@ import 'package:achieve_student_flutter/screens/report/report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileViewModel extends BaseViewModel {
@@ -26,15 +29,15 @@ class ProfileViewModel extends BaseViewModel {
   double? studentPercentProgressBar;
   bool isCreated = false;
   List<bool> isSelectedButton = [true, false];
+  Box? profileBox;
 
   Future onReady() async {
-    fetchStudentData();
+    fetchStudentDataFromApi();
     fetchStudentPercent();
     fetchStudy();
-    notifyListeners();
   }
 
-  fetchStudentData() async {
+  fetchStudentDataFromApi() async {
     var response = await networkHandler.get("/student/getStudent");
     if (response.statusCode == 200 || response.statusCode == 200) {
       studentProfileModel = StudentProfileModel.fromJson(json.decode(response.body));
@@ -43,7 +46,7 @@ class ProfileViewModel extends BaseViewModel {
     } else if (response.statusCode == 403) {
       var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
       await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
-      return fetchStudentData();
+      return fetchStudentDataFromApi();
     }
   }
 
@@ -169,8 +172,13 @@ class ProfileViewModel extends BaseViewModel {
         context, new MaterialPageRoute(builder: (context) => ReportScreen()));
   }
 
+  goToPgasScreen(context) {
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => PgasScreen()));
+  }
+
   Future<void> refresh() async {
-    fetchStudentData();
+    fetchStudentDataFromApi();
     fetchStudentPercent();
     notifyListeners();
   }
@@ -192,5 +200,12 @@ class ProfileViewModel extends BaseViewModel {
         isSelectedButton[index] = false;
       }
     }
+  }
+
+  openBox() async {
+    var dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    profileBox = await Hive.openBox("profileData");
+    notifyListeners();
   }
 }
