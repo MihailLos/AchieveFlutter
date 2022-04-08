@@ -1,3 +1,4 @@
+import 'package:achieve_student_flutter/screens/achievements/profile_achievements/created_achieve_grid.dart';
 import 'package:achieve_student_flutter/screens/rating/detail_student_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class DetailStudentScreen extends StatelessWidget {
     return ViewModelBuilder<DetailStudentViewModel>.reactive(
         viewModelBuilder: () => DetailStudentViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
+        onDispose: (viewModel) => viewModel.onDispose(),
         builder: (context, model, child) {
           return model.circular
               ? Center(child: CircularProgressIndicator())
@@ -60,6 +62,15 @@ class DetailStudentScreen extends StatelessWidget {
           height: 8,
         ),
         _educationInfo(context, model),
+        SizedBox(
+          height: 27,
+        ),
+        _achievementsTitle(),
+        _buttonsSpace(context, model),
+        SizedBox(
+          height: 10,
+        ),
+        model.isCreated ? CreatedAchieveGridAnotherStudent() : ReceivedAchieveGridAnotherStudent()
       ],
     );
   }
@@ -191,6 +202,72 @@ class DetailStudentScreen extends StatelessWidget {
           ),
           model.course != null ? Text("${model.course} курс", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)) :
           Text("Нет курса", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+
+  _buttonsSpace(context, DetailStudentViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Container(
+          height: 36,
+          padding: EdgeInsets.zero,
+          decoration: BoxDecoration(
+              color: Color(0xFF39ABDF),
+              borderRadius: BorderRadius.all(Radius.circular(180)),
+              boxShadow: [
+                BoxShadow(
+                    color: Color(0xFFFF9966),
+                    offset: Offset(0, 3.5),
+                    spreadRadius: 1,
+                    blurRadius: 7
+                )
+              ]
+          ),
+          child: ToggleButtons(
+            borderRadius: BorderRadius.circular(180),
+            selectedColor: Colors.white,
+            color: Colors.white,
+            fillColor: Color(0xFFFF9966),
+            renderBorder: false,
+            constraints: BoxConstraints.expand(width: (constraints.maxWidth / 2)),
+            isSelected: model.isSelectedButton,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Выполненные", style: CyrillicFonts.robotoMono(fontSize: 11, fontWeight: FontWeight.w600),),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Созданные", style: CyrillicFonts.robotoMono(fontSize: 11, fontWeight: FontWeight.w600),),
+              ),
+            ],
+            onPressed: (int newIndex) {
+              model.onChangeToggle(newIndex);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  _achievementsTitle() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "Достижения",
+            style: CyrillicFonts.raleway(
+                fontSize: 24,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF4065D8)
+            ),
+          ),
         ],
       ),
     );

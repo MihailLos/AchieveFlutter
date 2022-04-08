@@ -17,12 +17,18 @@ class DetailStudentViewModel extends BaseViewModel {
   int? studentPercent;
   int? course;
   double? studentPercentProgressBar;
+  bool isCreated = false;
+  List<bool> isSelectedButton = [true, false];
 
   Future onReady() async {
     fetchAnotherStudy();
     fetchAnotherStudent();
     fetchAnotherStudentPercent();
     notifyListeners();
+  }
+
+  void onDispose() async {
+    await storage.delete(key: "student_id");
   }
 
   fetchAnotherStudent() async {
@@ -115,5 +121,24 @@ class DetailStudentViewModel extends BaseViewModel {
   goToRatingScreen(context) async {
     Navigator.pop(context);
     await storage.delete(key: "student_id");
+  }
+
+  onChangeToggle(int newIndex) {
+    for (int index = 0; index < isSelectedButton.length; index++) {
+      if (index == newIndex) {
+        if (isSelectedButton[index] != true) {
+          isSelectedButton[index] = true;
+          if (newIndex == 0) {
+            isCreated = false;
+            notifyListeners();
+          } else {
+            isCreated = true;
+            notifyListeners();
+          }
+        }
+      } else {
+        isSelectedButton[index] = false;
+      }
+    }
   }
 }
