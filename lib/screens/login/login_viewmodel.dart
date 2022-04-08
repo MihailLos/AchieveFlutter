@@ -77,7 +77,8 @@ class LoginViewModel extends BaseViewModel {
         await tokenStorage.write(key: "token", value: output["accessToken"]);
         await tokenStorage.write(key: "refresh_token", value: output["refreshToken"]);
         if (responseForTokenEios.statusCode == 200 || responseForTokenEios.statusCode == 201) {
-          Map<String, dynamic> outputForEiosToken = json.decode(response.body);
+          Map<String, dynamic> outputForEiosToken = json.decode(responseForTokenEios.body);
+          print(outputForEiosToken);
           await tokenStorage.write(key: "eios_token", value: outputForEiosToken["accessToken"]);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Не удалось подключиться к системе защиты ЭИОС. (Код ошибки: ${response.statusCode})")));

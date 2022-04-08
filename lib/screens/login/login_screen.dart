@@ -1,5 +1,6 @@
 import 'package:achieve_student_flutter/screens/login/login_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -87,6 +88,7 @@ class LoginScreen extends StatelessWidget {
         width: double.maxFinite,
         height: 46,
         child: TextField(
+          autofillHints: [AutofillHints.username],
           controller: model.loginController,
           obscureText: false,
           style: TextStyle(fontFamily: 'OpenSans', fontSize: 14, color: Colors.white),
@@ -113,6 +115,8 @@ class LoginScreen extends StatelessWidget {
         width: double.maxFinite,
         height: 46,
         child: TextField(
+          autofillHints: [AutofillHints.password],
+          onEditingComplete: () => TextInput.finishAutofillContext(),
           controller: model.passwordController,
           obscureText: model.isHiddenPassword,
           style: TextStyle(fontFamily: 'OpenSans', fontSize: 14, color: Colors.white),
