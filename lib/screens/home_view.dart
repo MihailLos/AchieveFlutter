@@ -17,7 +17,11 @@ class HomeView extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return Scaffold(
-            body: getViewFromIndex(model.currentIndex),
+            body: PageView(
+              children: model.tabScreens,
+              onPageChanged: model.onPageChanged,
+              controller: model.pageController,
+            ),
             bottomNavigationBar: _bottomNavBar(context, model),
           );
         });
@@ -39,10 +43,10 @@ class HomeView extends StatelessWidget {
 
 _bottomNavBar(BuildContext context, HomeViewModel model) {
   return BottomNavigationBar(
-    currentIndex: model.currentIndex,
+    currentIndex: model.pageIndex,
     type: BottomNavigationBarType.fixed,
     backgroundColor: Colors.white,
-    onTap: model.setIndex,
+    onTap: model.onTabTapped,
     items: [
       BottomNavigationBarItem(
           icon: Icon(Icons.account_circle_outlined),
