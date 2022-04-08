@@ -17,16 +17,29 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         viewModelBuilder: () => ReceivedDetailAchieveViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return Scaffold(
+          return model.circle
+              ? Center(
+            child: CircularProgressIndicator(),
+          )
+              : Scaffold(
               body: NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) =>
                 [
                   SliverAppBar(
-                    floating: true,
-                    snap: true,
+                    expandedHeight: 350,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: _achieveImage(context, model),
+                    ),
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back_outlined),
+                      icon: ClipOval(
+                        child: Container(
+                            width: 64,
+                            height: 64,
+                            color: Colors.grey.withOpacity(0.25),
+                            child: Icon(Icons.clear)
+                        ),
+                      ),
                       color: Colors.black,
                       onPressed: () async {
                         Navigator.pop(context);
@@ -44,13 +57,9 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
   }
 
   _receivedAchieveBody(context, ReceivedDetailAchieveViewModel model) {
-    return model.circle
-        ? Center(
-      child: CircularProgressIndicator(),
-    )
-        : ListView(
+    return ListView(
       children: [
-        _achieveImage(context, model),
+        //_achieveImage(context, model),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 27, horizontal: 35),
           child: Column(
