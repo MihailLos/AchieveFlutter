@@ -21,8 +21,6 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
   runApp(MaterialApp(
     theme: ThemeData(
       primaryColor: Color(0xFF4065D8)
@@ -30,6 +28,8 @@ void main() {
     debugShowCheckedModeBanner: false,
     home: SplashScreen(),
   ));
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 }
 
 class SplashScreen extends StatelessWidget {
