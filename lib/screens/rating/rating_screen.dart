@@ -27,18 +27,6 @@ class RatingScreen extends StatelessWidget {
         });
   }
 
-  _appBar(context, model) {
-    return AppBar(
-      title: Text("Рейтинг студентов",
-          style: CyrillicFonts.raleway(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF4065D8))),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      // bottom:
-    );
-  }
   _body(context, model) {
     return Column(
       children: [
