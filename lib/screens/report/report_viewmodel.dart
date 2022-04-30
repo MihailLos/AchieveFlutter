@@ -15,7 +15,7 @@ class ReportViewModel extends BaseViewModel {
 
   var themeReportController = TextEditingController();
   var descriptionReportController = TextEditingController();
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   ReportModel reportModel = ReportModel();
   ReportsCollectionModel? reportsCollectionModel;
@@ -38,11 +38,11 @@ class ReportViewModel extends BaseViewModel {
 
   goToNewReportsScreen(context) {
     Navigator.push(context,
-        new MaterialPageRoute(builder: (context) => NewReportScreen())).then((value) => refresh());
+        MaterialPageRoute(builder: (context) => const NewReportScreen())).then((value) => refresh());
   }
 
   goToReportDetailScreen(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => DetailReportScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailReportScreen()));
   }
 
   void sendReportAction(context) async {
@@ -53,25 +53,22 @@ class ReportViewModel extends BaseViewModel {
         "description": descriptionReportController.text,
         "theme": themeReportController.text
       };
-      print(bodyData);
 
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
-      print(headers);
 
       var response = await networkHandler.post(
           "/student/newMessageError", headers, bodyData);
-      print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваше обращение успешно отправлено.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ваше обращение успешно отправлено.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке обращения! (Код ошибки: ${response.statusCode})")));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните тему и описание обращения!")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заполните тему и описание обращения!")));
     }
   }
 
@@ -89,11 +86,11 @@ class ReportViewModel extends BaseViewModel {
   }
 
   reportsSpace(context) {
-    return listReports == null ? Center(child: CircularProgressIndicator()) :
+    return listReports == null ? const Center(child: CircularProgressIndicator()) :
     listReports!.isEmpty ? Center(
       child: Text(
         "Нет сообщений об ошибках.",
-          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+          style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
       ),
     ) : Column(
       children:

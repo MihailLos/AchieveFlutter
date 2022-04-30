@@ -1,7 +1,6 @@
 import 'package:achieve_student_flutter/screens/login/login_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -26,8 +25,8 @@ class LoginScreen extends StatelessWidget {
   }
 
   _body(context, LoginViewModel model) {
-    return model.circle ? Center(child: CircularProgressIndicator(),) : Container(
-        decoration: BoxDecoration(
+    return model.circle ? const Center(child: CircularProgressIndicator(),) : Container(
+        decoration: const BoxDecoration(
           gradient: RadialGradient(
             center: Alignment(0.5, -0.7),
             colors: [
@@ -42,29 +41,27 @@ class LoginScreen extends StatelessWidget {
 
   _loginSpace(context, model) {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _achievementsLabel(),
-            SizedBox(
-              height: 21,
-            ),
-            _loginTextField(context, model),
-            SizedBox(
-              height: 21,
-            ),
-            _passwordTextField(context, model),
-            SizedBox(
-              height: 21,
-            ),
-            _loginButton(context, model),
-            SizedBox(
-              height: 22,
-            ),
-            _bottomInfo(context, model)
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _achievementsLabel(),
+          const SizedBox(
+            height: 21,
+          ),
+          _loginTextField(context, model),
+          const SizedBox(
+            height: 21,
+          ),
+          _passwordTextField(context, model),
+          const SizedBox(
+            height: 21,
+          ),
+          _loginButton(context, model),
+          const SizedBox(
+            height: 22,
+          ),
+          _bottomInfo(context, model)
+        ],
       ),
     );
   }
@@ -84,25 +81,25 @@ class LoginScreen extends StatelessWidget {
   _loginTextField(context, model) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
-      child: Container(
+      child: SizedBox(
         width: double.maxFinite,
         height: 46,
         child: TextField(
-          autofillHints: [AutofillHints.username],
+          autofillHints: const [AutofillHints.username],
           controller: model.loginController,
           obscureText: false,
-          style: TextStyle(fontFamily: 'OpenSans', fontSize: 14, color: Colors.white),
+          style: const TextStyle(fontFamily: 'OpenSans', fontSize: 14, color: Colors.white),
           decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                  borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                  borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               fillColor: Colors.transparent,
               filled: true,
               hintText: "Логин ЭИОС",
-              hintStyle: TextStyle(color: Colors.white)),
+              hintStyle: const TextStyle(color: Colors.white)),
         ),
       ),
     );
@@ -111,32 +108,32 @@ class LoginScreen extends StatelessWidget {
   _passwordTextField(context, model) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
-      child: Container(
+      child: SizedBox(
         width: double.maxFinite,
         height: 46,
         child: TextField(
-          autofillHints: [AutofillHints.password],
+          autofillHints: const [AutofillHints.password],
           onEditingComplete: () => TextInput.finishAutofillContext(),
           controller: model.passwordController,
           obscureText: model.isHiddenPassword,
-          style: TextStyle(fontFamily: 'OpenSans', fontSize: 14, color: Colors.white),
+          style: const TextStyle(fontFamily: 'OpenSans', fontSize: 14, color: Colors.white),
           decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                  borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                  borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               fillColor: Colors.transparent,
               filled: true,
               hintText: "Пароль",
               suffixIcon: IconButton(
                 icon: model.isHiddenPassword
-                    ? Icon(Icons.visibility_off, color: Colors.white,)
-                    : Icon(Icons.visibility, color: Colors.white,),
+                    ? const Icon(Icons.visibility_off, color: Colors.white,)
+                    : const Icon(Icons.visibility, color: Colors.white,),
                 onPressed: model.changePasswordToggle,
               ),
-              hintStyle: TextStyle(color: Colors.white)),
+              hintStyle: const TextStyle(color: Colors.white)),
         ),
       ),
     );
@@ -149,7 +146,7 @@ class LoginScreen extends StatelessWidget {
           width: double.maxFinite,
           height: 46,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black45,
                 offset: Offset(0, 6),
@@ -158,7 +155,7 @@ class LoginScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -193,7 +190,7 @@ class LoginScreen extends StatelessWidget {
             onPressed: () async {
               model.launchRecoveryPasswordURL();
             },
-            child: Text(
+            child: const Text(
               "Забыли пароль?",
               style: TextStyle(
                   fontFamily: 'OpenSans',
@@ -204,7 +201,7 @@ class LoginScreen extends StatelessWidget {
             onPressed: () {
               _showFaqScreen(context);
             },
-            child: Text(
+            child: const Text(
               "Как войти?",
               style: TextStyle(
                   fontFamily: 'OpenSans',
@@ -219,7 +216,7 @@ class LoginScreen extends StatelessWidget {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return const AlertDialog(
             title: Icon(
               Icons.settings,
               color: Colors.green,

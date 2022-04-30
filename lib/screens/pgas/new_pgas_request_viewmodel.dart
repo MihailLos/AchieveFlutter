@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:achieve_student_flutter/model/pgas/faculty.dart';
 import 'package:achieve_student_flutter/model/pgas/semester_type.dart';
 import 'package:achieve_student_flutter/screens/pgas/pgas_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
@@ -11,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class NewPgasRequestViewModel extends BaseViewModel {
   NewPgasRequestViewModel(BuildContext context);
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   List<FacultyModel> facultiesList = [];
   List<SemesterTypeModel> semestersList = [];
   FacultyModel? chooseFaculty;
@@ -89,15 +88,15 @@ class NewPgasRequestViewModel extends BaseViewModel {
       var response = await http.post(Uri.parse("https://api-next.kemsu.ru/api/student-depatment/pgas-mobile/addRequest"), headers: header, body: body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => PgasScreen()), (Route<dynamic> route) => false);
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const PgasScreen()), (Route<dynamic> route) => false);
         print(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваша заявка успешно отправлена.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ваша заявка успешно отправлена.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке заявки! Код ошибки: ${response.statusCode}")));
         print(response.body);
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните все поля заявки!")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заполните все поля заявки!")));
     }
   }
 }

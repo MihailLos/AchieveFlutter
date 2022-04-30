@@ -16,7 +16,7 @@ class DetailReportScreen extends StatelessWidget {
         viewModelBuilder: () => ReportDetailViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return model.circular ? Center(child: CircularProgressIndicator()) : Scaffold(
+          return model.circular ? const Center(child: CircularProgressIndicator()) : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
           );
@@ -26,7 +26,7 @@ class DetailReportScreen extends StatelessWidget {
   _appBar(context, model) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
           model.goToReportsScreen(context);
@@ -44,13 +44,13 @@ class DetailReportScreen extends StatelessWidget {
       child: ListView(
         children: [
           _mainTitle(context, model),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           _theme(context, model),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           _description(context, model),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           _statusError(context, model),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
           _adminComment(context, model)
         ],
       ),
@@ -66,7 +66,7 @@ class DetailReportScreen extends StatelessWidget {
             fontSize: 24,
             fontStyle: FontStyle.normal,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF4065D8)),
+            color: const Color(0xFF4065D8)),
       ),
     );
   }
@@ -139,17 +139,17 @@ class DetailReportScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 color: Colors.black),
           ),
-          SizedBox(height: 8,),
+          const SizedBox(height: 8,),
           Row(
             children: [
               model.detailReportModel.statusErrorName.toString() == "Решено" ?
-              Icon(Icons.check, color: Colors.green, size: 36,) :
+              const Icon(Icons.check, color: Colors.green, size: 36,) :
               model.detailReportModel.statusErrorName.toString() == "Отклонено" ?
-              Icon(Icons.close, color: Colors.red, size: 36,) :
+              const Icon(Icons.close, color: Colors.red, size: 36,) :
               model.detailReportModel.statusErrorName.toString() == "Просмотрено" ?
-              Icon(Icons.visibility, color: Colors.blueAccent, size: 36,) :
-              Icon(Icons.watch_later_outlined, color: Colors.black, size: 36,),
-              SizedBox(width: 7,),
+              const Icon(Icons.visibility, color: Colors.blueAccent, size: 36,) :
+              const Icon(Icons.watch_later_outlined, color: Colors.black, size: 36,),
+              const SizedBox(width: 7,),
               Text(
                 "${model.detailReportModel.statusErrorName}",
                 style: CyrillicFonts.openSans(
@@ -179,7 +179,7 @@ class DetailReportScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 color: Colors.black),
           ),
-          SizedBox(height: 8,),
+          const SizedBox(height: 8,),
           Text(model.detailReportModel.comment != null ? "${model.detailReportModel.comment}" : "",
             style: CyrillicFonts.openSans(
                 fontSize: 14,

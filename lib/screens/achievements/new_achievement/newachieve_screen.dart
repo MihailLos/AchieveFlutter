@@ -2,7 +2,6 @@ import 'package:achieve_student_flutter/model/achievement/achieve_category.dart'
 import 'package:achieve_student_flutter/model/reward/reward.dart';
 import 'package:achieve_student_flutter/screens/achievements/new_achievement/new_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -37,7 +36,7 @@ class NewAchieveScreen extends StatelessWidget {
       floating: true,
       snap: true,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
           model.goToUnreceivedFromNewAchievement(context);
@@ -62,13 +61,13 @@ class NewAchieveScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 22,),
+          const SizedBox(height: 22,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFF4065D8)),
+                    border: Border.all(color: const Color(0xFF4065D8)),
                     borderRadius: BorderRadius.circular(10)
                 ),
                 width: 156,
@@ -76,7 +75,7 @@ class NewAchieveScreen extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<AchieveCategoryModel>(
                     isExpanded: true,
-                      value: model.achieveCategoryModel == null ? null : model.achieveCategoryModel,
+                      value: model.achieveCategoryModel,
                       items: model.achieveCategoryList.map<DropdownMenuItem<AchieveCategoryModel>>((e) {
                         return DropdownMenuItem<AchieveCategoryModel>(
                           child: Row(
@@ -107,7 +106,7 @@ class NewAchieveScreen extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFF4065D8)),
+                    border: Border.all(color: const Color(0xFF4065D8)),
                     borderRadius: BorderRadius.circular(10)
                 ),
                 width: 156,
@@ -115,7 +114,7 @@ class NewAchieveScreen extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<RewardModel>(
                     isExpanded: true,
-                      value: model.chosenReward == null ? null : model.chosenReward,
+                      value: model.chosenReward,
                       items: model.rewardList.map<DropdownMenuItem<RewardModel>>((e) {
                         return DropdownMenuItem<RewardModel>(
                           child: FittedBox(
@@ -148,19 +147,19 @@ class NewAchieveScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           _newAchieveNameTextField(context, model),
-          SizedBox(height: 32,),
+          const SizedBox(height: 32,),
           _newAchieveDescriptionTextField(context, model),
-          SizedBox(height: 21,),
+          const SizedBox(height: 21,),
           _newAchieveScoreTextField(context, model),
-          SizedBox(height: 21,),
+          const SizedBox(height: 21,),
           _dateButtons(context, model),
-          SizedBox(height: 21,),
+          const SizedBox(height: 21,),
           _chooseImageButton(context, model),
-          SizedBox(height: 21,),
+          const SizedBox(height: 21,),
           _chosenImagePlace(context, model),
-          SizedBox(height: 21,),
+          const SizedBox(height: 21,),
           _sendNewAchieveButton(context, model),
         ],
       ),
@@ -171,7 +170,7 @@ class NewAchieveScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           child: TextField(
             autofocus: false,
@@ -193,7 +192,7 @@ class NewAchieveScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           child: TextField(
             autofocus: false,
@@ -208,10 +207,10 @@ class NewAchieveScreen extends StatelessWidget {
                   ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                    borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                    borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               )),
         ),
       ],
@@ -222,7 +221,7 @@ class NewAchieveScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           child: TextField(
             autofocus: false,
@@ -246,27 +245,27 @@ class NewAchieveScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
           ),
           child: OutlinedButton(
             child: model.getTextFromStartDateNewAchieve(),
             onPressed: () => model.pickStartNewAchieveDate(context),
             style: OutlinedButton.styleFrom(
-              shape: new RoundedRectangleBorder(
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ),
         ),
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.transparent
           ),
           child: OutlinedButton(
             child: model.getTextFromEndDateNewAchieve(),
             onPressed: () => model.pickEndNewAchieveDate(context),
             style: OutlinedButton.styleFrom(
-              shape: new RoundedRectangleBorder(
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
@@ -277,7 +276,7 @@ class NewAchieveScreen extends StatelessWidget {
   }
 
   _chooseImageButton(context, NewAchievementViewModel model) {
-    return Container(
+    return SizedBox(
         width: 334,
         height: 46,
         child: OutlinedButton(
@@ -287,7 +286,7 @@ class NewAchieveScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.attach_file, color: Color(0xFF4065D8),),
+              const Icon(Icons.attach_file, color: Color(0xFF4065D8),),
               Text(
                 "Прикрепить изображение",
                 style: CyrillicFonts.openSans(
@@ -299,7 +298,7 @@ class NewAchieveScreen extends StatelessWidget {
             ],
           ),
           style: OutlinedButton.styleFrom(
-            shape: new RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
@@ -309,7 +308,7 @@ class NewAchieveScreen extends StatelessWidget {
 
   _chosenImagePlace(context, NewAchievementViewModel model) {
     return model.newAchieveImage == null ?
-    Text("") :
+    const Text("") :
         Image.memory(model.getImage(model.decodedNewAchieveImage.toString()), width: 200, height: 200,);
   }
 
@@ -320,7 +319,7 @@ class NewAchieveScreen extends StatelessWidget {
           width: 334,
           height: 46,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45,
                   offset: Offset(0, 6),
@@ -329,7 +328,7 @@ class NewAchieveScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -361,7 +360,7 @@ class NewAchieveScreen extends StatelessWidget {
         style: CyrillicFonts.raleway(
             fontSize: 24,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF4065D8)
+            color: const Color(0xFF4065D8)
         )
     );
   }

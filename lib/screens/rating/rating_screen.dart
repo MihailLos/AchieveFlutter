@@ -41,16 +41,16 @@ class RatingScreen extends StatelessWidget {
 
   _searchTextView(context, model) {
     return Container(
-      color: Color(0xFF39ABDF),
+      color: const Color(0xFF39ABDF),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 0),
-        child: Container(
+        child: SizedBox(
           width: double.maxFinite,
           height: 46,
           child: TextField(
             controller: model.searchController,
             obscureText: false,
-            style: TextStyle(fontFamily: 'OpenSans', fontSize: 16, color: Colors.white),
+            style: const TextStyle(fontFamily: 'OpenSans', fontSize: 16, color: Colors.white),
             decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "Поиск",
@@ -60,7 +60,7 @@ class RatingScreen extends StatelessWidget {
                   color: Colors.white
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   color: Colors.white,
                   onPressed: () {
                     model.searchAction();
@@ -83,10 +83,10 @@ class RatingScreen extends StatelessWidget {
               style: CyrillicFonts.raleway(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF4065D8)
+                  color: const Color(0xFF4065D8)
               )
           ),
-          IconButton(onPressed: () {model.changeVisibility(context);}, icon: Icon(Icons.filter_alt, size: 32,), color: Colors.blueAccent,)
+          IconButton(onPressed: () {model.changeVisibility(context);}, icon: const Icon(Icons.filter_alt, size: 32,), color: Colors.blueAccent,)
         ],
       ),
     );
@@ -99,7 +99,7 @@ class RatingScreen extends StatelessWidget {
         builder: (context, constraints) => Container(
           height: 36,
           padding: EdgeInsets.zero,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Color(0xFF39ABDF),
               borderRadius: BorderRadius.all(Radius.circular(180)),
               boxShadow: [
@@ -114,7 +114,7 @@ class RatingScreen extends StatelessWidget {
           child: ToggleButtons(
             borderRadius: BorderRadius.circular(180),
             selectedColor: Colors.white,
-            fillColor: Color(0xFFFF9966),
+            fillColor: const Color(0xFFFF9966),
             renderBorder: false,
             color: Colors.white,
             constraints: BoxConstraints.expand(width: (constraints.maxWidth / 3) - 3),
@@ -162,7 +162,7 @@ class RatingScreen extends StatelessWidget {
                         value: e,
                       );
                     }).toList(),
-                    hint: Text("Институт"),
+                    hint: const Text("Институт"),
                     onChanged: (value) {
                       model.onChangeInstituteFilter(value);
                     }),
@@ -175,7 +175,7 @@ class RatingScreen extends StatelessWidget {
                         value: e,
                       );
                     }).toList(),
-                    hint: Text("Направление"),
+                    hint: const Text("Направление"),
                     onChanged: (value) {
                       model.onChangeStreamFilter(value);
                     }),
@@ -188,7 +188,7 @@ class RatingScreen extends StatelessWidget {
                         value: e,
                       );
                     }).toList(),
-                    hint: Text("Группа"),
+                    hint: const Text("Группа"),
                     onChanged: (value) {
                       model.onChangeGroupFilter(value);
                     }),
@@ -202,7 +202,7 @@ class RatingScreen extends StatelessWidget {
 
   _topStudentsSpace(context, RatingViewModel model) {
     return model.circle
-        ? Center(
+        ? const Center(
       child: CircularProgressIndicator(),
     )
         : Expanded(
@@ -218,23 +218,23 @@ class RatingScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${index + 1}", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w800)),
-                    SizedBox(width: 11,),
+                    Text("${index + 1}", style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w800)),
+                    const SizedBox(width: 11,),
                     ClipOval(
                       child: Image.memory(model.getStudentImage(
                           model.filteredStudents[index].data.toString()), width: 61, height: 61,),
                     ),
-                    SizedBox(width: 20,),
+                    const SizedBox(width: 20,),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("${model.filteredStudents[index].firstName.toString()} ${model.filteredStudents[index].lastName.toString()}",
                             style: CyrillicFonts.raleway(fontSize: 12, color: Colors.black, fontWeight: FontWeight.w700),),
-                          SizedBox(height: 16,),
+                          const SizedBox(height: 16,),
                           Text(
                               "${model.filteredStudents[index].instituteName.toString()}, ${model.filteredStudents[index].groupName.toString()}",
-                              style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w700))
+                              style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w700))
                         ],
                       ),
                     ),
@@ -246,9 +246,9 @@ class RatingScreen extends StatelessWidget {
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.normal,
-                              color: Color(0xFF4065D8)),
+                              color: const Color(0xFF4065D8)),
                         ),
-                        Image(image: AssetImage("assets/images/prize_icon.png"))
+                        const Image(image: AssetImage("assets/images/prize_icon.png"))
                       ],
                     )
                   ],

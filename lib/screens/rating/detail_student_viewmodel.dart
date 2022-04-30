@@ -10,7 +10,7 @@ import 'package:achieve_student_flutter/utils/network_handler.dart';
 class DetailStudentViewModel extends BaseViewModel {
   DetailStudentViewModel(BuildContext context);
 
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   StudentProfileModel? studentProfileModel;
   bool circular = true;

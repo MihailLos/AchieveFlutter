@@ -1,7 +1,5 @@
-import 'package:achieve_student_flutter/screens/achievements/new_achievement/new_achieve_viewmodel.dart';
 import 'package:achieve_student_flutter/screens/achievements/unreceived_achievements/unreceived_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -31,11 +29,11 @@ class UnreceivedAchieveScreen extends StatelessWidget {
           style: CyrillicFonts.raleway(
               fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF4065D8))),
+              color: const Color(0xFF4065D8))),
       elevation: 0,
       backgroundColor: Colors.transparent,
       actions: [
-        IconButton(onPressed: () {model.goToNewAchievement(context);}, icon: Icon(Icons.add_box), color: Color(0xFF4065D8), iconSize: 36,)
+        IconButton(onPressed: () {model.goToNewAchievement(context);}, icon: const Icon(Icons.add_box), color: const Color(0xFF4065D8), iconSize: 36,)
       ],
       // bottom:
     );
@@ -57,13 +55,13 @@ class UnreceivedAchieveScreen extends StatelessWidget {
         builder: (context, constraints) => Container(
           height: 36,
           padding: EdgeInsets.zero,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Color(0xFFa0b2ec),
               borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
           child: ToggleButtons(
             borderRadius: BorderRadius.circular(15),
-            selectedColor: Color(0xFF4065D8),
+            selectedColor: const Color(0xFF4065D8),
             fillColor: Colors.white,
             renderBorder: true,
             color: Colors.white,
@@ -94,7 +92,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
 
   _unreceivedAchievementsList(context, UnreceivedAchieveViewModel model) {
     return model.circle
-        ? Center(
+        ? const Center(
       child: CircularProgressIndicator(),
     )
         :
@@ -102,7 +100,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
     Center(
       child: Text(
           "Нет достижений.",
-          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+          style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
       ),
     ) :
     Expanded(
@@ -115,14 +113,14 @@ class UnreceivedAchieveScreen extends StatelessWidget {
                   model.goToDetailAchievement(context);
                 },
                 child: Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Stack(
                         children: [
                           Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
                                     color: Colors.grey,
@@ -144,7 +142,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
                           Positioned(
                             child: ClipOval(
                               child: Container(
-                                padding: EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(5),
                                 color: Colors.white,
                                 child: Image.memory(model.getImage(
                                     model.filteredUnreceivedProfileAchievements[index]
@@ -155,7 +153,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
                             right: 1,)
                         ],
                       ),
-                      SizedBox(width: 16,),
+                      const SizedBox(width: 16,),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +164,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
                                   fontStyle: FontStyle.normal,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.black),),
-                            SizedBox(height: 12,),
+                            const SizedBox(height: 12,),
                             Text(model.filteredUnreceivedProfileAchievements[index].achieveDescription.toString(),
                               style: CyrillicFonts.openSans(
                                   fontSize: 11,
@@ -185,7 +183,7 @@ class UnreceivedAchieveScreen extends StatelessWidget {
                                 fontSize: 14,
                                 fontStyle: FontStyle.normal,
                                 fontWeight: FontWeight.w800,
-                                color: Color(0xFF4065D8)),),
+                                color: const Color(0xFF4065D8)),),
                           Image.asset("assets/images/prize_icon.png", width: 30, height: 30,),
                           Image.memory(model.getImage(model.filteredUnreceivedProfileAchievements[index].rewardData.toString()), width: 30, height: 30,)
                         ],

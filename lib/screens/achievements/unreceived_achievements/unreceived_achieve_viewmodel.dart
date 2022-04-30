@@ -5,6 +5,7 @@ import 'package:achieve_student_flutter/screens/achievements/unreceived_achievem
 import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../model/achievement/unreceived_achievement/unreceived_achievement.dart';
@@ -15,7 +16,7 @@ class UnreceivedAchieveViewModel extends BaseViewModel {
   UnreceivedAchieveViewModel(BuildContext context);
 
   NetworkHandler networkHandler = NetworkHandler();
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   List<UnreceivedAchievementModel> unreceivedProfileAchievements = [];
   List<UnreceivedAchievementModel> filteredUnreceivedProfileAchievements = [];
   bool circle = true;
@@ -28,7 +29,7 @@ class UnreceivedAchieveViewModel extends BaseViewModel {
   }
 
   fetchUnreceivedAchievements([int? statusActiveId]) async {
-    var response;
+    Response response;
     circle = true;
     if (statusActiveId == null) {
       response = await networkHandler.get("/student/achievementsUnreceived/3");
@@ -68,11 +69,11 @@ class UnreceivedAchieveViewModel extends BaseViewModel {
   }
 
   goToNewAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => NewAchieveScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const NewAchieveScreen()));
   }
 
   goToDetailAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => UnreceivedDetailAchievementScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const UnreceivedDetailAchievementScreen()));
   }
 
   onChangeToggle(int newIndex) {

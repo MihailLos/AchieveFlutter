@@ -7,10 +7,10 @@ import 'package:logger/logger.dart';
 class NetworkHandler {
   String baseUrl = "http://82.179.1.166:8080";
   var log = Logger();
-  FlutterSecureStorage tokenStorage = FlutterSecureStorage();
+  FlutterSecureStorage tokenStorage = const FlutterSecureStorage();
 
   Future get(String uri, [Map<String, String>? customHeaders]) async {
-    var response;
+    http.Response response;
     String? accessToken = await tokenStorage.read(key: "token");
     uri = formater(uri);
 
@@ -24,9 +24,10 @@ class NetworkHandler {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       log.i(response.body);
+    } else {
+      log.i(response.body);
+      log.i(response.statusCode);
     }
-    log.i(response.body);
-    log.i(response.statusCode);
     return response;
   }
 

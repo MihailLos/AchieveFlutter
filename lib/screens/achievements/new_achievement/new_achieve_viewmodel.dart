@@ -19,7 +19,7 @@ class NewAchievementViewModel extends BaseViewModel {
   NewAchievementViewModel(BuildContext context);
 
   NetworkHandler networkHandler = NetworkHandler();
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   CreatedAchievementModel createdAchievementModel = CreatedAchievementModel();
   List<AchieveCategoryModel> achieveCategoryList = [];
   List<RewardModel> rewardList = [];
@@ -108,25 +108,22 @@ class NewAchievementViewModel extends BaseViewModel {
         "achieveScore": int.parse(newAchievementScore.text),
         "photo": decodedNewAchieveImage.toString(),
       };
-      print(bodyData);
 
       Map<String, String> headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
-      print(headers);
 
       var response = await networkHandler.post(
           "/student/newAchieve", headers, bodyData);
-      print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ваша заявка успешно отправлена.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ваша заявка успешно отправлена.")));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при отправке заявки!")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ошибка при отправке заявки!")));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните все поля заявки!")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заполните все поля заявки!")));
     }
   }
 
@@ -136,38 +133,38 @@ class NewAchievementViewModel extends BaseViewModel {
 
   getTextFromStartDateNewAchieve() {
     if (startNewAchieveDate == null) {
-      return Text("Дата начала", style: TextStyle(color: Colors.black),);
+      return const Text("Дата начала", style: TextStyle(color: Colors.black),);
     } else {
       if (startNewAchieveDate!.month < 10) {
         if (startNewAchieveDate!.day < 10) {
           startNewAchieveDateString = "${startNewAchieveDate!.year}-0${startNewAchieveDate!.month}-0${startNewAchieveDate!.day}";
-          return Text(startNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
+          return Text(startNewAchieveDateString.toString(), style: const TextStyle(color: Colors.black));
         } else {
           startNewAchieveDateString = "${startNewAchieveDate!.year}-0${startNewAchieveDate!.month}-${startNewAchieveDate!.day}";
-          return Text(startNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
+          return Text(startNewAchieveDateString.toString(), style: const TextStyle(color: Colors.black));
         }
       } else {
         startNewAchieveDateString = "${startNewAchieveDate!.year}-${startNewAchieveDate!.month}-${startNewAchieveDate!.day}";
-        return Text(startNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
+        return Text(startNewAchieveDateString.toString(), style: const TextStyle(color: Colors.black));
       }
     }
   }
 
   getTextFromEndDateNewAchieve() {
     if (endNewAchieveDate == null) {
-      return Text("Дата окончания", style: TextStyle(color: Colors.black));
+      return const Text("Дата окончания", style: TextStyle(color: Colors.black));
     } else {
       if (endNewAchieveDate!.month < 10) {
         if (endNewAchieveDate!.day < 10) {
           endNewAchieveDateString = "${endNewAchieveDate!.year}-0${endNewAchieveDate!.month}-0${endNewAchieveDate!.day}";
-          return Text(endNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
+          return Text(endNewAchieveDateString.toString(), style: const TextStyle(color: Colors.black));
         } else {
           endNewAchieveDateString = "${endNewAchieveDate!.year}-0${endNewAchieveDate!.month}-${endNewAchieveDate!.day}";
-          return Text(endNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
+          return Text(endNewAchieveDateString.toString(), style: const TextStyle(color: Colors.black));
         }
       } else {
         endNewAchieveDateString = "${endNewAchieveDate!.year}-${endNewAchieveDate!.month}-${endNewAchieveDate!.day}";
-        return Text(endNewAchieveDateString.toString(), style: TextStyle(color: Colors.black));
+        return Text(endNewAchieveDateString.toString(), style: const TextStyle(color: Colors.black));
       }
     }
   }

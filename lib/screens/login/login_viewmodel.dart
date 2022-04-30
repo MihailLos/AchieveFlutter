@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:achieve_student_flutter/screens/home_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -15,7 +13,7 @@ class LoginViewModel extends BaseViewModel {
   var loginController = TextEditingController();
   var passwordController = TextEditingController();
   NetworkHandler networkHandler = NetworkHandler();
-  FlutterSecureStorage tokenStorage = FlutterSecureStorage();
+  FlutterSecureStorage tokenStorage = const FlutterSecureStorage();
   bool circle = true;
 
   bool isHiddenPassword = true;
@@ -40,7 +38,7 @@ class LoginViewModel extends BaseViewModel {
       if (response.statusCode == 200 || response.statusCode == 201) {
         circle = false;
         notifyListeners();
-        Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => HomeView()), (route) => false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomeView()), (route) => false);
       } else if (response.statusCode == 403) {
         var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await tokenStorage.read(key: "refresh_token")}"});
         if (response.statusCode == 200) {
@@ -78,18 +76,17 @@ class LoginViewModel extends BaseViewModel {
         await tokenStorage.write(key: "refresh_token", value: output["refreshToken"]);
         if (responseForTokenEios.statusCode == 200 || responseForTokenEios.statusCode == 201) {
           Map<String, dynamic> outputForEiosToken = json.decode(responseForTokenEios.body);
-          print(outputForEiosToken);
           await tokenStorage.write(key: "eios_token", value: outputForEiosToken["accessToken"]);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Не удалось подключиться к системе защиты ЭИОС. (Код ошибки: ${response.statusCode})")));
         }
-        Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context) => HomeView()), (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Авторизация прошла успешно.")));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomeView()), (route) => false);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Авторизация прошла успешно.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Логин или пароль введены неверно! (Код ошибки: ${response.statusCode})")));
       }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Введите логин и пароль!")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Введите логин и пароль!")));
         // print(response.statusCode);
       }
     }

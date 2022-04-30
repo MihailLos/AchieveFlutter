@@ -10,7 +10,7 @@ import 'package:stacked/stacked.dart';
 class ProofDetailAchieveViewModel extends BaseViewModel {
   ProofDetailAchieveViewModel(BuildContext context);
 
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   DetailProofAchieveModel? proofAchievement;
   bool circle = true;

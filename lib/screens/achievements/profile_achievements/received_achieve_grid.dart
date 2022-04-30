@@ -1,4 +1,3 @@
-import 'package:achieve_student_flutter/screens/achievements/new_achievement/new_achieve_viewmodel.dart';
 import 'package:achieve_student_flutter/screens/achievements/profile_achievements/received_achieve_profile_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
@@ -27,7 +26,7 @@ class ReceivedAchieveGrid extends StatelessWidget {
 
   _receivedProfileAchievementsGrid(context, ReceivedAchieveProfileViewModel model) {
     return model.circle
-        ? Center(
+        ? const Center(
       child: CircularProgressIndicator(),
     )
         :
@@ -37,7 +36,7 @@ class ReceivedAchieveGrid extends StatelessWidget {
           onPressed: () {
             model.changeVisibility(context);
           },
-          icon: Icon(Icons.filter_alt, size: 30,),
+          icon: const Icon(Icons.filter_alt, size: 30,),
           color: Colors.blueAccent,
         ),
         model.showFilters(context),
@@ -45,13 +44,13 @@ class ReceivedAchieveGrid extends StatelessWidget {
         Center(
           child: Text(
               "Нет полученных достижений.",
-              style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+              style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
           ),
         ) :
         GridView.builder(
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3),
           itemCount: model.filteredReceivedProfileAchievements.length,
           itemBuilder: (BuildContext context, int index) {
@@ -66,7 +65,7 @@ class ReceivedAchieveGrid extends StatelessWidget {
                       model.goToDetailReceivedAchievement(context);
                     },
                     child: Container(
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         image: DecorationImage(
                             image: snapshot.data as ImageProvider,
@@ -83,11 +82,11 @@ class ReceivedAchieveGrid extends StatelessWidget {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text("Произошла ошибка"),
                   );
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             );
@@ -113,7 +112,7 @@ class ReceivedAchieveGridAnotherStudent extends StatelessWidget {
 
   _receivedAnotherStudentProfileAchievementsGrid(context, ReceivedAchieveProfileViewModel model) {
     return model.circle
-        ? Center(
+        ? const Center(
       child: CircularProgressIndicator(),
     )
         :
@@ -123,7 +122,7 @@ class ReceivedAchieveGridAnotherStudent extends StatelessWidget {
           onPressed: () {
             model.changeVisibility(context);
           },
-          icon: Icon(Icons.filter_alt, size: 30,),
+          icon: const Icon(Icons.filter_alt, size: 30,),
           color: Colors.blueAccent,
         ),
         model.showFilters(context),
@@ -131,13 +130,13 @@ class ReceivedAchieveGridAnotherStudent extends StatelessWidget {
         Center(
           child: Text(
               "Нет полученных достижений.",
-              style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+              style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
           ),
         ) :
         GridView.builder(
-          physics: ScrollPhysics(),
+          physics: const ScrollPhysics(),
           shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3),
           itemCount: model.filteredReceivedProfileAchievements.length,
           itemBuilder: (BuildContext context, int index) {
@@ -146,7 +145,7 @@ class ReceivedAchieveGridAnotherStudent extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.hasData || snapshot.data != null) {
                   return Container(
-                    margin: EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: snapshot.data as ImageProvider,
@@ -162,11 +161,11 @@ class ReceivedAchieveGridAnotherStudent extends StatelessWidget {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text("Произошла ошибка"),
                   );
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             );

@@ -1,6 +1,5 @@
 import 'package:achieve_student_flutter/screens/report/report_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -17,7 +16,7 @@ class ReportScreen extends StatelessWidget {
         viewModelBuilder: () => ReportViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return model.circular ? CircularProgressIndicator() : Scaffold(
+          return model.circular ? const CircularProgressIndicator() : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
           );
@@ -27,7 +26,7 @@ class ReportScreen extends StatelessWidget {
   _appBar(context, ReportViewModel model) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
           model.goToProfileScreen(context);
@@ -43,14 +42,14 @@ class ReportScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: model.refresh,
       child: ListView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: [
           _mainTitle(),
-          SizedBox(height: 34,),
+          const SizedBox(height: 34,),
           _createReportButton(context, model),
-          SizedBox(height: 34,),
+          const SizedBox(height: 34,),
           _reportsTitle(),
-          SizedBox(height: 31,),
+          const SizedBox(height: 31,),
           model.reportsSpace(context)
         ],
       ),
@@ -66,7 +65,7 @@ class ReportScreen extends StatelessWidget {
           fontSize: 24,
           fontStyle: FontStyle.normal,
           fontWeight: FontWeight.w700,
-          color: Color(0xFF4065D8)
+          color: const Color(0xFF4065D8)
         ),
       ),
     );
@@ -79,7 +78,7 @@ class ReportScreen extends StatelessWidget {
           width: double.maxFinite,
           height: 46,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45,
                   offset: Offset(0, 6),
@@ -88,7 +87,7 @@ class ReportScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -127,7 +126,7 @@ class ReportScreen extends StatelessWidget {
                 fontSize: 24,
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF4065D8)
+                color: const Color(0xFF4065D8)
             ),
           ),
         ],

@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 class PgasRequestInfoViewModel extends BaseViewModel {
   PgasRequestInfoViewModel(BuildContext context);
 
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   bool circle = true;
   PgasDetailModel? pgasRequest;
 
@@ -21,7 +21,7 @@ class PgasRequestInfoViewModel extends BaseViewModel {
   }
 
   goToEditPgasRequestScreen(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => EditPgasRequestScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const EditPgasRequestScreen()));
   }
 
   fetchDetailPgasRequest() async {
@@ -55,12 +55,11 @@ class PgasRequestInfoViewModel extends BaseViewModel {
     };
     var response = await http.post(Uri.parse("https://api-next.kemsu.ru/api/student-depatment/pgas-mobile/deleteRequest"), headers: header, body: body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => PgasScreen()), (Route<dynamic> route) => false);
-      print(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заявка успешно удалена.")));
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const PgasScreen()), (Route<dynamic> route) => false);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заявка успешно удалена.")));
       notifyListeners();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при удалении заявки.")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ошибка при удалении заявки.")));
       print(response.statusCode);
       print(response.body);
     }

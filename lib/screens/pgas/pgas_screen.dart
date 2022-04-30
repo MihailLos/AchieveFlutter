@@ -1,4 +1,6 @@
+import 'package:achieve_student_flutter/screens/home_view.dart';
 import 'package:achieve_student_flutter/screens/pgas/pgas_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -14,9 +16,9 @@ class PgasScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<PgasViewModel>.reactive(
         viewModelBuilder: () => PgasViewModel(context),
-        onModelReady: (viewModel) => viewModel.onReady(),
+        onModelReady: (viewModel) => viewModel.onReady(context),
         builder: (context, model, child) {
-          return model.circle ? Center(child: CircularProgressIndicator(),) : Scaffold(
+          return model.circle ? const Center(child: CircularProgressIndicator(),) : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
           );
@@ -26,10 +28,10 @@ class PgasScreen extends StatelessWidget {
   _appBar(context, PgasViewModel model) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
-          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeView()));
         },
         iconSize: 32,
       ),
@@ -40,14 +42,14 @@ class PgasScreen extends StatelessWidget {
 
   _body(context, model) {
     return ListView(
-      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
         _mainTitle(),
-        SizedBox(height: 34,),
+        const SizedBox(height: 34,),
         _createRequestButton(context, model),
-        SizedBox(height: 34,),
+        const SizedBox(height: 34,),
         _pgasRequestsTitle(),
-        SizedBox(height: 31,),
+        const SizedBox(height: 31,),
         _pgasRequestsSpace(context, model)
       ],
     );
@@ -62,7 +64,7 @@ class PgasScreen extends StatelessWidget {
             fontSize: 24,
             fontStyle: FontStyle.normal,
             fontWeight: FontWeight.w700,
-            color: Color(0xFF4065D8)
+            color: const Color(0xFF4065D8)
         ),
       ),
     );
@@ -75,7 +77,7 @@ class PgasScreen extends StatelessWidget {
           width: double.maxFinite,
           height: 46,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45,
                   offset: Offset(0, 6),
@@ -84,7 +86,7 @@ class PgasScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -123,7 +125,7 @@ class PgasScreen extends StatelessWidget {
                 fontSize: 24,
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF4065D8)
+                color: const Color(0xFF4065D8)
             ),
           ),
         ],
@@ -137,7 +139,7 @@ class PgasScreen extends StatelessWidget {
       child: model.pgasList.isEmpty ? Center(
           child: Text(
               "Нет заявок на ПГАС.",
-              style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+              style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
           )) : ListView.builder(
           shrinkWrap: true,
           itemCount: model.pgasList.length,
@@ -154,11 +156,11 @@ class PgasScreen extends StatelessWidget {
                     children: [
                       Text("Заявка №${model.pgasList[index].requestId}",
                         style: CyrillicFonts.raleway(fontSize: 18, color: Colors.black, fontWeight: FontWeight.w700),),
-                      model.pgasList[index].approveFlag == 1 ? Icon(Icons.check, color: Colors.green, size: 36,) :
-                          Icon(Icons.access_time_outlined, color: Colors.black, size: 36,)
+                      model.pgasList[index].approveFlag == 1 ? const Icon(Icons.check, color: Colors.green, size: 36,) :
+                          const Icon(Icons.access_time_outlined, color: Colors.black, size: 36,)
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     thickness: 2,
                     color: Color(0xFF4065D8),
                   )

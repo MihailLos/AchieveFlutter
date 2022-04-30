@@ -2,7 +2,6 @@ import 'package:achieve_student_flutter/screens/achievements/profile_achievement
 import 'package:achieve_student_flutter/screens/achievements/profile_achievements/received_achieve_grid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
@@ -21,12 +20,12 @@ class ProfileScreen extends StatelessWidget {
         viewModelBuilder: () => ProfileViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return model.circular
-              ? Center(child: CircularProgressIndicator(),)
-              : Scaffold(
+          return model.isStudentDataInit && model.isStudyInit && model.isPercentInit
+              ? Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
-          );
+          )
+              : const Center(child: CircularProgressIndicator(),);
         });
   }
 
@@ -43,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       actions: [
         IconButton(
-          icon: Icon(Icons.logout, color: Colors.blueAccent,),
+          icon: const Icon(Icons.logout, color: Colors.blueAccent,),
           onPressed: () => model.exitButtonAction(context),
           iconSize: 32,
         ),
@@ -55,31 +54,31 @@ class ProfileScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: model.refresh,
       child: ListView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         children: [
           _profilePictureWidget(context, model),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           _profileName(context, model),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           _progressField(context, model),
           _educationInfo(context, model),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
-          _goToPgasButton(context, model),
-          SizedBox(
+          GoToPgasButton(),
+          const SizedBox(
             height: 27,
           ),
-          _achievementsTitle(),
+          AchievementsTitle(),
           _buttonsSpace(context, model),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          model.isCreated ? CreatedAchieveGrid() : ReceivedAchieveGrid()
+          model.isCreated ? const CreatedAchieveGrid() : const ReceivedAchieveGrid()
         ],
       ),
     );
@@ -118,16 +117,16 @@ class ProfileScreen extends StatelessWidget {
                       showModalBottomSheet(
                           context: context,
                           builder: ((builder) =>
-                              _bottomChooseProfilePhotoWidget(context, model)));
+                              BottomChooseProfilePhotoWidget()));
                     },
                   ),
                 ),
               ),
             );
           } else if (snapshot.hasError) {
-            return Center(child: Text("Произошла ошибка"),);
+            return const Center(child: Text("Произошла ошибка"),);
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         }
     );
@@ -148,9 +147,9 @@ class ProfileScreen extends StatelessWidget {
             ),
           );
         } else if (snapshot.hasError) {
-          return Center(child: Text("Произошла ошибка"),);
+          return const Center(child: Text("Произошла ошибка"),);
         } else {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
           }
         );
@@ -162,10 +161,10 @@ class ProfileScreen extends StatelessWidget {
         showModalBottomSheet(
             context: context,
             builder: ((builder) =>
-                _bottomChooseProfilePhotoWidget(context, model)));
+                BottomChooseProfilePhotoWidget()));
       },
       child: _buildCircle(
-        Icon(
+        const Icon(
           Icons.edit,
           size: 20,
           color: Colors.white,
@@ -177,7 +176,7 @@ class ProfileScreen extends StatelessWidget {
   _buildCircle(Widget child) {
     return ClipOval(
       child: Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         color: Colors.blueAccent,
         child: child,
       ),
@@ -198,9 +197,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _userScore(context, model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : Row(
+    return Row(
             children: [
               Text(
                 model.studentProfileModel.score.toString(),
@@ -208,24 +205,22 @@ class ProfileScreen extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal,
-                    color: Color(0xFF4065D8)),
+                    color: const Color(0xFF4065D8)),
               ),
-              Image(image: AssetImage("assets/images/prize_icon.png"))
+              const Image(image: AssetImage("assets/images/prize_icon.png"))
             ],
           );
   }
 
   _progressBar(context, model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : Container(
+    return SizedBox(
           height: 29,
           width: 202,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: LinearProgressIndicator(
-              backgroundColor: Color(0xFFE2E2E2),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF7CEAF1)),
+              backgroundColor: const Color(0xFFE2E2E2),
+              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF7CEAF1)),
               value: model.studentPercentProgressBar,
             ),
           ),
@@ -233,9 +228,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _userPercent(context, model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : Text(model.studentPercent.toString() + "%",
+    return Text(model.studentPercent.toString() + "%",
             style: CyrillicFonts.montserrat(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -245,9 +238,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   _educationInfo(context, ProfileViewModel model) {
-    return model.circular
-        ? LinearProgressIndicator()
-        : Padding(
+    return Padding(
             padding: const EdgeInsets.fromLTRB(29, 59, 29, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,50 +247,50 @@ class ProfileScreen extends StatelessWidget {
                   future: model.getInstitute(),
                     builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500),
+                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500),
                       );
                     } else if (snapshot.hasError) {
-                      return Center(child: Text("Произошла ошибка"),);
+                      return const Center(child: Text("Произошла ошибка"),);
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 FutureBuilder(
                   future: model.getStream(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500));
+                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500));
                     } else if (snapshot.hasError) {
-                      return Center(child: Text("Произошла ошибка"),);
+                      return const Center(child: Text("Произошла ошибка"),);
                     } else {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 FutureBuilder(
                   future: model.getGroup(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500));
+                      return Text(snapshot.data as String, style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500));
                     } else if (snapshot.hasError) {
-                      return Center(child: Text("Произошла ошибка"),);
+                      return const Center(child: Text("Произошла ошибка"),);
                     } else {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
-                model.course != null ? Text("${model.course} курс", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)) :
-                Text("Нет курса", style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500))
+                model.course != null ? Text("${model.course} курс", style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)) :
+                Text("Нет курса", style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500))
               ],
             ),
           );
@@ -312,7 +303,7 @@ class ProfileScreen extends StatelessWidget {
         builder: (context, constraints) => Container(
           height: 36,
           padding: EdgeInsets.zero,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Color(0xFF39ABDF),
               borderRadius: BorderRadius.all(Radius.circular(180)),
               boxShadow: [
@@ -328,7 +319,7 @@ class ProfileScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(180),
               selectedColor: Colors.white,
               color: Colors.white,
-              fillColor: Color(0xFFFF9966),
+              fillColor: const Color(0xFFFF9966),
               renderBorder: false,
               constraints: BoxConstraints.expand(width: (constraints.maxWidth / 2)),
               isSelected: model.isSelectedButton,
@@ -350,130 +341,21 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  _bottomChooseProfilePhotoWidget(context, model) {
-    return Container(
-      height: 170,
-      width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Center(
-        child: Column(
-          children: [
-            Text(
-              "Изменить фото профиля",
-              style: CyrillicFonts.raleway(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF5878DD)
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              "Если фото будет содержать непристойный контент, ваш аккаунт будет заблокирован модератором!",
-              style: CyrillicFonts.raleway(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF757575)
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                  onTap: () {
-                    model.pickImage(ImageSource.camera, context);
-                  },
-                  child: Column(
-                    children: [
-                      ClipOval(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          color: Color(0xFFFF9966),
-                          child: Icon(
-                            Icons.camera,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5,),
-                      Text(
-                          "Камера",
-                          style: CyrillicFonts.raleway(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                      )
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    model.pickImage(ImageSource.gallery, context);
-                  },
-                  child: Column(
-                    children: [
-                      ClipOval(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          color: Color(0xFFFF9966),
-                          child: Icon(
-                            Icons.photo,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 5,),
-                      Text(
-                          "Галерея",
-                          style: CyrillicFonts.raleway(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          )
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
+class GoToPgasButton extends StatelessWidget {
+  const GoToPgasButton({Key? key}) : super(key: key);
 
-  _achievementsTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            "Ваши достижения",
-            style: CyrillicFonts.raleway(
-                fontSize: 24,
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF4065D8)
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _goToPgasButton(context, ProfileViewModel model) {
+  @override
+  Widget build(BuildContext context) {
+    ProfileViewModel model = ProfileViewModel(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 22),
       child: Container(
           width: double.maxFinite,
           height: 30,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45,
                   offset: Offset(0, 6),
@@ -482,7 +364,7 @@ class ProfileScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(25),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -505,6 +387,132 @@ class ProfileScreen extends StatelessWidget {
             ),
 
           )
+      ),
+    );
+  }
+}
+
+class AchievementsTitle extends StatelessWidget {
+  const AchievementsTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "Ваши достижения",
+            style: CyrillicFonts.raleway(
+                fontSize: 24,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF4065D8)
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomChooseProfilePhotoWidget extends StatelessWidget {
+  const BottomChooseProfilePhotoWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ProfileViewModel model = ProfileViewModel(context);
+    return Container(
+      height: 170,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              "Изменить фото профиля",
+              style: CyrillicFonts.raleway(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: const Color(0xFF5878DD)
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              "Если фото будет содержать непристойный контент, ваш аккаунт будет заблокирован модератором!",
+              style: CyrillicFonts.raleway(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF757575)
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () {
+                    model.pickImage(ImageSource.camera, context);
+                  },
+                  child: Column(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          color: const Color(0xFFFF9966),
+                          child: const Icon(
+                            Icons.camera,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5,),
+                      Text(
+                        "Камера",
+                        style: CyrillicFonts.raleway(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    model.pickImage(ImageSource.gallery, context);
+                  },
+                  child: Column(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          color: const Color(0xFFFF9966),
+                          child: const Icon(
+                            Icons.photo,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5,),
+                      Text(
+                          "Галерея",
+                          style: CyrillicFonts.raleway(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          )
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

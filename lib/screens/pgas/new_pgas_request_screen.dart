@@ -1,7 +1,6 @@
 import 'package:achieve_student_flutter/model/pgas/faculty.dart';
 import 'package:achieve_student_flutter/model/pgas/semester_type.dart';
 import 'package:achieve_student_flutter/screens/pgas/new_pgas_request_viewmodel.dart';
-import 'package:achieve_student_flutter/screens/pgas/pgas_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -37,7 +36,7 @@ class NewPgasRequestScreen extends StatelessWidget {
       floating: true,
       snap: true,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
           Navigator.pop(context);
@@ -62,13 +61,13 @@ class NewPgasRequestScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 22,),
+          const SizedBox(height: 22,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFFFF9A67)),
+                    border: Border.all(color: const Color(0xFFFF9A67)),
                     borderRadius: BorderRadius.circular(10)
                 ),
                 width: 156,
@@ -76,7 +75,7 @@ class NewPgasRequestScreen extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<FacultyModel>(
                       isExpanded: true,
-                      value: model.chooseFaculty == null ? null : model.chooseFaculty,
+                      value: model.chooseFaculty,
                       items: model.facultiesList.map<DropdownMenuItem<FacultyModel>>((e) {
                         return DropdownMenuItem<FacultyModel>(
                           child: FittedBox(child: Padding(
@@ -105,7 +104,7 @@ class NewPgasRequestScreen extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFFFF9A67)),
+                    border: Border.all(color: const Color(0xFFFF9A67)),
                     borderRadius: BorderRadius.circular(10)
                 ),
                 width: 156,
@@ -113,7 +112,7 @@ class NewPgasRequestScreen extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<SemesterTypeModel>(
                       isExpanded: true,
-                      value: model.chooseSemester == null ? null : model.chooseSemester,
+                      value: model.chooseSemester,
                       items: model.semestersList.map<DropdownMenuItem<SemesterTypeModel>>((e) {
                         return DropdownMenuItem<SemesterTypeModel>(
                           child: FittedBox(
@@ -144,21 +143,21 @@ class NewPgasRequestScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           _surnameTextField(context, model),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           _firstNameTextField(context, model),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           _middleNameTextField(context, model),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           _phoneTextField(context, model),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           _groupTextField(context, model),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           _yearDropdownButton(context, model),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           _courseDropdownButton(context, model),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           _sendButton(context, model)
         ],
       ),
@@ -169,7 +168,7 @@ class NewPgasRequestScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           height: 40,
           width: 334,
           child: TextField(
@@ -177,13 +176,13 @@ class NewPgasRequestScreen extends StatelessWidget {
               autofocus: false,
               controller: model.surnameController,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: const EdgeInsets.all(8),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   hintText: "Фамилия",
                   hintStyle: CyrillicFonts.openSans(
                       fontWeight: FontWeight.w400,
@@ -200,7 +199,7 @@ class NewPgasRequestScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           height: 40,
           child: TextField(
@@ -208,13 +207,13 @@ class NewPgasRequestScreen extends StatelessWidget {
               autofocus: false,
               controller: model.firstNameController,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: const EdgeInsets.all(8),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   hintText: "Имя",
                   hintStyle: CyrillicFonts.openSans(
                       fontWeight: FontWeight.w400,
@@ -231,7 +230,7 @@ class NewPgasRequestScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           height: 40,
           child: TextField(
@@ -239,13 +238,13 @@ class NewPgasRequestScreen extends StatelessWidget {
               autofocus: false,
               controller: model.middleNameController,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: const EdgeInsets.all(8),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   hintText: "Отчество",
                   hintStyle: CyrillicFonts.openSans(
                       fontWeight: FontWeight.w400,
@@ -262,7 +261,7 @@ class NewPgasRequestScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           height: 40,
           child: TextField(
@@ -270,13 +269,13 @@ class NewPgasRequestScreen extends StatelessWidget {
               keyboardType: TextInputType.number,
               controller: model.phoneController,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: const EdgeInsets.all(8),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   hintText: "Номер телефона в любом формате",
                   hintStyle: CyrillicFonts.openSans(
                       fontWeight: FontWeight.w400,
@@ -293,7 +292,7 @@ class NewPgasRequestScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           height: 40,
           child: TextField(
@@ -301,13 +300,13 @@ class NewPgasRequestScreen extends StatelessWidget {
               autofocus: false,
               controller: model.groupController,
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(8),
+                  contentPadding: const EdgeInsets.all(8),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                      borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                   hintText: "Название группы (пример: М-185)",
                   hintStyle: CyrillicFonts.openSans(
                       fontWeight: FontWeight.w400,
@@ -323,7 +322,7 @@ class NewPgasRequestScreen extends StatelessWidget {
   _yearDropdownButton(context, NewPgasRequestViewModel model) {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFFF9A67)),
+          border: Border.all(color: const Color(0xFFFF9A67)),
           borderRadius: BorderRadius.circular(10)
       ),
       width: 334,
@@ -338,7 +337,7 @@ class NewPgasRequestScreen extends StatelessWidget {
                   child: Text(e.toString()),
                 )))
             ).toList(),
-            value: model.chosenYear == null ? null : model.chosenYear,
+            value: model.chosenYear,
             onChanged: (value) {
               model.chosenYear = value!;
               model.notifyListeners();
@@ -362,7 +361,7 @@ class NewPgasRequestScreen extends StatelessWidget {
   _courseDropdownButton(context, NewPgasRequestViewModel model) {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFFF9A67)),
+          border: Border.all(color: const Color(0xFFFF9A67)),
           borderRadius: BorderRadius.circular(10)
       ),
       width: 334,
@@ -377,7 +376,7 @@ class NewPgasRequestScreen extends StatelessWidget {
                   child: Text(e.toString()),
                 )))
             ).toList(),
-            value: model.chosenCourse == null ? null : model.chosenCourse,
+            value: model.chosenCourse,
             onChanged: (value) {
               model.chosenCourse = value!;
               model.notifyListeners();
@@ -405,7 +404,7 @@ class NewPgasRequestScreen extends StatelessWidget {
           width: double.maxFinite,
           height: 46,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45,
                   offset: Offset(0, 6),
@@ -414,7 +413,7 @@ class NewPgasRequestScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -446,7 +445,7 @@ class NewPgasRequestScreen extends StatelessWidget {
         style: CyrillicFonts.raleway(
             fontSize: 24,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF4065D8)
+            color: const Color(0xFF4065D8)
         )
     );
   }

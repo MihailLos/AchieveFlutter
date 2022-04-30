@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:achieve_student_flutter/model/pgas/short_pgas_request.dart';
+import 'package:achieve_student_flutter/screens/login/login_screen.dart';
 import 'package:achieve_student_flutter/screens/pgas/new_pgas_request_screen.dart';
 import 'package:achieve_student_flutter/screens/pgas/pgas_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,23 +12,23 @@ import 'package:http/http.dart' as http;
 class PgasViewModel extends BaseViewModel {
   PgasViewModel(BuildContext context);
 
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   List<ShortPgasRequestModel> pgasList = [];
   bool circle = true;
 
-  Future onReady() async {
-    await fetchPgasRequests();
+  Future onReady(context) async {
+    await fetchPgasRequests(context);
   }
 
   goToNewPgasRequest(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => NewPgasRequestScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const NewPgasRequestScreen()));
   }
 
   goToPgasDetail(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => PgasDetailScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const PgasDetailScreen()));
   }
 
-  fetchPgasRequests() async {
+  fetchPgasRequests(context) async {
     String? eiosAccessToken = await storage.read(key: "eios_token");
     Map<String, String> header = {
       "X-Access-Token": "$eiosAccessToken"
@@ -38,10 +39,10 @@ class PgasViewModel extends BaseViewModel {
       circle = false;
       notifyListeners();
     } else if (response.statusCode == 401) {
-      var response = await http.post(Uri.parse("https://api-next.kemsu.ru/api/security/auth/prolong"), headers: header);
-      await storage.write(key: "eios_token", value: json.decode(response.body)["accessToken"]);
-      print(response.body);
-      return fetchPgasRequests();
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginScreen()), (Route<dynamic> route) => false);
+      await storage.delete(key: "token");
+      await storage.delete(key: "eios_token");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Сессия ЭИОС истекла. Пожалуйста, авторизуйтесь повторно")));
     }
   }
 

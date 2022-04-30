@@ -4,6 +4,7 @@ import 'package:achieve_student_flutter/model/achievement/created_achievement/cr
 import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../utils/network_handler.dart';
@@ -13,7 +14,7 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
   CreatedAchieveProfileViewModel(BuildContext context);
 
   NetworkHandler networkHandler = NetworkHandler();
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   List<CreatedAchievementModel> createdProfileAchievements = [];
   Parser parser = Parser();
   bool circle = true;
@@ -32,7 +33,7 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
 
   fetchCreatedProfileAchievements([int? studentId]) async {
     circle = true;
-    var response;
+    Response response;
     studentId == null ? response = await networkHandler.get("/student/achievementsCreated") :
     response = await networkHandler.get("/student/achievementsCreated?studentId=$studentId");
 
@@ -61,6 +62,6 @@ class CreatedAchieveProfileViewModel extends BaseViewModel {
   }
 
   goToDetailCreatedAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => CreatedDetailAchieveScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreatedDetailAchieveScreen()));
   }
 }

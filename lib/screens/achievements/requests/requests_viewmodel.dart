@@ -7,6 +7,7 @@ import 'package:achieve_student_flutter/screens/achievements/proof_achievements/
 import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../model/proof_achievement/proof_achieve.dart';
@@ -18,20 +19,21 @@ class RequestsViewModel extends BaseViewModel {
   List<CreatedAchievementModel> createdAchievements = [];
   List<ProofAchieveModel> proofAchievements = [];
   NetworkHandler networkHandler = NetworkHandler();
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   bool circle = true;
   bool isProof = true;
   Parser parser = Parser();
   List<bool> isSelectedButton = [true, false];
 
   Future onReady() async {
-    fetchRequestAchievements("proof");
-    fetchRequestAchievements("create");
+    await fetchRequestAchievements("proof");
+    await fetchRequestAchievements("create");
+    circle = false;
     notifyListeners();
   }
 
   fetchRequestAchievements(String? type) async {
-    var response;
+    Response response;
     if (type == "create") {
       response = await networkHandler.get("/student/achievementsCreated");
       if (response.statusCode == 200 || response.statusCode == 200) {
@@ -46,7 +48,6 @@ class RequestsViewModel extends BaseViewModel {
       response = await networkHandler.get("/student/proof");
       if (response.statusCode == 200 || response.statusCode == 200) {
         proofAchievements = parser.parseProofAchievements(json.decode(response.body));
-        circle = false;
         notifyListeners();
       } else if (response.statusCode == 403) {
         var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
@@ -74,13 +75,13 @@ class RequestsViewModel extends BaseViewModel {
   }
 
   goToDetailCreatedAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(
-        builder: (context) => CreatedDetailAchieveScreen()));
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => const CreatedDetailAchieveScreen()));
   }
 
   goToDetailProofAchievement(context) {
-    Navigator.push(context, new MaterialPageRoute(
-        builder: (context) => ProofDetailAchieveScreen()));
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => const ProofDetailAchieveScreen()));
   }
 
   onChangeToggle(int newIndex, BuildContext context) {

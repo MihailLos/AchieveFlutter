@@ -26,10 +26,10 @@ class PgasDetailScreen extends StatelessWidget {
   _appBar(context, PgasDetailViewModel model) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
-        onPressed: () async {
-          Navigator.pop(context);
+        onPressed: () {
+          model.goToPgasRequestList(context);
         },
         iconSize: 32,
       ),
@@ -37,15 +37,9 @@ class PgasDetailScreen extends StatelessWidget {
       actions: [
         IconButton(
             onPressed: () {
-              model.goToEditPgasRequestScreen(context);
-            },
-            icon: Icon(Icons.edit_outlined, color: Color(0xFF5878DD), size: 32,)
-        ),
-        IconButton(
-            onPressed: () {
               model.goToPgasRequestInfoScreen(context);
             },
-            icon: Icon(Icons.info_outline, color: Color(0xFF5878DD), size: 32,)
+            icon: const Icon(Icons.info_outline, color: Color(0xFF5878DD), size: 32,)
         )
       ],
       backgroundColor: Colors.transparent,
@@ -75,7 +69,7 @@ class PgasDetailScreen extends StatelessWidget {
         style: CyrillicFonts.raleway(
             fontSize: 24,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF4065D8)
+            color: const Color(0xFF4065D8)
         )
     );
   }

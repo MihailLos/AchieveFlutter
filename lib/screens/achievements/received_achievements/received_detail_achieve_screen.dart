@@ -18,7 +18,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return model.circle
-              ? Center(
+              ? const Center(
             child: CircularProgressIndicator(),
           )
               : Scaffold(
@@ -37,7 +37,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                             width: 64,
                             height: 64,
                             color: Colors.grey.withOpacity(0.25),
-                            child: Icon(Icons.clear)
+                            child: const Icon(Icons.clear)
                         ),
                       ),
                       color: Colors.black,
@@ -66,18 +66,18 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _authorName(context, model),
-              SizedBox(height: 8,),
+              const SizedBox(height: 8,),
               _achieveName(context, model),
-              SizedBox(height: 38,),
+              const SizedBox(height: 38,),
               _achieveDescription(context, model),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               _achieveReward(context, model),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _achieveCategory(context, model),
-                  SizedBox(width: 84,),
+                  const SizedBox(width: 84,),
                   _achieveStatus(context, model)
                 ],
               ),
@@ -95,7 +95,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                     width: double.maxFinite,
                     height: 46,
                     decoration: BoxDecoration(
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black45,
                             offset: Offset(0, 6),
@@ -104,7 +104,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                         )
                       ],
                       borderRadius: BorderRadius.circular(10),
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
@@ -163,7 +163,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
           fontWeight: FontWeight.w800,
           fontSize: 24,
           fontStyle: FontStyle.normal,
-          color: Color(0xFF4065D8)
+          color: const Color(0xFF4065D8)
       ),
     );
   }
@@ -220,7 +220,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
               style: CyrillicFonts.raleway(
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                  color: Color(0xFFFF9966),
+                  color: const Color(0xFFFF9966),
                   fontSize: 14
               ),
             ),
@@ -288,7 +288,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(Icons.check, color: Colors.green,),
+            const Icon(Icons.check, color: Colors.green,),
             Text(
               "Выполнено",
               style: CyrillicFonts.raleway(
@@ -314,7 +314,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
               style: CyrillicFonts.raleway(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF5878DD)
+                color: const Color(0xFF5878DD)
               ),
             )
             ),
@@ -326,7 +326,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                   style: CyrillicFonts.raleway(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF757575)
+                      color: const Color(0xFF757575)
                   ),
                 ),
                 Padding(
@@ -334,7 +334,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                   child: Container(
                       width: double.maxFinite,
                       decoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Colors.black45,
                               offset: Offset(0, 6),
@@ -343,7 +343,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                           )
                         ],
                         borderRadius: BorderRadius.circular(25),
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
@@ -373,7 +373,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
                     style: CyrillicFonts.raleway(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF757575)
+                      color: const Color(0xFF757575)
                     ),
                 ),
               ],
@@ -381,7 +381,7 @@ class ReceivedDetailAchieveScreen extends StatelessWidget {
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("Отмена")
+                  child: const Text("Отмена")
               ),
             ],
           );

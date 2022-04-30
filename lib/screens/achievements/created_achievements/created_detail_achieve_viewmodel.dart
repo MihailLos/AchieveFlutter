@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:achieve_student_flutter/model/achievement/created_achievement/detail_created_achievement.dart';
 import 'package:achieve_student_flutter/utils/network_handler.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:open_file/open_file.dart';
@@ -13,7 +12,7 @@ import 'package:stacked/stacked.dart';
 
 class CreatedDetailAchieveViewModel extends BaseViewModel {
   CreatedDetailAchieveViewModel(BuildContext context);
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   DetailCreatedAchieveModel? createdAchievement;
   FilePickerResult? filePickerResult;
@@ -73,17 +72,13 @@ class CreatedDetailAchieveViewModel extends BaseViewModel {
         "description": commentController.text,
         "files": filePickerResult!.files.length
       };
-      print(bodyProofData);
 
       Map<String, String> headersProof = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
-      print(headersProof);
 
       var response = await networkHandler.post("/student/newProof", headersProof, bodyProofData);
-      print(response.body);
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         await storage.write(key: "list_file_id_for_proof", value: response.body);
@@ -95,30 +90,26 @@ class CreatedDetailAchieveViewModel extends BaseViewModel {
             "format": filePickerResult!.files[i].extension,
             "listFileId": listFileId
           };
-          print(bodyFileData);
 
           Map<String, String> headersFile = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $accessToken',
           };
-          print(headersFile);
 
           var response = await networkHandler.post("/student/newFile", headersFile, bodyFileData);
-          print(response.body);
-          print(response.statusCode);
 
           if (response.statusCode != 200) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("При загрузке файла произошла ошибка.")));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("При загрузке файла произошла ошибка.")));
             return;
           }
         }
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заявка успешно сформирована.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заявка успешно сформирована.")));
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при создании заявки.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ошибка при создании заявки.")));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните все поля заявки!")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заполните все поля заявки!")));
     }
   }
 }

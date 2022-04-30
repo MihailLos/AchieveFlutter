@@ -26,7 +26,7 @@ class RatingViewModel extends BaseViewModel {
   InstituteModel? filterInstitute;
   StreamModel? filterStream;
   GroupModel? filterGroup;
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   bool isVisibleFilters = false;
   Parser parser = Parser();
   bool circle = true;
@@ -35,7 +35,7 @@ class RatingViewModel extends BaseViewModel {
   Future onReady() async {
     await fetchStudentsTop(10);
     await fetchInstitutes();
-    filteredStudents.isNotEmpty && institutesList.isNotEmpty ? circle = false : circle = true;
+    filteredStudents.isNotEmpty ? circle = false : circle = true;
     notifyListeners();
   }
 
@@ -128,7 +128,7 @@ class RatingViewModel extends BaseViewModel {
 
   goToStudentDetail(context) {
     Navigator.push(
-        context, new MaterialPageRoute(builder: (context) => DetailStudentScreen()));
+        context, MaterialPageRoute(builder: (context) => const DetailStudentScreen()));
   }
 
   changeVisibility(context) {

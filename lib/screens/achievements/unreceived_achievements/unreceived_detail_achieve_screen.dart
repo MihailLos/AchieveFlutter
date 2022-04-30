@@ -1,7 +1,5 @@
 import 'package:achieve_student_flutter/screens/achievements/unreceived_achievements/unreceived_detail_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -20,7 +18,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return model.circle
-              ? Center(
+              ? const Center(
             child: CircularProgressIndicator(),
           )
               :  Scaffold(
@@ -40,7 +38,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
                             width: 64,
                             height: 64,
                             color: Colors.grey.withOpacity(0.25),
-                            child: Icon(Icons.clear)
+                            child: const Icon(Icons.clear)
                         ),
                       ),
                       color: Colors.black,
@@ -73,28 +71,28 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _authorName(context, model),
-              SizedBox(height: 8,),
+              const SizedBox(height: 8,),
               _achieveName(context, model),
-              SizedBox(height: 38,),
+              const SizedBox(height: 38,),
               _achieveDescription(context, model),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               _achieveReward(context, model),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _achieveCategory(context, model),
-                  SizedBox(width: 84,),
+                  const SizedBox(width: 84,),
                   _achieveStatus(context, model)
                 ],
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               _proofAchieveRule(context),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               _commentProofAchieve(context, model),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               _chooseFilesButton(context, model),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               _filesListView(context, model),
               _sendButton(context, model)
             ],
@@ -114,18 +112,18 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _authorName(context, model),
-              SizedBox(height: 8,),
+              const SizedBox(height: 8,),
               _achieveName(context, model),
-              SizedBox(height: 38,),
+              const SizedBox(height: 38,),
               _achieveDescription(context, model),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               _achieveReward(context, model),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _achieveCategory(context, model),
-                  SizedBox(width: 84,),
+                  const SizedBox(width: 84,),
                   _achieveStatus(context, model)
                 ],
               )
@@ -163,7 +161,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
           fontWeight: FontWeight.w800,
           fontSize: 24,
           fontStyle: FontStyle.normal,
-          color: Color(0xFF4065D8)
+          color: const Color(0xFF4065D8)
       ),
     );
   }
@@ -272,12 +270,12 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         Row(
           children: [
             model.unreceivedAchievement!.statusActive.toString() == "Активно" ?
-            Icon(Icons.check, color: Colors.green, size: 24,) :
+            const Icon(Icons.check, color: Colors.green, size: 24,) :
             model.unreceivedAchievement!.statusActive.toString() == "Не активно"
                 ?
-            Icon(Icons.access_time, color: Colors.black, size: 24,)
+            const Icon(Icons.access_time, color: Colors.black, size: 24,)
                 :
-            Icon(Icons.close, color: Colors.red, size: 24,),
+            const Icon(Icons.close, color: Colors.red, size: 24,),
             Text(
               "${model.unreceivedAchievement!.statusActive}",
               style: CyrillicFonts.raleway(
@@ -328,20 +326,20 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
   _commentProofAchieve(context, UnreceivedDetailAchievementViewModel model) {
     return SingleChildScrollView(
       reverse: true,
-      child: Container(
+      child: SizedBox(
         width: double.maxFinite,
         height: 46,
         child: TextField(
           controller: model.commentController,
           obscureText: false,
-          style: TextStyle(fontFamily: 'OpenSans', fontSize: 14),
+          style: const TextStyle(fontFamily: 'OpenSans', fontSize: 14),
           decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                  borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                  borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               fillColor: Colors.transparent,
               filled: true,
               hintText: "Комментарий к заявке"),
@@ -351,7 +349,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
   }
 
   _chooseFilesButton(context, UnreceivedDetailAchievementViewModel model) {
-    return Container(
+    return SizedBox(
         width: double.maxFinite,
         height: 46,
         child: OutlinedButton(
@@ -361,7 +359,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.file_download, color: Colors.black,),
+              const Icon(Icons.file_download, color: Colors.black,),
               Text(
                 "Выбрать файлы",
                 style: CyrillicFonts.raleway(
@@ -373,7 +371,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
             ],
           ),
           style: OutlinedButton.styleFrom(
-            shape: new RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
@@ -383,8 +381,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
 
   _filesListView(context, UnreceivedDetailAchievementViewModel model) {
     return model.filePickerResult == null ?
-    Text("") :
-    Container(
+    const Text("") :
+    SizedBox(
       height: 150,
       child: ListView.builder(
           shrinkWrap: true,
@@ -399,7 +397,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
               onTap: () {
                 model.openFiles(file);
               },
-              child: Container(
+              child: SizedBox(
                 width: 120,
                 child: Column(
                   children: [
@@ -413,7 +411,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
                           file.extension == "jpg" || file.extension == "png"
                               || file.extension == "png" ? Colors.green
                               : file.extension == "pdf" ? Colors.red :
-                          Color(0xFF4065D8),
+                          const Color(0xFF4065D8),
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
@@ -428,8 +426,8 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
                                     : file.extension == "pdf"
                                     ? Colors.redAccent
                                     :
-                                Color(0xFF4065D8),
-                                offset: Offset(3, 3.5),
+                                const Color(0xFF4065D8),
+                                offset: const Offset(3, 3.5),
                                 spreadRadius: 1,
                                 blurRadius: 7
                             )
@@ -476,7 +474,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
         width: double.maxFinite,
         height: 46,
         decoration: BoxDecoration(
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
                 color: Colors.black45,
                 offset: Offset(0, 6),
@@ -485,7 +483,7 @@ class UnreceivedDetailAchievementScreen extends StatelessWidget {
             )
           ],
           borderRadius: BorderRadius.circular(10),
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [

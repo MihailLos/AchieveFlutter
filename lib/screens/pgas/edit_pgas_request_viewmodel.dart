@@ -4,7 +4,6 @@ import 'package:achieve_student_flutter/model/pgas/faculty.dart';
 import 'package:achieve_student_flutter/model/pgas/pgas_detail.dart';
 import 'package:achieve_student_flutter/model/pgas/semester_type.dart';
 import 'package:achieve_student_flutter/screens/pgas/pgas_request_info_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stacked/stacked.dart';
@@ -12,7 +11,7 @@ import 'package:http/http.dart' as http;
 
 class EditPgasRequestViewModel extends BaseViewModel {
   EditPgasRequestViewModel(BuildContext context);
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   PgasDetailModel? detailPgasRequest;
   List<FacultyModel> facultiesList = [];
   List<SemesterTypeModel> semestersList = [];
@@ -126,15 +125,14 @@ class EditPgasRequestViewModel extends BaseViewModel {
       var response = await http.post(Uri.parse("https://api-next.kemsu.ru/api/student-depatment/pgas-mobile/editRequest"), headers: header, body: body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => PgasRequestInfoScreen()), (Route<dynamic> route) => false);
-        print(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Данные успешно сохранены.")));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const PgasRequestInfoScreen()), (route) => false);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: const Text("Данные успешно сохранены.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка при сохранении данных! Код ошибки: ${response.statusCode}")));
         print(response.body);
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Заполните все поля!")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Заполните все поля!")));
     }
   }
 }

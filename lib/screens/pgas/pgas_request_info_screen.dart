@@ -1,7 +1,7 @@
 import 'package:achieve_student_flutter/screens/pgas/pgas_request_info_viewmodel.dart';
+import 'package:achieve_student_flutter/screens/pgas/pgas_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:stacked/stacked.dart';
 
 class PgasRequestInfoScreenRoute extends MaterialPageRoute {
@@ -17,7 +17,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
         viewModelBuilder: () => PgasRequestInfoViewModel(context),
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
-          return model.circle ? Center(child: CircularProgressIndicator(),) : Scaffold(
+          return model.circle ? const Center(child: CircularProgressIndicator(),) : Scaffold(
             appBar: _appBar(context, model),
             body: _body(context, model),
           );
@@ -27,10 +27,10 @@ class PgasRequestInfoScreen extends StatelessWidget {
   _appBar(context, PgasRequestInfoViewModel model) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
-          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const PgasScreen()));
         },
         iconSize: 32,
       ),
@@ -39,13 +39,13 @@ class PgasRequestInfoScreen extends StatelessWidget {
             onPressed: () {
               model.goToEditPgasRequestScreen(context);
             },
-            icon: Icon(Icons.edit_outlined, color: Color(0xFF5878DD), size: 32,)
+            icon: const Icon(Icons.edit_outlined, color: Color(0xFF5878DD), size: 32,)
         ),
         IconButton(
             onPressed: () {
               _deleteRequestAlert(context, model);
             },
-            icon: Icon(Icons.delete_outline, color: Color(0xFF5878DD), size: 32,)
+            icon: const Icon(Icons.delete_outline, color: Color(0xFF5878DD), size: 32,)
         )
       ],
       elevation: 0,
@@ -66,12 +66,12 @@ class PgasRequestInfoScreen extends StatelessWidget {
               ],
             ),
           ),
-          _infoTextField(context, Icon(Icons.person, color: Color(0xFF4065D8),), model.pgasRequest!.surname.toString(), "Фамилия"),
-          _infoTextField(context, Icon(Icons.person, color: Color(0xFF4065D8),), model.pgasRequest!.name.toString(), "Имя"),
-          _infoTextField(context, Icon(Icons.person, color: Color(0xFF4065D8),), model.pgasRequest!.patronymic.toString(), "Отчество"),
-          _infoTextField(context, Icon(Icons.phone, color: Color(0xFF4065D8),), model.pgasRequest!.phone.toString(), "Номер телефона"),
-          _infoTextField(context, Icon(Icons.school, color: Color(0xFF4065D8),), model.pgasRequest!.facultyName.toString(), "Институт"),
-          _infoTextField(context, Icon(Icons.school, color: Color(0xFF4065D8),), model.pgasRequest!.group.toString(), "Группа"),
+          _infoTextField(context, const Icon(Icons.person, color: Color(0xFF4065D8),), model.pgasRequest!.surname.toString(), "Фамилия"),
+          _infoTextField(context, const Icon(Icons.person, color: Color(0xFF4065D8),), model.pgasRequest!.name.toString(), "Имя"),
+          _infoTextField(context, const Icon(Icons.person, color: Color(0xFF4065D8),), model.pgasRequest!.patronymic.toString(), "Отчество"),
+          _infoTextField(context, const Icon(Icons.phone, color: Color(0xFF4065D8),), model.pgasRequest!.phone.toString(), "Номер телефона"),
+          _infoTextField(context, const Icon(Icons.school, color: Color(0xFF4065D8),), model.pgasRequest!.facultyName.toString(), "Институт"),
+          _infoTextField(context, const Icon(Icons.school, color: Color(0xFF4065D8),), model.pgasRequest!.group.toString(), "Группа"),
           _infoTextField(context, null, model.pgasRequest!.courseNum.toString(), "Курс"),
           _infoTextField(context, null, model.pgasRequest!.studyYear.toString(), "Учебный год"),
           _infoTextField(context, null, model.pgasRequest!.semesterType.toString(), "Семестр"),
@@ -85,7 +85,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
         style: CyrillicFonts.raleway(
             fontSize: 24,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF4065D8)
+            color: const Color(0xFF4065D8)
         )
     );
   }
@@ -102,7 +102,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
                 style: CyrillicFonts.raleway(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF5878DD)
+                    color: const Color(0xFF5878DD)
                 ),
               ),
             ),
@@ -114,7 +114,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
                   style: CyrillicFonts.raleway(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF757575)
+                      color: const Color(0xFF757575)
                   ),
                 ),
                 Padding(
@@ -122,7 +122,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
                   child: Container(
                       width: double.maxFinite,
                       decoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Colors.black45,
                               offset: Offset(0, 6),
@@ -131,7 +131,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
                           )
                         ],
                         borderRadius: BorderRadius.circular(25),
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
@@ -161,7 +161,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("Отмена")
+                  child: const Text("Отмена")
               ),
             ],
           );
@@ -177,7 +177,7 @@ class PgasRequestInfoScreen extends StatelessWidget {
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           labelText: label,
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
             color: Color(0xFF4065D8)
           )
         ),

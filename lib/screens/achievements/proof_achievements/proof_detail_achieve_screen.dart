@@ -1,6 +1,5 @@
 import 'package:achieve_student_flutter/screens/achievements/proof_achievements/proof_detail_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -19,7 +18,7 @@ class ProofDetailAchieveScreen extends StatelessWidget {
         onModelReady: (viewModel) => viewModel.onReady(),
         builder: (context, model, child) {
           return model.circle
-              ? Center(
+              ? const Center(
             child: CircularProgressIndicator(),
           )
               : Scaffold(
@@ -38,7 +37,7 @@ class ProofDetailAchieveScreen extends StatelessWidget {
                             width: 64,
                             height: 64,
                             color: Colors.grey.withOpacity(0.25),
-                            child: Icon(Icons.clear)
+                            child: const Icon(Icons.clear)
                         ),
                       ),
                       color: Colors.black,
@@ -60,18 +59,17 @@ class ProofDetailAchieveScreen extends StatelessWidget {
   _proofAchieveBody(context, ProofDetailAchieveViewModel model) {
     return ListView(
       children: [
-        //_achieveImage(context, model),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 27, horizontal: 35),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _achieveName(context, model),
-              SizedBox(height: 38,),
+              const SizedBox(height: 38,),
               _achieveDescription(context, model),
-              SizedBox(height: 12,),
+              const SizedBox(height: 12,),
               _achieveStudentDescription(context, model),
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -79,7 +77,7 @@ class ProofDetailAchieveScreen extends StatelessWidget {
                   _achieveStatus(context, model)
                 ],
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               _moderatorComment(context, model)
             ],
           ),
@@ -103,7 +101,7 @@ class ProofDetailAchieveScreen extends StatelessWidget {
           fontWeight: FontWeight.w800,
           fontSize: 24,
           fontStyle: FontStyle.normal,
-          color: Color(0xFF4065D8)
+          color: const Color(0xFF4065D8)
       ),
     );
   }
@@ -220,7 +218,7 @@ class ProofDetailAchieveScreen extends StatelessWidget {
               fontSize: 14
           ),
         ),
-        model.proofAchievement?.comment == null ? Text("") :
+        model.proofAchievement?.comment == null ? const Text("") :
         Text(
           "${model.proofAchievement!.comment}",
           style: CyrillicFonts.raleway(

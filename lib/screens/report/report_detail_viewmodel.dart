@@ -13,7 +13,7 @@ class ReportDetailViewModel extends BaseViewModel {
   NetworkHandler networkHandler = NetworkHandler();
   DetailReportModel detailReportModel = DetailReportModel();
   bool circular = true;
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
 
 
   Future onReady() async {

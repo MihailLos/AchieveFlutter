@@ -30,13 +30,13 @@ class HomeView extends StatelessWidget {
   getViewFromIndex(int currentIndex) {
     switch (currentIndex) {
       case 0:
-        return ProfileScreen();
+        return const ProfileScreen();
       case 1:
-        return RatingScreen();
+        return const RatingScreen();
       case 2:
-        return UnreceivedAchieveScreen();
+        return const UnreceivedAchieveScreen();
       case 3:
-        return RequestsScreen();
+        return const RequestsScreen();
     }
   }
 }
@@ -47,7 +47,7 @@ _bottomNavBar(BuildContext context, HomeViewModel model) {
     type: BottomNavigationBarType.fixed,
     backgroundColor: Colors.white,
     onTap: model.onTabTapped,
-    items: [
+    items: const [
       BottomNavigationBarItem(
           icon: Icon(Icons.account_circle_outlined),
           label: "Профиль"),

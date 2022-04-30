@@ -1,4 +1,3 @@
-import 'package:achieve_student_flutter/screens/achievements/new_achievement/new_achieve_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -28,21 +27,21 @@ class CreatedAchieveGrid extends StatelessWidget {
 
   _createdProfileAchievementsGrid(context, CreatedAchieveProfileViewModel model) {
     return model.circle
-        ? Center(
+        ? const Center(
       child: CircularProgressIndicator(),
     )
         : model.createdProfileAchievements.isEmpty ?
     Center(
       child: Text(
           "Нет созданных достижений.",
-          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+          style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
       ),
     ) :
     GridView.builder(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       shrinkWrap: true,
       gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       itemCount: model.createdProfileAchievements.length,
       itemBuilder: (BuildContext context, int index) {
         return FutureBuilder(
@@ -57,7 +56,7 @@ class CreatedAchieveGrid extends StatelessWidget {
                 child: Container(
                   width: 100,
                   height: 200,
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: snapshot.data as ImageProvider,
@@ -68,11 +67,11 @@ class CreatedAchieveGrid extends StatelessWidget {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text("Произошла ошибка"),
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         );
@@ -96,21 +95,21 @@ class CreatedAchieveGridAnotherStudent extends StatelessWidget {
 
   _createdAnotherStudentAchievementsGrid(context, CreatedAchieveProfileViewModel model) {
     return model.circle
-        ? Center(
+        ? const Center(
       child: CircularProgressIndicator(),
     )
         : model.createdProfileAchievements.isEmpty ?
     Center(
       child: Text(
           "Нет созданных достижений.",
-          style: CyrillicFonts.raleway(fontSize: 12, color: Color(0xFF757575), fontWeight: FontWeight.w500)
+          style: CyrillicFonts.raleway(fontSize: 12, color: const Color(0xFF757575), fontWeight: FontWeight.w500)
       ),
     ) :
     GridView.builder(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       shrinkWrap: true,
       gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       itemCount: model.createdProfileAchievements.length,
       itemBuilder: (BuildContext context, int index) {
         return FutureBuilder(
@@ -120,7 +119,7 @@ class CreatedAchieveGridAnotherStudent extends StatelessWidget {
               return Container(
                 width: 100,
                 height: 200,
-                margin: EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                       image: snapshot.data as ImageProvider,
@@ -130,11 +129,11 @@ class CreatedAchieveGridAnotherStudent extends StatelessWidget {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text("Произошла ошибка"),
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         );

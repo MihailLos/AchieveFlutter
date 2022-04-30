@@ -1,6 +1,5 @@
 import 'package:achieve_student_flutter/screens/report/report_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:stacked/stacked.dart';
 
@@ -27,7 +26,7 @@ class NewReportScreen extends StatelessWidget {
   _appBar(context, model) {
     return AppBar(
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_outlined),
+        icon: const Icon(Icons.arrow_back_outlined),
         color: Colors.black,
         onPressed: () async {
           model.goToReportsScreen(context);
@@ -41,18 +40,18 @@ class NewReportScreen extends StatelessWidget {
 
   _body(context, model) {
     return ListView(
-      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       children: [
         _mainTitle(),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
         _themeTextField(context, model),
-        SizedBox(
+        const SizedBox(
           height: 61,
         ),
         _descriptionTextField(context, model),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         _sendReportButton(context, model)
@@ -69,7 +68,7 @@ class NewReportScreen extends StatelessWidget {
             fontSize: 24,
             fontStyle: FontStyle.normal,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF4065D8)),
+            color: const Color(0xFF4065D8)),
       ),
     );
   }
@@ -78,11 +77,11 @@ class NewReportScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           child: TextField(
               controller: model.themeReportController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Тема обращения",
               )),
         ),
@@ -94,7 +93,7 @@ class NewReportScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: 334,
           child: TextField(
               controller: model.descriptionReportController,
@@ -103,10 +102,10 @@ class NewReportScreen extends StatelessWidget {
                 hintText: "Описание",
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                    borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1)),
+                    borderSide: const BorderSide(color: Color(0xFFC4C4C4), width: 1)),
               )),
         ),
       ],
@@ -120,7 +119,7 @@ class NewReportScreen extends StatelessWidget {
           width: double.maxFinite,
           height: 46,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: Colors.black45,
                   offset: Offset(0, 6),
@@ -129,7 +128,7 @@ class NewReportScreen extends StatelessWidget {
               )
             ],
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [

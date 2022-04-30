@@ -24,24 +24,27 @@ class ProfileViewModel extends BaseViewModel {
   StudentProfileModel? studentProfileModel;
   int? studentPercent;
   int? course;
-  bool circular = true;
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  bool isStudentDataInit = false;
+  bool isStudyInit = false;
+  bool isPercentInit = false;
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   double? studentPercentProgressBar;
   bool isCreated = false;
   List<bool> isSelectedButton = [true, false];
   Box? profileBox;
 
   Future onReady() async {
-    fetchStudentDataFromApi();
-    fetchStudentPercent();
-    fetchStudy();
+    await fetchStudentDataFromApi();
+    await fetchStudentPercent();
+    await fetchStudy();
+    notifyListeners();
   }
 
   fetchStudentDataFromApi() async {
-    var response = await networkHandler.get("/student/getStudent");
+    var response = await networkHandler.get("/student/getStudent", null);
     if (response.statusCode == 200 || response.statusCode == 200) {
       studentProfileModel = StudentProfileModel.fromJson(json.decode(response.body));
-      circular = false;
+      isStudentDataInit = true;
       notifyListeners();
     } else if (response.statusCode == 403) {
       var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
@@ -51,36 +54,38 @@ class ProfileViewModel extends BaseViewModel {
   }
 
   fetchStudy() async {
-    var response = await networkHandler.get("/student/getStudy");
-    if (response.statusCode == 200 || response.statusCode == 200) {
+    var response = await networkHandler.get("/student/getStudy", null);
+    if (response.statusCode == 200 || response.statusCode == 201) {
       course = json.decode(response.body)["course"];
+      isStudyInit = true;
       notifyListeners();
     } else if (response.statusCode == 403) {
-      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${storage.read(key: "refresh_token")}"});
       await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
       return fetchStudy();
     }
   }
 
   fetchStudentPercent() async {
-    var response = await networkHandler.get("/student/achievementsPercent");
-    if (response.statusCode == 200 || response.statusCode == 200) {
+    var response = await networkHandler.get("/student/achievementsPercent", null);
+    if (response.statusCode == 200 || response.statusCode == 201) {
       studentPercent = json.decode(response.body);
       studentPercentProgressBar = studentPercent! / 100;
+      isPercentInit = true;
       notifyListeners();
     } else if (response.statusCode == 403) {
-      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${await storage.read(key: "refresh_token")}"});
+      var response = await networkHandler.get("/newToken", {"Refresh": "Refresh ${storage.read(key: "refresh_token")}"});
       await storage.write(key: "token", value: json.decode(response.body)["accessToken"]);
       return fetchStudentPercent();
     }
   }
 
-  exitButtonAction(context) async {
-    await storage.delete(key: "token");
-    await storage.delete(key: "refresh_token");
+  exitButtonAction(context) {
+    storage.delete(key: "token");
+    storage.delete(key: "refresh_token");
     Navigator.pushAndRemoveUntil(
         context,
-        new MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
         (route) => false);
   }
 
@@ -148,18 +153,16 @@ class ProfileViewModel extends BaseViewModel {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $accessToken',
       };
-      print(headers);
 
       var response =
           await networkHandler.put("/student/changePhoto", headers, bodyData);
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         refresh();
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Фото профиля успешно изменено.")));
+            const SnackBar(content: Text("Фото профиля успешно изменено.")));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Ошибка при изменении изображения профиля!")));
       }
     } on PlatformException catch (e) {
@@ -169,12 +172,12 @@ class ProfileViewModel extends BaseViewModel {
 
   goToReportsScreen(context) {
     Navigator.push(
-        context, new MaterialPageRoute(builder: (context) => ReportScreen()));
+        context, MaterialPageRoute(builder: (context) => const ReportScreen()));
   }
 
   goToPgasScreen(context) {
     Navigator.push(
-        context, new MaterialPageRoute(builder: (context) => PgasScreen()));
+        context, MaterialPageRoute(builder: (context) => const PgasScreen()));
   }
 
   Future<void> refresh() async {

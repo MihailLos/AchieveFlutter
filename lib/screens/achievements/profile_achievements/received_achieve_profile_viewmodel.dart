@@ -5,6 +5,7 @@ import 'package:achieve_student_flutter/screens/achievements/received_achievemen
 import 'package:achieve_student_flutter/utils/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../../model/achievement/achieve_category.dart';
@@ -15,7 +16,7 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   ReceivedAchieveProfileViewModel(BuildContext context);
 
   NetworkHandler networkHandler = NetworkHandler();
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   List<ReceivedAchievementModel> receivedProfileAchievements = [];
   List<ReceivedAchievementModel> filteredReceivedProfileAchievements = [];
   List<AchieveCategoryModel> achieveCategoryList = [];
@@ -39,7 +40,7 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   }
 
   fetchReceivedProfileAchievements([int? categoryId, int? studentId]) async {
-    var response;
+    Response response;
     circle = true;
     if (categoryId != null) {
       if (studentId == null) {
@@ -101,14 +102,14 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
         child: Center(
           child: DropdownButton<AchieveCategoryModel>(
               isExpanded: true,
-              value: achieveCategoryModel == null ? null : achieveCategoryModel,
+              value: achieveCategoryModel,
               items: achieveCategoryList.map((e) {
                 return DropdownMenuItem(
                   child: Text(e.categoryName.toString()),
                   value: e,
                 );
               }).toList(),
-              hint: Text("Категория достижения"),
+              hint: const Text("Категория достижения"),
               onChanged: (value) async {
                 String? studentId = await storage.read(key: "student_id");
                 achieveCategoryModel = value!;
@@ -129,6 +130,6 @@ class ReceivedAchieveProfileViewModel extends BaseViewModel {
   }
 
   goToDetailReceivedAchievement(BuildContext context) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => ReceivedDetailAchieveScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const ReceivedDetailAchieveScreen()));
   }
 }
