@@ -43,13 +43,14 @@ class RatingScreen extends StatelessWidget {
     return Container(
       color: const Color(0xFF39ABDF),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 0),
+        padding: const EdgeInsets.only(top: 30.0, left: 21, right: 9),
         child: SizedBox(
           width: double.maxFinite,
           height: 46,
           child: TextField(
             controller: model.searchController,
             obscureText: false,
+            cursorColor: Colors.white,
             style: const TextStyle(fontFamily: 'OpenSans', fontSize: 16, color: Colors.white),
             decoration: InputDecoration(
                 border: InputBorder.none,
