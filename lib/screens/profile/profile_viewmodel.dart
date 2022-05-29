@@ -159,14 +159,15 @@ class ProfileViewModel extends BaseViewModel {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         refresh();
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Фото профиля успешно изменено.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Фото профиля успешно изменено.")));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Ошибка при изменении изображения профиля!")));
       }
     } on PlatformException catch (e) {
-      print("Не удалось загрузить изображение: $e");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Не удалось загрузить изображение: $e")));
     }
   }
 

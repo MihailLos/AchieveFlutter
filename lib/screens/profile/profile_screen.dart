@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_language_fonts/google_language_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stacked/stacked.dart';
-import 'profile_viewmodel.dart';
+import 'profile_viewModel.dart';
 
 class ProfileScreenRoute extends MaterialPageRoute {
   ProfileScreenRoute() : super(builder: (context) => const ProfileScreen());
@@ -69,11 +69,11 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          GoToPgasButton(),
+          const GoToPgasButton(),
           const SizedBox(
             height: 27,
           ),
-          AchievementsTitle(),
+          const AchievementsTitle(),
           _buttonsSpace(context, model),
           const SizedBox(
             height: 10,
@@ -117,7 +117,7 @@ class ProfileScreen extends StatelessWidget {
                       showModalBottomSheet(
                           context: context,
                           builder: ((builder) =>
-                              BottomChooseProfilePhotoWidget()));
+                              const BottomChooseProfilePhotoWidget()));
                     },
                   ),
                 ),
@@ -161,7 +161,7 @@ class ProfileScreen extends StatelessWidget {
         showModalBottomSheet(
             context: context,
             builder: ((builder) =>
-                BottomChooseProfilePhotoWidget()));
+                const BottomChooseProfilePhotoWidget()));
       },
       child: _buildCircle(
         const Icon(
@@ -419,7 +419,6 @@ class AchievementsTitle extends StatelessWidget {
 
 class BottomChooseProfilePhotoWidget extends StatelessWidget {
   const BottomChooseProfilePhotoWidget({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     ProfileViewModel model = ProfileViewModel(context);
@@ -458,6 +457,7 @@ class BottomChooseProfilePhotoWidget extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     model.pickImage(ImageSource.camera, context);
+                    Navigator.pop(context);
                   },
                   child: Column(
                     children: [
@@ -485,6 +485,7 @@ class BottomChooseProfilePhotoWidget extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     model.pickImage(ImageSource.gallery, context);
+                    Navigator.of(context).pop(true);
                   },
                   child: Column(
                     children: [
